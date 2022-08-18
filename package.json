@@ -1,0 +1,29 @@
+{
+  "name": "advanced-beauty_be",
+  "version": "1.0.0",
+  "description": "Rest API for Advanced Beauty website bookings",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "fetch-test-data": "node ./db/data/fetch-data.js",
+    "fetch-dev-data": "NODE_ENV=development node  ./db/data/fetch-data.js"
+  },
+  "repository": "git+https://github.com/Rocamain/AdvancedBeauty-BE.git",
+  "keywords": [
+    "booking",
+    "reservation"
+  ],
+  "author": "Francisco Javier Roca",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Rocamain/AdvancedBeauty-BE/issues"
+  },
+  "homepage": "https://github.com/Rocamain/AdvancedBeauty-BE#readme",
+  "devDependencies": {
+    "@faker-js/faker": "^7.4.0",
+    "lodash": "^4.17.21"
+  },
+  "dependencies": {
+    "date-fns": "^2.29.2"
+  }
+}
