@@ -1,14 +1,14 @@
 module.exports = [
   {
-    "shop_id": 1,
-    "shop_name": "Turo Park"
+    "shopId": 1,
+    "shopName": "Turo Park"
   },
   {
-    "shop_id": 2,
-    "shop_name": "L'Illa Diagonal"
+    "shopId": 2,
+    "shopName": "L'Illa Diagonal"
   },
   {
-    "shop_id": 3,
-    "shop_name": "Palma de Majorca"
+    "shopId": 3,
+    "shopName": "Palma de Majorca"
   }
 ]

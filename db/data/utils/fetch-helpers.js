@@ -49,14 +49,14 @@ const generateBookings = (
         const date =
           ENV === 'dev' ? sample(workingDays) : new Date(2022, 7, 19);
         const appointment = addHours(date, randomHour);
-        const { service_id, duration } = sample(services);
-        const { customer_id } = sample(customers);
+        const { serviceId, duration } = sample(services);
+        const { customerId } = sample(customers);
 
         const newBooking = {
-          booking_id: `${shopID}-${i + 1}`,
-          shop_id: shopID,
-          service_id,
-          customer_id,
+          bookingId: `${shopID}-${i + 1}`,
+          shopId: shopID,
+          serviceId,
+          customerId,
           appointment,
           appointmentFinish: addMinutes(appointment, duration),
         };
@@ -100,8 +100,8 @@ const uniqueSurNames = generateUniques(
 const generateCustomers = (firstNames, surNames) => {
   return firstNames.map((firstName, i) => {
     return {
-      customer_id: i + 1,
-      customer_name: `${firstName} ${surNames[i]}`,
+      customerId: i + 1,
+      customerName: `${firstName} ${surNames[i]}`,
       email: faker.internet.email(firstName, surNames[i]),
     };
   });
@@ -110,8 +110,8 @@ const generateCustomers = (firstNames, surNames) => {
 const generateServices = (shops, serviceCount) => {
   return Array.from({ length: serviceCount }, (service, i) => {
     return {
-      service_id: i,
-      service_name: `${faker.company.catchPhrase()} `,
+      serviceId: i,
+      serviceName: `${faker.company.catchPhrase()} `,
       duration: sample([30, 60, 90]),
       type: sample(['Facial', 'Manicure and Pedicure', 'Laser', 'Body']),
     };
@@ -125,17 +125,18 @@ module.exports = ({ bookingsLength, servicesLength }) => {
   const customers = generateCustomers(uniqueFirstNames, uniqueSurNames);
 
   const shops = [
-    { shop_id: 1, shop_name: 'Turo Park' },
-    { shop_id: 2, shop_name: "L'Illa Diagonal" },
-    { shop_id: 3, shop_name: 'Palma de Majorca' },
+    { shopId: 1, shopName: 'Turo Park' },
+    { shopId: 2, shopName: "L'Illa Diagonal" },
+    { shopId: 3, shopName: 'Palma de Majorca' },
   ];
 
   const services = generateServices(shops, servicesLength);
 
-  const bookings = shops.map(({ shop_id }) =>
-    generateBookings(services, customers, bookingsLength, shop_id)
+  let bookings = shops.map(({ shopId }) =>
+    generateBookings(services, customers, bookingsLength, shopId)
   );
 
+  bookings = [...bookings[0], ...bookings[1], ...bookings[2]];
   mkdir(`./db/data/${ENV}-data`)
     .catch(() => console.log('Overwriting existing files in db/data'))
     .then(() => {

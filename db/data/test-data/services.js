@@ -1,62 +1,62 @@
 module.exports = [
   {
-    "service_id": 0,
-    "service_name": "Enterprise-wide multimedia complexity ",
+    "serviceId": 0,
+    "serviceName": "Switchable regional projection ",
+    "duration": 30,
+    "type": "Body"
+  },
+  {
+    "serviceId": 1,
+    "serviceName": "Compatible zero tolerance implementation ",
     "duration": 90,
     "type": "Laser"
   },
   {
-    "service_id": 1,
-    "service_name": "Re-engineered real-time circuit ",
+    "serviceId": 2,
+    "serviceName": "Reverse-engineered holistic encoding ",
     "duration": 60,
-    "type": "Body"
+    "type": "Facial"
   },
   {
-    "service_id": 2,
-    "service_name": "Streamlined logistical service-desk ",
-    "duration": 90,
-    "type": "Body"
-  },
-  {
-    "service_id": 3,
-    "service_name": "Devolved bi-directional product ",
+    "serviceId": 3,
+    "serviceName": "Managed multi-state functionalities ",
     "duration": 90,
     "type": "Facial"
   },
   {
-    "service_id": 4,
-    "service_name": "Public-key radical access ",
-    "duration": 30,
-    "type": "Laser"
-  },
-  {
-    "service_id": 5,
-    "service_name": "Diverse local architecture ",
-    "duration": 30,
-    "type": "Facial"
-  },
-  {
-    "service_id": 6,
-    "service_name": "Organic cohesive encoding ",
-    "duration": 30,
+    "serviceId": 4,
+    "serviceName": "Quality-focused dynamic emulation ",
+    "duration": 60,
     "type": "Manicure and Pedicure"
   },
   {
-    "service_id": 7,
-    "service_name": "Switchable zero defect interface ",
-    "duration": 60,
-    "type": "Facial"
-  },
-  {
-    "service_id": 8,
-    "service_name": "Ameliorated contextually-based leverage ",
-    "duration": 60,
+    "serviceId": 5,
+    "serviceName": "Self-enabling analyzing superstructure ",
+    "duration": 30,
     "type": "Body"
   },
   {
-    "service_id": 9,
-    "service_name": "Customer-focused systematic budgetary management ",
+    "serviceId": 6,
+    "serviceName": "Re-engineered logistical array ",
     "duration": 60,
     "type": "Facial"
+  },
+  {
+    "serviceId": 7,
+    "serviceName": "Open-architected next generation benchmark ",
+    "duration": 90,
+    "type": "Body"
+  },
+  {
+    "serviceId": 8,
+    "serviceName": "Expanded optimizing algorithm ",
+    "duration": 30,
+    "type": "Laser"
+  },
+  {
+    "serviceId": 9,
+    "serviceName": "Open-architected holistic capability ",
+    "duration": 60,
+    "type": "Manicure and Pedicure"
   }
 ]
