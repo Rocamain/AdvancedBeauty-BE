@@ -16,11 +16,15 @@ module.exports = {
     port: process.env.TEST_PORT,
     dialect: 'postgres',
     define: {
-      timeStamps: true,
-      underscore: true,
-      underscoreAll: true,
-      createdAt: 'created-at',
-      updatedAt: 'updated-at',
+      logQueryParameters: 'true',
+    },
+    sync: { force: true },
+
+    // pool configuration used to pool database connections
+    pool: {
+      max: 5,
+      idle: 30000,
+      acquire: 60000,
     },
   },
   production: {

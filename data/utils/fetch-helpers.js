@@ -1,7 +1,7 @@
 const { faker } = require('@faker-js/faker');
 const { sample } = require('lodash');
 const { promisify } = require('util');
-const { addHours, addMinutes, format } = require('date-fns');
+const { addHours, addMinutes } = require('date-fns');
 const {
   checkOverlappedBookings,
   sortByAppointment,
@@ -26,16 +26,18 @@ const generateBookings = (
   services,
   customers,
   bookingsLength,
-  shopID,
+  shopId,
   bookings = []
 ) => {
   if (bookingsLength <= 0) {
     const cleanBookingDates = bookings.map(
-      ({ appointment, appointmentFinish, ...booking }) => ({
-        ...booking,
-        appointment: format(appointment, "MM/dd/yyyy 'at' h:mm a"),
-        appointmentFinish: format(appointmentFinish, "MM/dd/yyyy 'at' h:mm a"),
-      })
+      ({ appointment, appointmentFinish, ...restBooking }, i) => {
+        return {
+          ...restBooking,
+          appointment: appointment,
+          appointment_finish: appointmentFinish,
+        };
+      }
     );
     return cleanBookingDates;
   }
@@ -49,14 +51,13 @@ const generateBookings = (
         const date =
           ENV === 'dev' ? sample(workingDays) : new Date(2022, 7, 19);
         const appointment = addHours(date, randomHour);
-        const { serviceId, duration } = sample(services);
-        const { customerId } = sample(customers);
+        const { service_id, duration } = sample(services);
+        const { customer_id } = sample(customers);
 
         const newBooking = {
-          bookingId: `${shopID}-${i + 1}`,
-          shopId: shopID,
-          serviceId,
-          customerId,
+          shop_id: shopId,
+          service_id,
+          customer_id,
           appointment,
           appointmentFinish: addMinutes(appointment, duration),
         };
@@ -77,7 +78,7 @@ const generateBookings = (
     services,
     customers,
     bookingsLength - totalBookingsCompleted,
-    shopID,
+    shopId,
     confirmedReservations
   );
 };
@@ -100,8 +101,8 @@ const uniqueSurNames = generateUniques(
 const generateCustomers = (firstNames, surNames) => {
   return firstNames.map((firstName, i) => {
     return {
-      customerId: i + 1,
-      customerName: `${firstName} ${surNames[i]}`,
+      customer_id: i + 1,
+      customer_name: `${firstName} ${surNames[i]}`,
       email: faker.internet.email(firstName, surNames[i]),
     };
   });
@@ -110,59 +111,80 @@ const generateCustomers = (firstNames, surNames) => {
 const generateServices = (shops, serviceCount) => {
   return Array.from({ length: serviceCount }, (service, i) => {
     return {
-      serviceId: i,
-      serviceName: `${faker.company.catchPhrase()} `,
+      service_id: i + 1,
+      service_name: `${faker.company.catchPhrase()}`,
       duration: sample([30, 60, 90]),
       type: sample(['Facial', 'Manicure and Pedicure', 'Laser', 'Body']),
     };
   });
 };
+const shops = [
+  {
+    shop_name: 'Turo Park',
+    city: 'Barcelona',
+    street: 'C/ Tenor Viñas, 3',
+    postcode: '08021 – Barcelona',
+    phone: '93 200 96 56',
+    mobile: '640 725 934',
+  },
+  {
+    shop_name: "L'Illa Diagonal",
+    city: 'Barcelona',
+    street: 'Avda. Diagonal, 569',
+    postcode: '08029 – Barcelona',
+    phone: '93 410 14 87',
+    mobile: '640 725 935',
+  },
+  {
+    shop_name: 'Palma',
+    city: 'Palma de Majorca',
+    street: 'C/ Josep Anselm Clavé, 6',
+    postcode: '07002 – Palma de Mallorca',
+    phone: '971 707 281',
+    mobile: '646 531 481',
+  },
+];
 
 const generateFileText = (js) =>
   `module.exports = ${JSON.stringify(js, null, 2)}`;
 
 module.exports = ({ bookingsLength, servicesLength }) => {
-  const customers = generateCustomers(uniqueFirstNames, uniqueSurNames);
-
-  const shops = [
-    { shopId: 1, shopName: 'Turo Park' },
-    { shopId: 2, shopName: "L'Illa Diagonal" },
-    { shopId: 3, shopName: 'Palma de Majorca' },
-  ];
-
-  const services = generateServices(shops, servicesLength);
-
-  let bookings = shops.map(({ shopId }) =>
-    generateBookings(services, customers, bookingsLength, shopId)
+  let customers = generateCustomers(uniqueFirstNames, uniqueSurNames);
+  let services = generateServices(shops, servicesLength);
+  let bookings = shops.map((_, index) =>
+    generateBookings(services, customers, bookingsLength, index + 1)
   );
 
   bookings = [...bookings[0], ...bookings[1], ...bookings[2]];
-  mkdir(`./db/data/${ENV}-data`)
-    .catch(() => console.log('Overwriting existing files in db/data'))
+  customers = customers.map(({ customer_id, ...rest }) => rest);
+  services = services.map(({ service_id, ...rest }) => rest);
+
+  mkdir(`./data/${ENV}-data`)
+    .catch(() => console.log('Overwriting existing files in /data'))
     .then(() => {
       return writeFile(
-        `./db/data/${ENV}-data/customers.js`,
+        `./data/${ENV}-data/customers.js`,
         generateFileText(customers),
         'utf8'
       );
     })
     .then(() => {
       return writeFile(
-        `./db/data/${ENV}-data/shops.js`,
+        `./data/${ENV}-data/shops.js`,
         generateFileText(shops),
         'utf8'
       );
     })
     .then(() => {
       return writeFile(
-        `./db/data/${ENV}-data/services.js`,
+        `./data/${ENV}-data/services.js`,
         generateFileText(services),
         'utf8'
       );
     })
     .then(() => {
       return writeFile(
-        `./db/data/${ENV}-data/bookings.js`,
+        `./data/${ENV}-data/bookings.js`,
         generateFileText(bookings),
         'utf8'
       );

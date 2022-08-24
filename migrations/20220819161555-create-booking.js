@@ -2,36 +2,45 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('bookings', {
       id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
         type: Sequelize.INTEGER,
-      },
-      bookingId: {
-        type: Sequelize.STRING,
+        field: 'booking_id',
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
       },
       shopId: {
         type: Sequelize.INTEGER,
+        field: 'shop_id',
+        allowNull: false,
       },
       serviceId: {
         type: Sequelize.INTEGER,
+        field: 'service_id',
+        allowNull: false,
       },
       customerId: {
         type: Sequelize.INTEGER,
+        field: 'customer_id',
+        allowNull: false,
       },
       appointment: {
-        type: Sequelize.STRING,
+        type: Sequelize.DATE,
+        allowNull: false,
       },
       appointmentFinish: {
-        type: Sequelize.STRING,
+        type: Sequelize.DATE,
+        field: 'appointment_finish',
+        allowNull: false,
       },
       createdAt: {
-        allowNull: true,
         type: Sequelize.DATE,
+        field: 'created_at',
+        defaultValue: Sequelize.fn('NOW'),
       },
       updatedAt: {
-        allowNull: true,
         type: Sequelize.DATE,
+        field: 'updated_at',
+        defaultValue: Sequelize.fn('NOW'),
       },
     });
   },
