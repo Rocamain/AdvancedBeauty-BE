@@ -2,20 +2,15 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('customers', {
       id: {
-        allowNull: false,
-        autoIncrement: true,
-
         type: Sequelize.INTEGER,
-      },
-      customerId: {
-        allowNull: false,
+        field: 'customer_id',
         primaryKey: true,
-        type: Sequelize.INTEGER,
-        unique: true,
+        autoIncrement: true,
       },
       customerName: {
         allowNull: false,
         type: Sequelize.STRING,
+        field: 'customer_name',
       },
       email: {
         allowNull: false,
@@ -23,12 +18,14 @@ module.exports = {
         unique: true,
       },
       createdAt: {
-        allowNull: true,
         type: Sequelize.DATE,
+        field: 'created_at',
+        defaultValue: Sequelize.fn('NOW'),
       },
       updatedAt: {
-        allowNull: true,
         type: Sequelize.DATE,
+        field: 'updated_at',
+        defaultValue: Sequelize.fn('NOW'),
       },
     });
   },

@@ -2,41 +2,39 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('services', {
       id: {
+        type: Sequelize.INTEGER,
+        field: 'service_id',
+        primaryKey: true,
         allowNull: false,
         autoIncrement: true,
-
-        type: Sequelize.INTEGER,
       },
-      serviceId: {
-        allowNull: false,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-        unique: true,
-      },
-
       serviceName: {
-        allowNull: false,
         type: Sequelize.STRING,
+        field: 'service_name',
+        allowNull: false,
         unique: true,
       },
       duration: {
-        allowNull: false,
         type: Sequelize.INTEGER,
+        allowNull: false,
       },
       type: {
-        allowNull: false,
         type: Sequelize.STRING,
+        allowNull: false,
       },
       status: {
         type: Sequelize.BOOLEAN,
+        defaultValue: true,
       },
       createdAt: {
-        allowNull: true,
         type: Sequelize.DATE,
+        field: 'created_at',
+        defaultValue: Sequelize.fn('NOW'),
       },
       updatedAt: {
-        allowNull: true,
         type: Sequelize.DATE,
+        field: 'updated_at',
+        defaultValue: Sequelize.fn('NOW'),
       },
     });
   },
