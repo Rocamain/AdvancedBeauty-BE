@@ -1,8 +1,12 @@
 const { Model } = require('sequelize');
+const moment = require('moment');
 module.exports = (sequelize, DataTypes) => {
   class Customer extends Model {
-    findAll;
-    static associate(models) {}
+    static associate(models) {
+      this.hasMany(models.Booking, {
+        foreignKey: 'customerId',
+      });
+    }
   }
   Customer.init(
     {
@@ -17,16 +21,35 @@ module.exports = (sequelize, DataTypes) => {
         field: 'customer_name',
         allowNull: false,
       },
-      email: { type: DataTypes.STRING, field: 'email', allowNull: false },
+
+      email: {
+        type: DataTypes.STRING,
+        field: 'email',
+        allowNull: false,
+        validate: { isEmail: true },
+      },
+
       createdAt: {
         type: DataTypes.DATE,
         field: 'created_at',
         defaultValue: DataTypes.NOW,
+        //  Not decided if i want to implement this.
+
+        // get() {
+        //   const rawValue = this.getDataValue('createdAt');
+        //   return rawValue ? moment(rawValue).format('DD/MM/YYYY') : null;
+        // },
       },
       updatedAt: {
         type: DataTypes.DATE,
         field: 'updated_at',
         defaultValue: DataTypes.NOW,
+        //  Not decided if i want to implement this.
+
+        // get() {
+        //   const rawValue = this.getDataValue('updatedAt');
+        //   return rawValue ? moment(rawValue).format('DD/MM/YYYY') : null;
+        // },
       },
     },
 
