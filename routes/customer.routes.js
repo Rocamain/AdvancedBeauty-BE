@@ -2,7 +2,8 @@ const { Router } = require('express');
 const {
   getAllCustomers,
   createCustomer,
-  getCustomerByPK,
+  eraseCustomer,
+  getCustomer,
   updateCustomer,
 } = require('../controllers/customer.controller');
 const { withErrorHandling } = require('../middlewares/index');
@@ -14,7 +15,8 @@ router
   .post(withErrorHandling(createCustomer));
 router
   .route('/customers/:id')
-  .get(withErrorHandling(getCustomerByPK))
-  .put(withErrorHandling(updateCustomer));
+  .get(withErrorHandling(getCustomer))
+  .put(withErrorHandling(updateCustomer))
+  .delete(withErrorHandling(eraseCustomer));
 
 module.exports = router;

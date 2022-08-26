@@ -2,7 +2,11 @@ const express = require('express');
 const cors = require('cors');
 
 const customerRouter = require('./routes/customer.routes.js');
-const { routeNotFound, handleCustomErrors } = require('./middlewares');
+const {
+  routeNotFound,
+  handleCustomErrors,
+  SQLErrors,
+} = require('./middlewares');
 const app = express();
 
 // Settings
@@ -14,11 +18,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Routes
+app.get('/', (req, res) => {
+  res.status(200).send({ msg: 'Ok' });
+});
 app.use(customerRouter);
 app.all('/*', routeNotFound);
 
 // handling errors
 app.use(handleCustomErrors);
+app.use(SQLErrors);
 app.use((err, req, res, next) => {
   return res.status(500).json({
     status: 'error',
