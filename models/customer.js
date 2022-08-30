@@ -1,10 +1,10 @@
 const { Model } = require('sequelize');
-const moment = require('moment');
+
 module.exports = (sequelize, DataTypes) => {
   class Customer extends Model {
     static associate(models) {
       this.hasMany(models.Booking, {
-        foreignKey: 'customerId',
+        foreignKey: 'customer_id',
       });
     }
   }
@@ -14,18 +14,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         field: 'customer_id',
         primaryKey: true,
+        allowNull: false,
         autoIncrement: true,
+        unique: true,
       },
       customerName: {
         type: DataTypes.STRING,
         field: 'customer_name',
         allowNull: false,
+        validate: { len: [4, 30] },
       },
 
       email: {
         type: DataTypes.STRING,
-        field: 'email',
         allowNull: false,
+        unique: true,
         validate: { isEmail: true },
       },
 

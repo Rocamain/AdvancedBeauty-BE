@@ -2,74 +2,80 @@ const { Customer, sequelize } = require('../index');
 const { Op } = require('sequelize');
 
 const fetchAllCustomers = async ({
-  limit,
+  limit = null,
   offset = 0,
-  queryFields,
+  customerName,
   createdAt,
   updatedAt,
-  createdAtFrom = new Date(1900, 0, 1),
-  createdAtTo = new Date(Date.now()),
+  createdFrom = new Date(1900, 0, 1),
+  updatedFrom = new Date(1900, 0, 1),
+  createdTo = new Date(Date.now()),
+  updatedTo = new Date(Date.now()),
+  order = 'ASC',
+  orderBy = 'id',
+  ...queryFields
 }) => {
-  try {
-    const customers = await Customer.findAll({
-      where: {
-        ...queryFields,
-        createdAt: { [Op.between]: [createdAtFrom, createdAtTo] },
+  const customers = await Customer.findAll({
+    where: {
+      ...queryFields,
+      customerName: {
+        [Op.regexp]: customerName ? `${customerName}` : '^[a-zA-Z]',
       },
-      offset: offset,
-      limit: limit,
-    });
+      createdAt: {
+        [Op.between]: [
+          createdAt ? createdAt : createdFrom,
+          createdAt ? createdAt : createdTo,
+        ],
+      },
+      updatedAt: {
+        [Op.between]: [
+          updatedAt ? updatedAt : updatedFrom,
+          updatedAt ? updatedAt : updatedTo,
+        ],
+      },
+    },
+    limit: limit,
+    offset: offset,
+    order: [[orderBy, order]],
+  });
 
-    return customers;
-  } catch (err) {
-    return err;
-  }
+  return customers;
 };
 
-const postCustomer = ({ customerName, email }) => {
-  const postNewCustomer = Customer.create({ customerName, email });
+const postCustomer = async ({ customerName, email }) => {
+  const postNewCustomer = await Customer.create({ customerName, email });
 
   return postNewCustomer;
 };
 
 const getCustomerByPK = async ({ id }) => {
-  try {
-    const customer = await Customer.findByPk(id);
+  const customer = await Customer.findByPk(id);
 
+  if (customer) {
     const [bookings] = await sequelize.query(
       `SELECT b.booking_id , sh.shop_name , s.service_name, b.appointment, b.appointment_finish , b.created_at, b.updated_at FROM bookings AS b JOIN customers as c ON b.customer_id = c.customer_id JOIN services as s ON b.service_id = s.service_id JOIN shops as sh ON b.shop_id = sh.shop_id WHERE b.customer_id=${id} ORDER BY b.appointment DESC`
     );
 
-    return { customer, reservations: bookings };
-  } catch (err) {
-    return err;
+    return { ...customer.dataValues, reservations: bookings };
   }
+
+  return null;
 };
 
 const deleteCustomer = async ({ id }) => {
-  id = Number(id);
+  await Customer.destroy({ where: { id: id } });
 
-  try {
-    const deletedUser = await Customer.destroy({ where: { id: id } });
-
-    return {};
-  } catch (err) {
-    return err;
-  }
+  return `user ${id} has been deleted`;
 };
 const putCustomer = async ({ customerName, email, id }) => {
-  id = Number(id);
-  try {
-    const customer = await Customer.findByPk(id);
+  const customer = await Customer.findByPk(id);
 
+  if (customer) {
     await customer.update({ customerName, email });
-
     await customer.save();
-
     return customer;
-  } catch (err) {
-    return err;
   }
+  return null;
 };
 
 module.exports = {

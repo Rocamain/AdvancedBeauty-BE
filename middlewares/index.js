@@ -20,7 +20,10 @@ exports.handleCustomErrors = (err, req, res, next) => {
 exports.SQLErrors = (err, req, res, next) => {
   const errorCodes = {
     23505: 'Unique constrain error',
+    22007: 'Invalid date',
+    42703: 'Query field does not exist',
   };
+
   const getMessage = Boolean(err?.parent?.code)
     ? errorCodes[err.parent.code]
     : err.errors[0].message;

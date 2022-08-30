@@ -1,7 +1,20 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Booking extends Model {
-    static associate(models) {}
+    static associate(models) {
+      this.belongsTo(models.Customer, {
+        foreignKey: 'customer_id',
+        as: 'customerInfo',
+      });
+      this.belongsTo(models.Service, {
+        foreignKey: 'service_id',
+        as: 'serviceInfo',
+      });
+      this.belongsTo(models.Shop, {
+        foreignKey: 'shop_id',
+        as: 'shopInfo',
+      });
+    }
   }
   Booking.init(
     {
@@ -11,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
+        unique: true,
       },
       shopId: { type: DataTypes.INTEGER, field: 'shop_id', allowNull: false },
       serviceId: {
@@ -44,7 +58,6 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: 'Booking',
       tableName: 'bookings',
-      underscored: true,
     }
   );
   return Booking;

@@ -5,6 +5,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         field: 'customer_id',
         primaryKey: true,
+        allowNull: false,
         autoIncrement: true,
       },
       customerName: {
@@ -15,7 +16,6 @@ module.exports = {
       email: {
         allowNull: false,
         type: Sequelize.STRING,
-        unique: true,
       },
       createdAt: {
         type: Sequelize.DATE,

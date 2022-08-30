@@ -6,7 +6,6 @@ module.exports = {
         field: 'shop_id',
         primaryKey: true,
         allowNull: false,
-
         autoIncrement: true,
       },
       shopName: {
