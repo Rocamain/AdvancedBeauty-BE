@@ -3,9 +3,7 @@ process.env.NODE_ENV = 'test';
 const supertest = require('supertest');
 const app = require('../app');
 const db = require('../models/index');
-
 const request = supertest(app);
-const NOW = new Date();
 
 describe('Test search feature', () => {
   beforeAll(async () => {
@@ -122,8 +120,6 @@ describe('Test search feature', () => {
       //   const { body } = await request.get(
       //     `/customers?createdAtFrom=2022-08-18T08:00:00.000Z&createdAtTo=${NOW}`
       //   );
-      //   console.log(body[0]);
-      //   console.log(body[100]);
       // });
       test('Post: should return status code 400 to unique email validation error', async () => {
         const { body, status } = await request
@@ -146,7 +142,7 @@ describe('Test search feature', () => {
       test('Post: should return status code 400:wrong email format', async () => {
         const { body, status } = await request
           .post('/customers')
-          .send({ customerName: 'Jonh Doe', email: 'Jondoe_yahoo.com' });
+          .send({ customerName: 'John Doe', email: 'Jondoe_yahoo.com' });
 
         const { msg } = body;
 
@@ -210,6 +206,132 @@ describe('Test search feature', () => {
         expect(status).toBe(400);
         expect(msg).toBe('Bad request: Validation isEmail on email failed');
       });
+    });
+  });
+
+  // Test suite for testing the BOOKINGS ROUTE
+
+  describe('Bookings route,', () => {
+    describe('/bookings', () => {
+      test('Get: getAllBookings should return status code 200', async () => {
+        const { status, body } = await request.get('/bookings');
+        const { bookings } = body;
+        expect(status).toBe(200);
+        expect(bookings).toHaveLength(20);
+        bookings.forEach(
+          ({
+            id,
+            appointment,
+            time,
+            appointmentFinish,
+            createdAt,
+            updatedAt,
+            customerInfo,
+            serviceInfo,
+            shopInfo,
+          }) => {
+            expect(typeof id).toBe('number');
+            expect(new Date(appointment)).toBeInstanceOf(Date);
+            expect(typeof time).toBe('string');
+            expect(new Date(appointmentFinish)).toBeInstanceOf(Date);
+            expect(new Date(updatedAt)).toBeInstanceOf(Date);
+            expect(new Date(createdAt)).toBeInstanceOf(Date);
+            expect(typeof customerInfo.id).toBe('number');
+            expect(typeof customerInfo.customerName).toBe('string');
+            expect(typeof customerInfo.email).toBe('string');
+            expect(typeof serviceInfo.id).toBe('number');
+            expect(typeof serviceInfo.serviceName).toBe('string');
+            expect(typeof serviceInfo.duration).toBe('number');
+            expect(typeof shopInfo.id).toBe('number');
+            expect(typeof shopInfo.shopName).toBe('string');
+          }
+        );
+      });
+      test('Get: getAllBookings Query(orderBy appointment order DESC ) should return status code 200', async () => {
+        const { status, body } = await request.get(
+          '/bookings?orderBy=appointment&order=asc'
+        );
+        const { bookings } = body;
+
+        const sortedBookings = bookings.sort(
+          (prevBooking, nextBooking) =>
+            new Date(nextBooking.appointment) -
+            new Date(prevBooking.appointment)
+        );
+        expect(status).toBe(200);
+        expect(bookings[0]).toEqual(sortedBookings[0]);
+        expect(bookings[10]).toEqual(sortedBookings[10]);
+      });
+    });
+    test('Get: getAllBookings Query(filter by appointment range of date and shopName) should return status code 200', async () => {
+      const { status, body } = await request.get(
+        '/bookings?appointmentFrom=2022-08-19T09:00:00.000Z&appointmentTo=2022-08-19T11:00:00.000Z&shopName=Palma'
+      );
+      const { bookings } = body;
+
+      expect(status).toBe(200);
+      expect(bookings).toEqual([
+        {
+          appointment: '19/08/2022',
+          time: '12:00',
+          id: 16,
+          appointmentFinish: '2022-08-19T12:30:00.000Z',
+          createdAt: bookings[0].createdAt,
+          updatedAt: bookings[0].updatedAt,
+          customerInfo: {
+            id: 6,
+            customerName: 'Emory Towne',
+            email: 'Emory_Towne23@hotmail.com',
+          },
+          serviceInfo: {
+            id: 5,
+            serviceName: 'Enhanced even-keeled structure',
+            type: 'Body',
+            duration: 90,
+          },
+          shopInfo: { id: 3, shopName: 'Palma' },
+        },
+        {
+          appointment: '19/08/2022',
+          time: '11:00',
+          id: 15,
+          appointmentFinish: '2022-08-19T11:00:00.000Z',
+          createdAt: bookings[0].createdAt,
+          updatedAt: bookings[0].updatedAt,
+          customerInfo: {
+            id: 7,
+            customerName: 'Adella Harris',
+            email: 'Adella_Harris@yahoo.com',
+          },
+          serviceInfo: {
+            id: 7,
+            serviceName: 'Managed value-added task-force',
+            type: 'Manicure and Pedicure',
+            duration: 60,
+          },
+          shopInfo: { id: 3, shopName: 'Palma' },
+        },
+      ]);
+    });
+    test('should return status code 400 for wrong date format', async () => {
+      const { status, body } = await request.get(
+        '/bookings?updatedAt=notADate'
+      );
+      const { msg } = body;
+      expect(status).toBe(400);
+      expect(msg).toBe('Bad request: Invalid date');
+    });
+    test('should return status code 400 for for query field that does not exist', async () => {
+      const { status, body } = await request.get('/bookings?iDoNotExist=Hello');
+      const { msg } = body;
+      expect(status).toBe(400);
+      expect(msg).toBe('Bad request: Query field does not exist');
+    });
+    test('should return status code 400 for for query value that does not exist', async () => {
+      const { status, body } = await request.get('/bookings?duration=long');
+      const { msg } = body;
+      expect(status).toBe(400);
+      expect(msg).toBe('Bad request: Invalid input value type');
     });
   });
 });

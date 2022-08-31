@@ -1,3 +1,5 @@
+const { format, getHours, getMinutes } = require('date-fns');
+
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Booking extends Model {
@@ -37,7 +39,28 @@ module.exports = (sequelize, DataTypes) => {
         field: 'customer_id',
         allowNull: false,
       },
-      appointment: { type: DataTypes.DATE, allowNull: false },
+      appointment: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        get() {
+          const appointment = this.getDataValue('appointment');
+          const cleanDate = format(appointment, 'dd/MM/yyyy');
+          return cleanDate;
+        },
+      },
+      time: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          const appointment = this.getDataValue('appointment');
+          const hours = getHours(appointment);
+          const minutes = getMinutes(appointment);
+
+          const cleanMinutes =
+            minutes.toString().length < 2 ? '0' + minutes : minutes;
+          return `${hours}:${cleanMinutes}`;
+        },
+      },
+
       appointmentFinish: {
         type: DataTypes.DATE,
         field: 'appointment_finish',
