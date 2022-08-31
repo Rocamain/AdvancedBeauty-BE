@@ -1,0 +1,77 @@
+const {
+  fetchAllCustomers,
+  postCustomer,
+  getCustomerByPK,
+  deleteCustomer,
+  putCustomer,
+} = require('../models/queries/customer.queries');
+const { checkIsNum } = require('./utils/index');
+
+const getAllCustomers = (req, res, next) => {
+  const { query } = req;
+
+  const { createdFrom, updatedFrom, createdAtTo, updatedAtTo } = query;
+
+  // const checkDates = (date) => { date === null || }
+
+  fetchAllCustomers(query)
+    .then((customers) => res.status(200).json({ customers }))
+    .catch(next);
+};
+
+const createCustomer = (req, res, next) => {
+  const { email, customerName } = req.body;
+  const isNum = checkIsNum([{ email }, { customerName }]);
+
+  if (isNum.length > 0) {
+    let err = new Error();
+    err.msg = `Bad request: ${isNum[0]} cannot be a number`;
+    err.status = 400;
+    throw err;
+  }
+  postCustomer({ ...req.body })
+    .then((customer) => res.status(201).json({ customer }))
+    .catch(next);
+};
+
+const getCustomer = (req, res, next) => {
+  getCustomerByPK(req.params)
+    .then((customer) => {
+      res.status(200).json({ customer });
+    })
+    .catch(next);
+};
+
+const eraseCustomer = (req, res, next) => {
+  deleteCustomer(req.params)
+    .then((customer) => res.status(204).json({ customer }))
+    .catch(next);
+};
+
+const updateCustomer = (req, res, next) => {
+  const { id } = req.params;
+  const { email, customerName } = req.body;
+
+  const isNum = checkIsNum([{ email }, { customerName }]);
+
+  if (isNum.length > 0) {
+    let err = new Error();
+    err.msg = `Bad request: ${isNum[0]} cannot be a number`;
+    err.status = 400;
+    throw err;
+  }
+
+  putCustomer({ id, email, customerName })
+    .then((customer) => {
+      return res.status(200).json({ customer });
+    })
+    .catch(next);
+};
+
+module.exports = {
+  getAllCustomers,
+  createCustomer,
+  eraseCustomer,
+  getCustomer,
+  updateCustomer,
+};

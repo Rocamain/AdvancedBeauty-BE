@@ -1,7 +1,11 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Service extends Model {
-    static associate(models) {}
+    static associate(models) {
+      this.hasMany(models.Booking, {
+        foreignKey: 'service_id',
+      });
+    }
   }
   Service.init(
     {
@@ -11,18 +15,29 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
+        unique: true,
       },
       serviceName: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         field: 'service_name',
         allowNull: false,
         unique: true,
+        validate: {
+          len: [6, 40],
+        },
       },
       duration: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      type: { type: DataTypes.STRING, allowNull: false },
+      type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          len: [4, 30],
+          isIn: [['Facial', 'Body', 'Manicure and pedicure', 'Laser']],
+        },
+      },
       status: { type: DataTypes.BOOLEAN },
       createdAt: {
         allowNull: true,
@@ -40,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'Service',
-      tableName: 'Services',
+      tableName: 'services',
     }
   );
   return Service;

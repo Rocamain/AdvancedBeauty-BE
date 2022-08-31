@@ -1,7 +1,11 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Shop extends Model {
-    static associate(models) {}
+    static associate(models) {
+      this.hasMany(models.Booking, {
+        foreignKey: 'shop_id',
+      });
+    }
   }
 
   Shop.init(
@@ -10,7 +14,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         field: 'shop_id',
         allowNull: false,
+        primaryKey: true,
         autoIncrement: true,
+        unique: true,
       },
       shopName: {
         type: DataTypes.INTEGER,

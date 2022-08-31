@@ -12,16 +12,28 @@ module.exports = {
         type: Sequelize.INTEGER,
         field: 'shop_id',
         allowNull: false,
+        references: {
+          model: 'shops',
+          key: 'shop_id',
+        },
       },
       serviceId: {
         type: Sequelize.INTEGER,
         field: 'service_id',
         allowNull: false,
+        references: {
+          model: 'services',
+          key: 'service_id',
+        },
       },
       customerId: {
         type: Sequelize.INTEGER,
         field: 'customer_id',
         allowNull: false,
+        references: {
+          model: 'customers',
+          key: 'customer_id',
+        },
       },
       appointment: {
         type: Sequelize.DATE,

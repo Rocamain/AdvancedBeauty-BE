@@ -15,10 +15,7 @@ module.exports = {
     host: process.env.TEST_HOST,
     port: process.env.TEST_PORT,
     dialect: 'postgres',
-    define: {
-      logQueryParameters: 'true',
-    },
-    sync: { force: true },
+    logging: false,
 
     // pool configuration used to pool database connections
     pool: {
