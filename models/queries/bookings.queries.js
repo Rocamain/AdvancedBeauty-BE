@@ -1,4 +1,6 @@
 const { Booking, Customer, Service, Shop } = require('../index');
+const { addMinutes } = require('date-fns');
+const { getIds } = require('./utils/index');
 const { Op } = require('sequelize');
 
 const fetchAllBookings = ({
@@ -50,7 +52,6 @@ const fetchAllBookings = ({
       'appointment',
       'time',
       'appointmentFinish',
-
       'createdAt',
       'updatedAt',
     ],
@@ -63,10 +64,10 @@ const fetchAllBookings = ({
         required: true,
         where: {
           customer_name: {
-            [Op.regexp]: customerName ? `${customerName}/i` : '^[a-zA-Z]',
+            [Op.iRegexp]: customerName ? `${customerName}` : '^[a-zA-Z]',
           },
           email: {
-            [Op.regexp]: email ? `${email}/i` : '^[a-zA-Z0-9]',
+            [Op.regexp]: email ? `/${email}/i` : '^[a-zA-Z0-9]',
           },
         },
       },
@@ -106,11 +107,54 @@ const fetchAllBookings = ({
     ],
     offset: offset,
     limit: limit,
-
     order: [[orderBy, order]],
   });
 };
 
+const postBooking = async ({
+  serviceName,
+  customerName,
+  shopName,
+  email,
+  appointment,
+}) => {
+  const { serviceId, shopId, customerId, duration } = await getIds({
+    serviceName,
+    customerName,
+    shopName,
+    email,
+    appointment,
+  });
+  if (shopId) {
+    const isAppointmentOverlapped = await fetchAllBookings({
+      appointmentTo: addMinutes(new Date(appointment), +duration),
+      appointmentFrom: addMinutes(new Date(appointment), -duration),
+      shopId: shopId,
+    }).then((bookings) => {
+      const err = new Error();
+      err.msg = 'Bad request: Appointment not available';
+      err.status = 400;
+
+      if (Boolean(bookings.length)) {
+        throw err;
+      }
+      return false;
+    });
+
+    if (!isAppointmentOverlapped) {
+      const newBooking = await Booking.create({
+        serviceId,
+        shopId,
+        customerId,
+        appointment,
+        appointmentFinish: addMinutes(new Date(appointment), duration),
+      });
+      return newBooking;
+    }
+  }
+};
+
 module.exports = {
   fetchAllBookings,
+  postBooking,
 };

@@ -7,7 +7,6 @@ exports.withErrorHandling = (controller) => {
     try {
       await controller(req, res, next);
     } catch (err) {
-      console.log('HANDLER=>>>>>>>>', { err });
       next(err);
     }
   };
@@ -24,6 +23,7 @@ exports.SQLErrors = (err, req, res, next) => {
     22007: 'Invalid date',
     42703: 'Query field does not exist',
     '22P02': 'Invalid input value type',
+    42883: 'Invalid input value type',
   };
 
   const getMessage = Boolean(err?.parent?.code)
