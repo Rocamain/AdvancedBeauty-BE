@@ -1,8 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 
-const customerRouter = require('./routes/customer.routes.js');
+const customerRouter = require('./routes/customers.routes');
 const bookingsRouter = require('./routes/bookings.routes');
+const servicesRouter = require('./routes/services.routes');
+const shopsRouter = require('./routes/shops.routes');
+
 const {
   routeNotFound,
   handleCustomErrors,
@@ -25,6 +28,8 @@ app.get('/', (req, res) => {
 });
 app.use(customerRouter);
 app.use(bookingsRouter);
+app.use(servicesRouter);
+app.use(shopsRouter);
 app.all('*', routeNotFound);
 
 // handling errors
