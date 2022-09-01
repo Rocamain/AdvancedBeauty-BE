@@ -10,8 +10,6 @@ const { checkIsNum } = require('./utils/index');
 const getAllCustomers = (req, res, next) => {
   const { query } = req;
 
-  // const checkDates = (date) => { date === null || }
-
   fetchAllCustomers(query)
     .then((customers) => res.status(200).json({ customers }))
     .catch(next);
