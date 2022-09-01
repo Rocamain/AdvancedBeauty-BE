@@ -4,13 +4,11 @@ const {
   getCustomerByPK,
   deleteCustomer,
   putCustomer,
-} = require('../models/queries/customer.queries');
+} = require('../models/queries/customers.queries');
 const { checkIsNum } = require('./utils/index');
 
 const getAllCustomers = (req, res, next) => {
   const { query } = req;
-
-  const { createdFrom, updatedFrom, createdAtTo, updatedAtTo } = query;
 
   // const checkDates = (date) => { date === null || }
 
@@ -21,11 +19,11 @@ const getAllCustomers = (req, res, next) => {
 
 const createCustomer = (req, res, next) => {
   const { email, customerName } = req.body;
-  const isNum = checkIsNum([{ email }, { customerName }]);
+  const { isNum, errors } = checkIsNum([{ email }, { customerName }]);
 
-  if (isNum.length > 0) {
+  if (isNum) {
     let err = new Error();
-    err.msg = `Bad request: ${isNum[0]} cannot be a number`;
+    err.msg = `Bad request: ${errors[0]} cannot be a number`;
     err.status = 400;
     throw err;
   }
@@ -52,11 +50,11 @@ const updateCustomer = (req, res, next) => {
   const { id } = req.params;
   const { email, customerName } = req.body;
 
-  const isNum = checkIsNum([{ email }, { customerName }]);
+  const { isNum, errors } = checkIsNum([{ email }, { customerName }]);
 
-  if (isNum.length > 0) {
+  if (isNum) {
     let err = new Error();
-    err.msg = `Bad request: ${isNum[0]} cannot be a number`;
+    err.msg = `Bad request: ${errors[0]} cannot be a number`;
     err.status = 400;
     throw err;
   }

@@ -5,7 +5,7 @@ const {
   eraseCustomer,
   getCustomer,
   updateCustomer,
-} = require('../controllers/customer.controller');
+} = require('../controllers/customers.controller');
 const { withErrorHandling } = require('../middlewares/index');
 const router = Router();
 
