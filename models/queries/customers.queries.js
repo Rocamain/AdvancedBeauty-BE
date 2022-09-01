@@ -5,6 +5,7 @@ const fetchAllCustomers = async ({
   limit = null,
   offset = 0,
   customerName,
+  email,
   createdAt,
   updatedAt,
   createdFrom = new Date(1900, 0, 1),
@@ -13,13 +14,21 @@ const fetchAllCustomers = async ({
   updatedTo = new Date(Date.now()),
   order = 'ASC',
   orderBy = 'id',
+  bookingSearch = false,
   ...queryFields
 }) => {
+  const isBookingQuery = bookingSearch
+    ? `^${customerName}$`
+    : `^${customerName}`;
+
   const customers = await Customer.findAll({
     where: {
       ...queryFields,
       customerName: {
-        [Op.regexp]: customerName ? `${customerName}` : '^[a-zA-Z]',
+        [Op.iRegexp]: customerName ? isBookingQuery : '[a-zA-Z]',
+      },
+      email: {
+        [Op.iRegexp]: email ? `^${email}` : '^[a-zA-Z]',
       },
       createdAt: {
         [Op.between]: [
@@ -42,10 +51,8 @@ const fetchAllCustomers = async ({
   return customers;
 };
 
-const postCustomer = async ({ customerName, email }) => {
-  const postNewCustomer = await Customer.create({ customerName, email });
-
-  return postNewCustomer;
+const postCustomer = ({ customerName, email }) => {
+  return Customer.create({ customerName, email });
 };
 
 const getCustomerByPK = async ({ id }) => {
@@ -78,10 +85,32 @@ const putCustomer = async ({ customerName, email, id }) => {
   return null;
 };
 
+const findOrCreateCustomer = async ({ email, customerName }) => {
+  try {
+    const [customer] = await Customer.findAll({
+      where: {
+        [Op.and]: [
+          { customerName: { [Op.iRegexp]: `^${customerName}` } },
+          { email: { [Op.iRegexp]: `^${email}` } },
+        ],
+      },
+    });
+
+    if (!customer) {
+      const newCustomer = Customer.create({ customerName, email });
+      return newCustomer;
+    }
+    return customer;
+  } catch (err) {
+    return err;
+  }
+};
+
 module.exports = {
   fetchAllCustomers,
   postCustomer,
   deleteCustomer,
   getCustomerByPK,
   putCustomer,
+  findOrCreateCustomer,
 };
