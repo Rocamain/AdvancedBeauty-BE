@@ -1,5 +1,4 @@
 const { fetchAllShops } = require('../models/queries/shops.queries');
-const { checkIsNum } = require('./utils/index');
 
 const getAllShops = (req, res, next) => {
   const { query } = req;
