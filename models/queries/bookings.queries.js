@@ -112,6 +112,43 @@ const fetchAllBookings = ({
   });
 };
 
+const postBooking = async ({
+  serviceId,
+  shopId,
+  customerId,
+  duration,
+  appointment,
+}) => {
+  if (shopId && serviceId && customerId && duration) {
+    const isAppointmentOverlapped = await fetchAllBookings({
+      appointmentTo: addMinutes(new Date(appointment), +duration),
+      appointmentFrom: addMinutes(new Date(appointment), -duration),
+      shopId: shopId,
+    }).then((bookings) => {
+      const err = new Error();
+      err.msg = 'Bad request: Appointment not available';
+      err.status = 400;
+
+      if (Boolean(bookings.length)) {
+        throw err;
+      }
+      return false;
+    });
+
+    if (!isAppointmentOverlapped) {
+      const newBooking = await Booking.create({
+        serviceId,
+        shopId,
+        customerId,
+        appointment,
+        appointmentFinish: addMinutes(new Date(appointment), duration),
+      });
+
+      return newBooking;
+    }
+  }
+};
+
 module.exports = {
   fetchAllBookings,
   postBooking,
