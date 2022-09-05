@@ -4,7 +4,7 @@ const cors = require('cors');
 const customerRouter = require('./routes/customers.routes');
 const bookingsRouter = require('./routes/bookings.routes');
 const servicesRouter = require('./routes/services.routes');
-const shopsRouter = require('./routes/shops.routes');
+const shopsRouter = require('./routes/shops.routes.js');
 
 const {
   routeNotFound,

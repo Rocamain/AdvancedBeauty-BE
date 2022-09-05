@@ -7,6 +7,13 @@ const fetchAllServices = ({
   limit = 20,
   offset = 0,
   serviceName,
+  type,
+  createdAt,
+  createdFrom = new Date(1900, 0, 1),
+  createdTo = new Date(Date.now()),
+  updatedAt,
+  updatedFrom = new Date(1900, 0, 1),
+  updatedTo = new Date(Date.now()),
   ...queryFields
 }) => {
   return Service.findAll({
@@ -14,6 +21,21 @@ const fetchAllServices = ({
       ...queryFields,
       serviceName: {
         [Op.iRegexp]: serviceName ? `^${serviceName}$` : '[a-zA-Z]',
+      },
+      type: {
+        [Op.iRegexp]: type ? `^${type}$` : '[a-zA-Z]',
+      },
+      createdAt: {
+        [Op.between]: [
+          createdAt ? createdAt : createdFrom,
+          createdAt ? createdAt : createdTo,
+        ],
+      },
+      updatedAt: {
+        [Op.between]: [
+          updatedAt ? updatedAt : updatedFrom,
+          updatedAt ? updatedAt : updatedTo,
+        ],
       },
     },
     limit,
