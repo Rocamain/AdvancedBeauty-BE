@@ -107,51 +107,9 @@ const fetchAllBookings = ({
     ],
     offset: offset,
     limit: limit,
+
     order: [[orderBy, order]],
   });
-};
-
-const postBooking = async ({
-  serviceName,
-  customerName,
-  shopName,
-  email,
-  appointment,
-}) => {
-  const { serviceId, shopId, customerId, duration } = await getIds({
-    serviceName,
-    customerName,
-    shopName,
-    email,
-    appointment,
-  });
-  if (shopId) {
-    const isAppointmentOverlapped = await fetchAllBookings({
-      appointmentTo: addMinutes(new Date(appointment), +duration),
-      appointmentFrom: addMinutes(new Date(appointment), -duration),
-      shopId: shopId,
-    }).then((bookings) => {
-      const err = new Error();
-      err.msg = 'Bad request: Appointment not available';
-      err.status = 400;
-
-      if (Boolean(bookings.length)) {
-        throw err;
-      }
-      return false;
-    });
-
-    if (!isAppointmentOverlapped) {
-      const newBooking = await Booking.create({
-        serviceId,
-        shopId,
-        customerId,
-        appointment,
-        appointmentFinish: addMinutes(new Date(appointment), duration),
-      });
-      return newBooking;
-    }
-  }
 };
 
 module.exports = {
