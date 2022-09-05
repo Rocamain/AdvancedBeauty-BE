@@ -17,12 +17,13 @@ const getAllCustomers = (req, res, next) => {
 
 const createCustomer = (req, res, next) => {
   const { email, customerName } = req.body;
-  const { isNum, errors } = checkIsNum([{ email }, { customerName }]);
+  const { isNum, numErrors } = checkIsNum([{ email }, { customerName }]);
 
   if (isNum) {
     let err = new Error();
-    err.msg = `Bad request: ${errors[0]} cannot be a number`;
+    err.msg = `Bad request: ${numErrors[0]} cannot be a number`;
     err.status = 400;
+
     throw err;
   }
   postCustomer({ ...req.body })
@@ -48,11 +49,11 @@ const updateCustomer = (req, res, next) => {
   const { id } = req.params;
   const { email, customerName } = req.body;
 
-  const { isNum, errors } = checkIsNum([{ email }, { customerName }]);
+  const { isNum, numErrors } = checkIsNum([{ email }, { customerName }]);
 
   if (isNum) {
     let err = new Error();
-    err.msg = `Bad request: ${errors[0]} cannot be a number`;
+    err.msg = `Bad request: ${numErrors[0]} cannot be a number`;
     err.status = 400;
     throw err;
   }
