@@ -9,10 +9,10 @@
   "bugs": {
     "url": "https://github.com/Rocamain/AdvancedBeauty-BE/issues"
   },
-  "main": "index.js",
+  "main": "listen.js",
   "scripts": {
     "test": "(npm run db:reset && jest ./__tests__/app.test.js)",
-    "dev": "cross-env NODE_ENV=test nodemon ./listen.js",
+    "dev": "cross-env NODE_ENV=test nodemon listen.js",
     "fetch-test-data": "node ./db/data/fetch-data.js",
     "fetch-dev-data": "NODE_ENV=development node  ./db/data/fetch-data.js",
     "setup-db": "npx sequelize-cli db:create",
@@ -36,9 +36,11 @@
     "supertest": "^6.2.4"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "date-fns": "^2.29.2",
+    "date-fns-tz": "^1.3.7",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "pg": "^8.7.3",

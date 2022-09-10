@@ -47,19 +47,31 @@ const generateBookings = (
     .concat(bookings)
     .reduce(
       (previousBookings, currentBooking, i) => {
-        const randomHour = sample([9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]);
-        const date =
-          ENV === 'dev' ? sample(workingDays) : new Date(2022, 7, 19);
-        const appointment = addHours(date, randomHour);
         const { service_id, duration } = sample(services);
+        const hours = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+        if (duration > 60) {
+          hours.pop();
+        }
+        const randomHour = sample(hours);
+
+        const date =
+          ENV === 'dev' ? sample(workingDays) : new Date(2022, 10, 19);
+        const appointment = addHours(date, randomHour);
+        // const appointmentWithOffSet prevent the change the time between summer and winter times as well as if execute from different
+        // timezone so date still the same value.
+        const appointmentWithOffSet = addMinutes(
+          appointment,
+          appointment.getTimezoneOffset() * -1
+        );
+
         const { customer_id } = sample(customers);
 
         const newBooking = {
           shop_id: shopId,
           service_id,
           customer_id,
-          appointment,
-          appointmentFinish: addMinutes(appointment, duration),
+          appointment: appointmentWithOffSet,
+          appointmentFinish: addMinutes(appointmentWithOffSet, duration),
         };
 
         if (checkOverlappedBookings(newBooking, previousBookings).length > 0) {
@@ -114,6 +126,7 @@ const generateServices = (shops, serviceCount) => {
       service_id: i + 1,
       service_name: `${faker.company.catchPhrase()}`,
       duration: sample([30, 60, 90]),
+      price: sample([25, 40, 50, 70]),
       type: sample(['Facial', 'Manicure and Pedicure', 'Laser', 'Body']),
     };
   });
