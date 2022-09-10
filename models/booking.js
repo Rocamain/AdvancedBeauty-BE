@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         get() {
           const appointment = this.getDataValue('appointment');
-          const cleanDate = format(appointment, 'dd/MM/yyyy');
+          const cleanDate = new Date(appointment);
           return cleanDate;
         },
       },
@@ -52,8 +52,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.VIRTUAL,
         get() {
           const appointment = this.getDataValue('appointment');
-          const hours = getHours(appointment);
-          const minutes = getMinutes(appointment);
+          const hours = new Date(appointment).getUTCHours();
+          const minutes = new Date(appointment).getUTCMinutes();
 
           const cleanMinutes =
             minutes.toString().length < 2 ? '0' + minutes : minutes;

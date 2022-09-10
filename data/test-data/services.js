@@ -1,52 +1,62 @@
 module.exports = [
   {
-    "service_name": "Managed context-sensitive encoding",
+    "service_name": "Open-source optimal paradigm",
     "duration": 30,
+    "price": 40,
     "type": "Facial"
   },
   {
-    "service_name": "Reduced client-driven interface",
-    "duration": 90,
-    "type": "Manicure and Pedicure"
-  },
-  {
-    "service_name": "Re-contextualized background info-mediaries",
-    "duration": 90,
-    "type": "Body"
-  },
-  {
-    "service_name": "Vision-oriented 6th generation info-mediaries",
-    "duration": 60,
-    "type": "Manicure and Pedicure"
-  },
-  {
-    "service_name": "Enhanced even-keeled structure",
-    "duration": 90,
-    "type": "Body"
-  },
-  {
-    "service_name": "Visionary 24/7 ability",
-    "duration": 60,
-    "type": "Laser"
-  },
-  {
-    "service_name": "Managed value-added task-force",
-    "duration": 60,
-    "type": "Manicure and Pedicure"
-  },
-  {
-    "service_name": "Balanced needs-based matrices",
+    "service_name": "Reverse-engineered mission-critical encryption",
     "duration": 30,
+    "price": 40,
+    "type": "Body"
+  },
+  {
+    "service_name": "Horizontal radical structure",
+    "duration": 60,
+    "price": 70,
     "type": "Facial"
   },
   {
-    "service_name": "Re-contextualized disintermediate groupware",
+    "service_name": "Customizable next generation alliance",
     "duration": 60,
+    "price": 70,
     "type": "Laser"
   },
   {
-    "service_name": "Extended heuristic service-desk",
+    "service_name": "Business-focused asynchronous internet solution",
+    "duration": 90,
+    "price": 50,
+    "type": "Body"
+  },
+  {
+    "service_name": "Compatible encompassing paradigm",
     "duration": 30,
+    "price": 25,
+    "type": "Body"
+  },
+  {
+    "service_name": "Triple-buffered uniform capability",
+    "duration": 60,
+    "price": 50,
+    "type": "Body"
+  },
+  {
+    "service_name": "Switchable web-enabled array",
+    "duration": 60,
+    "price": 70,
+    "type": "Body"
+  },
+  {
+    "service_name": "Compatible empowering encoding",
+    "duration": 60,
+    "price": 25,
+    "type": "Laser"
+  },
+  {
+    "service_name": "Expanded high-level concept",
+    "duration": 60,
+    "price": 50,
     "type": "Manicure and Pedicure"
   }
 ]

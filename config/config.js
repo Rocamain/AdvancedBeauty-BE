@@ -7,6 +7,16 @@ module.exports = {
     database: process.env.DEV_DB_NAME,
     host: process.env.DEV_HOST,
     dialect: 'postgres',
+    dialectOptions: {
+      useUTC: false,
+    },
+    logging: false,
+    // pool configuration used to pool database connections
+    pool: {
+      max: 5,
+      idle: 30000,
+      acquire: 60000,
+    },
   },
   test: {
     username: process.env.TEST_USER,
@@ -15,8 +25,10 @@ module.exports = {
     host: process.env.TEST_HOST,
     port: process.env.TEST_PORT,
     dialect: 'postgres',
+    dialectOptions: {
+      useUTC: false,
+    },
     logging: false,
-
     // pool configuration used to pool database connections
     pool: {
       max: 5,
@@ -30,5 +42,15 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.HOST,
     dialect: 'postgres',
+    dialectOptions: {
+      useUTC: false,
+    },
+    logging: false,
+    // pool configuration used to pool database connections
+    pool: {
+      max: 5,
+      idle: 30000,
+      acquire: 60000,
+    },
   },
 };

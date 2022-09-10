@@ -1,9 +1,11 @@
 const { Booking, Customer, Service, Shop } = require('../index');
-const { addMinutes } = require('date-fns');
-const { getIds } = require('./utils/index');
+const { fetchAllServices } = require('../queries/services.queries');
+const { getAvailableBookings } = require('./utils/index');
+const { addMinutes, addHours } = require('date-fns');
+
 const { Op } = require('sequelize');
 
-const fetchAllBookings = ({
+const fetchAllBookings = async ({
   customerName,
   email,
   serviceName,
@@ -12,20 +14,20 @@ const fetchAllBookings = ({
   shopName,
   appointment,
   appointmentFrom = new Date(1900, 0, 1),
-  appointmentTo = new Date(Date.now()),
+  appointmentTo = Infinity,
   createdAt,
   createdFrom = new Date(1900, 0, 1),
-  createdTo = new Date(Date.now()),
+  createdTo = Infinity,
   updatedAt,
   updatedFrom = new Date(1900, 0, 1),
-  updatedTo = new Date(Date.now()),
+  updatedTo = Infinity,
   limit = 20,
   offset = 0,
-  order = 'DESC',
-  orderBy = 'id',
+  order = 'ASC',
+  orderBy = 'appointment',
   ...restOfQuery
 }) => {
-  return Booking.findAll({
+  const bookings = await Booking.findAll({
     where: {
       ...restOfQuery,
       appointment: {
@@ -110,26 +112,63 @@ const fetchAllBookings = ({
 
     order: [[orderBy, order]],
   });
+
+  return bookings;
+};
+
+const fetchBookingsByShopAndDay = ({
+  shopName,
+  appointmentFrom,
+  appointmentTo,
+  order = 'ASC',
+  orderBy = 'appointment',
+}) => {
+  return Booking.findAll({
+    where: {
+      appointment: {
+        [Op.between]: [appointmentFrom, appointmentTo],
+      },
+    },
+    attributes: ['id', 'appointment', 'time', 'appointmentFinish'],
+    include: [
+      {
+        model: Shop,
+        as: 'shopInfo',
+        attributes: ['id', 'shopName'],
+        where: { shopName: { [Op.iRegexp]: `^${shopName}$` } },
+      },
+    ],
+    order: [[orderBy, order]],
+  }).then((bookings) =>
+    bookings.map(({ id, appointment, time, appointmentFinish, shopInfo }) => ({
+      id,
+      appointment,
+      time,
+      appointmentFinish,
+      shopName: shopInfo.shopName,
+    }))
+  );
 };
 
 const postBooking = async ({
   serviceId,
   shopId,
   customerId,
-  duration,
+  serviceTime,
   appointment,
 }) => {
-  if (shopId && serviceId && customerId && duration) {
+  if (shopId && serviceId && customerId && serviceTime) {
     const isAppointmentOverlapped = await fetchAllBookings({
-      appointmentTo: addMinutes(new Date(appointment), +duration),
-      appointmentFrom: addMinutes(new Date(appointment), -duration),
-      shopId: shopId,
+      appointmentFrom: appointment,
+      appointmentTo: addMinutes(appointment, +serviceTime),
+      shopId,
     }).then((bookings) => {
-      const err = new Error();
-      err.msg = 'Bad request: Appointment not available';
-      err.status = 400;
+      const isOverlapped = bookings.length > 1;
 
-      if (Boolean(bookings.length)) {
+      if (isOverlapped) {
+        const err = new Error();
+        err.msg = 'Bad request: Appointment not available';
+        err.status = 400;
         throw err;
       }
       return false;
@@ -141,7 +180,7 @@ const postBooking = async ({
         shopId,
         customerId,
         appointment,
-        appointmentFinish: addMinutes(new Date(appointment), duration),
+        appointmentFinish: addMinutes(appointment, serviceTime),
       });
 
       return newBooking;
@@ -149,7 +188,44 @@ const postBooking = async ({
   }
 };
 
+const fetchAvailableBookings = async ({ serviceName, shopName, date }) => {
+  const appointmentFrom = addHours(date, 9);
+  const appointmentTo = addHours(date, 20);
+
+  try {
+    const [service] = await fetchAllServices({ serviceName });
+    const { duration } = service.dataValues;
+
+    const bookings = await fetchBookingsByShopAndDay({
+      shopName,
+      appointmentTo,
+      appointmentFrom,
+    });
+
+    // Possible implementation for getting the closing/opening times of the shop
+    // by make a query to db, below default
+
+    let openingTime = addHours(new Date(date), 9);
+    let closingTime = addHours(new Date(date), 20);
+
+    if (bookings) {
+      const availableBookings = getAvailableBookings({
+        openingTime,
+        closingTime,
+        bookings,
+        serviceTime: duration,
+      });
+
+      return availableBookings;
+    }
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+};
+
 module.exports = {
   fetchAllBookings,
   postBooking,
+  fetchAvailableBookings,
 };
