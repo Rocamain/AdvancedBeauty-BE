@@ -1,4 +1,4 @@
-const { throwDatesErrors } = require('./utils.js');
+const { throwDatesErrors } = require('./utils/index');
 
 exports.routeNotFound = (req, res) => {
   res.status(404).send({ msg: 'Route not found' });
