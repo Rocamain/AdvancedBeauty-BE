@@ -4,6 +4,7 @@ const supertest = require('supertest');
 const app = require('../app');
 const db = require('../models/index');
 const request = supertest(app);
+const { isPast } = require('date-fns');
 
 describe('Test search feature', () => {
   beforeAll(async () => {
@@ -38,13 +39,13 @@ describe('Test search feature', () => {
       );
       const { msg } = body;
       expect(status).toBe(400);
-      expect(msg).toBe('Bad request: Invalid date value');
+      expect(msg).toBe('Bad request: Invalid date');
     });
     test('should return status code 400 for wrong date format(number)', async () => {
       const { status, body } = await request.get('/customers?createdAt=23');
       const { msg } = body;
       expect(status).toBe(400);
-      expect(msg).toBe('Bad request: Invalid date value');
+      expect(msg).toBe('Bad request: Invalid date');
     });
   });
 
@@ -85,18 +86,18 @@ describe('Test search feature', () => {
 
         expect(status).toBe(200);
         expect(customers).toHaveLength(100);
-        expect(customers[0].customerName).toBe('Yvette Zemlak');
-        expect(customers[99].customerName).toBe('Abdullah Fay');
+        expect(customers[0].customerName).toBe('Willy Gorczany');
+        expect(customers[99].customerName).toBe('Adolf Reichel');
       });
       test('Get: getAllCustomers Query(get the names which contains Dennis ) should return status code 200', async () => {
         const { status, body } = await request.get(
-          '/customers?customerName=Dennis'
+          '/customers?customerName=russell'
         );
         const { customers } = body;
 
         expect(status).toBe(200);
         expect(customers).toHaveLength(1);
-        expect(customers[0].customerName).toBe('Dennis Leuschke');
+        expect(customers[0].customerName).toBe('Russell Fahey');
       });
       test('Get: getAllCustomers Query field that does not exist should return status code 400', async () => {
         const { status, body } = await request.get(
@@ -119,12 +120,6 @@ describe('Test search feature', () => {
         expect(customer.customerName).toBe('Javier Roca');
         expect(customer.email).toBe('Javier_R@yahoo.com');
       });
-      // CHECK HOW TO DO THIS TEST => ALL SEED IS CREATE A SAME TIME
-      // test('Get: should return status code 200, can be query any field and createdAt can be query by range', async () => {
-      //   const { body } = await request.get(
-      //     `/customers?createdAtFrom=2022-08-18T08:00:00.000Z&createdAtTo=${NOW}`
-      //   );
-      // });
     });
     describe('/customers Errors', () => {
       test('should return status code 400 to unique email validation error', async () => {
@@ -165,7 +160,7 @@ describe('Test search feature', () => {
 
         expect(status).toBe(200);
         expect(id).toBe(49);
-        expect(customerName).toBe('Ora Kuvalis');
+        expect(customerName).toBe('Russell Fahey');
         expect(body.customer).toHaveProperty('reservations');
       });
 
@@ -240,17 +235,18 @@ describe('Test search feature', () => {
       });
       test('Get: getAllServices Query(serviceName) exact match return  should return status code 200', async () => {
         const { status, body } = await request.get(
-          '/services?serviceName=Extended heuristic service-desk'
+          '/services?serviceName=Open-source optimal paradigm'
         );
         const { services } = body;
-        const { id, serviceName, duration, type } = services[0];
+        const { id, serviceName, duration, price, type } = services[0];
 
         expect(status).toBe(200);
         expect(services).toHaveLength(1);
-        expect(id).toBe(10);
-        expect(serviceName).toBe('Extended heuristic service-desk');
+        expect(id).toBe(1);
+        expect(serviceName).toBe('Open-source optimal paradigm');
         expect(duration).toBe(30);
-        expect(type).toBe('Manicure and Pedicure');
+        expect(price).toBe(40);
+        expect(type).toBe('Facial');
       });
       test('Get: getAllServices Query(type and duration) should return status code 200', async () => {
         const { status, body } = await request.get(
@@ -259,13 +255,11 @@ describe('Test search feature', () => {
         const { services } = body;
 
         expect(status).toBe(200);
-        expect(services).toHaveLength(2);
+        expect(services).toHaveLength(1);
         expect(services[0].id).toBe(1);
         expect(services[0].duration).toBe(30);
+        expect(services[0].price).toBe(40);
         expect(services[0].type).toBe('Facial');
-        expect(services[1].id).toBe(8);
-        expect(services[1].duration).toBe(30);
-        expect(services[1].type).toBe('Facial');
       });
     });
     describe('/services Errors', () => {
@@ -287,7 +281,7 @@ describe('Test search feature', () => {
         const { status, body } = await request.get('/services?createdAt=111');
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid date value');
+        expect(msg).toBe('Bad request: Invalid date');
       });
       test('should return status code 400 for query(createdAt) an invalid input type string', async () => {
         const { status, body } = await request.get(
@@ -295,7 +289,7 @@ describe('Test search feature', () => {
         );
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid date value');
+        expect(msg).toBe('Bad request: Invalid date');
       });
     });
   });
@@ -349,18 +343,17 @@ describe('Test search feature', () => {
         expect(status).toBe(400);
         expect(msg).toBe('Bad request: Invalid input value type');
       });
-
       test('should return status code 400 for query(createdAt) an invalid input type number', async () => {
         const { status, body } = await request.get('/shops?createdAt=111');
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid date value');
+        expect(msg).toBe('Bad request: Invalid date');
       });
       test('should return status code 400 for query(updatedAt) an invalid input type string', async () => {
         const { status, body } = await request.get('/shops?updatedAt=string');
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid date value');
+        expect(msg).toBe('Bad request: Invalid date');
       });
     });
   });
@@ -398,6 +391,7 @@ describe('Test search feature', () => {
             expect(typeof serviceInfo.id).toBe('number');
             expect(typeof serviceInfo.serviceName).toBe('string');
             expect(typeof serviceInfo.duration).toBe('number');
+            expect(typeof serviceInfo.price).toBe('number');
             expect(typeof shopInfo.id).toBe('number');
             expect(typeof shopInfo.shopName).toBe('string');
           }
@@ -420,80 +414,103 @@ describe('Test search feature', () => {
       });
       test('Get: getAllBookings Query(filter by appointment range of date and shopName) should return status code 200', async () => {
         const { status, body } = await request.get(
-          '/bookings?appointmentFrom=2022-08-19T09:00:00.000Z&appointmentTo=2022-08-19T11:00:00.000Z&shopName=Palma'
+          '/bookings?appointmentFrom=2022-11-19T09:00:00.000Z&appointmentTo=2022-11-19T11:00:00.000Z&shopName=Palma'
         );
         const { bookings } = body;
 
         expect(status).toBe(200);
         expect(bookings).toEqual([
           {
-            appointment: '19/08/2022',
-            time: '12:00',
-            id: 16,
-            appointmentFinish: '2022-08-19T12:30:00.000Z',
+            appointment: '2022-11-19T09:00:00.000Z',
+            time: '9:00',
+            id: 18,
+            appointmentFinish: '2022-11-19T10:00:00.000Z',
             createdAt: bookings[0].createdAt,
             updatedAt: bookings[0].updatedAt,
             customerInfo: {
-              id: 6,
-              customerName: 'Emory Towne',
-              email: 'Emory_Towne23@hotmail.com',
+              id: 25,
+              customerName: 'Aurelie Kunze',
+              email: 'Aurelie_Kunze@gmail.com',
             },
             serviceInfo: {
-              id: 5,
-              serviceName: 'Enhanced even-keeled structure',
+              id: 7,
+              serviceName: 'Triple-buffered uniform capability',
               type: 'Body',
-              duration: 90,
+              price: 50,
+              duration: 60,
             },
             shopInfo: { id: 3, shopName: 'Palma' },
           },
           {
-            appointment: '19/08/2022',
-            time: '11:00',
-            id: 15,
-            appointmentFinish: '2022-08-19T11:00:00.000Z',
-            createdAt: bookings[0].createdAt,
-            updatedAt: bookings[0].updatedAt,
+            appointment: '2022-11-19T10:00:00.000Z',
+            time: '10:00',
+            id: 19,
+            appointmentFinish: '2022-11-19T11:00:00.000Z',
+            createdAt: bookings[1].createdAt,
+            updatedAt: bookings[1].updatedAt,
             customerInfo: {
-              id: 7,
-              customerName: 'Adella Harris',
-              email: 'Adella_Harris@yahoo.com',
+              id: 92,
+              customerName: 'Eda Reinger',
+              email: 'Eda9@gmail.com',
             },
             serviceInfo: {
               id: 7,
-              serviceName: 'Managed value-added task-force',
-              type: 'Manicure and Pedicure',
+              serviceName: 'Triple-buffered uniform capability',
+              type: 'Body',
+              price: 50,
+              duration: 60,
+            },
+            shopInfo: { id: 3, shopName: 'Palma' },
+          },
+          {
+            appointment: '2022-11-19T11:00:00.000Z',
+            time: '11:00',
+            id: 20,
+            appointmentFinish: '2022-11-19T12:00:00.000Z',
+            createdAt: bookings[2].createdAt,
+            updatedAt: bookings[2].updatedAt,
+            customerInfo: {
+              id: 73,
+              customerName: 'Dusty Wolf',
+              email: 'Dusty_Wolf33@gmail.com',
+            },
+            serviceInfo: {
+              id: 4,
+              serviceName: 'Customizable next generation alliance',
+              type: 'Laser',
+              price: 70,
               duration: 60,
             },
             shopInfo: { id: 3, shopName: 'Palma' },
           },
         ]);
       });
-      test('Post: should return status code 201 (not case sensitive) for an existing user', async () => {
+      test('Post: should return status code 201 (not case sensitive) with an existing user', async () => {
         const { body, status } = await request.post('/bookings').send({
           customerName: 'darlene Murray',
           email: 'Darlene_murray40@yahoo.com',
-          serviceName: 'Re-contextualized Background info-mediaries',
-          shopName: 'palma',
+          serviceName: 'Reverse-engineered mission-critical encryption',
+          shopName: 'Palma',
           appointment: '2023-01-02T15:10:00.000Z',
         });
 
         const { createdAt, updatedAt, ...restBooking } = body.booking;
         expect(status).toBe(201);
         expect(restBooking).toEqual({
-          appointment: '02/01/2023',
-          time: '15:10',
-          id: 22,
-          serviceId: 3,
+          appointment: '2023-01-02T15:10:00.000Z',
           shopId: 3,
-          customerId: 2,
-          appointmentFinish: '2023-01-02T16:40:00.000Z',
+          time: '15:10',
+          appointmentFinish: '2023-01-02T15:40:00.000Z',
+          customerId: 103,
+          id: 26,
+          serviceId: 2,
         });
       });
       test('Post: should return status code 201 (not case sensitive) for a new user', async () => {
         const { body, status } = await request.post('/bookings').send({
           customerName: 'New User',
           email: 'newUser@yahoo.com',
-          serviceName: 'Re-contextualized Background info-mediaries',
+          serviceName: 'Horizontal radical structure',
           shopName: 'turo park',
           appointment: '2023-11-02T11:00:00.000Z',
         });
@@ -501,13 +518,13 @@ describe('Test search feature', () => {
         const { createdAt, updatedAt, ...restBooking } = body.booking;
         expect(status).toBe(201);
         expect(restBooking).toEqual({
-          appointment: '02/11/2023',
           time: '11:00',
-          appointmentFinish: '2023-11-02T12:30:00.000Z',
-          customerId: 103,
-          id: 23,
+          id: 27,
           serviceId: 3,
           shopId: 1,
+          appointment: '2023-11-02T11:00:00.000Z',
+          appointmentFinish: '2023-11-02T12:00:00.000Z',
+          customerId: 104,
         });
       });
     });
@@ -519,7 +536,7 @@ describe('Test search feature', () => {
         );
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid date value');
+        expect(msg).toBe('Bad request: Invalid date');
       });
       test('Get:should return status code 400 for query field that does not exist', async () => {
         const { status, body } = await request.get(
@@ -565,7 +582,7 @@ describe('Test search feature', () => {
         const { body, status } = await request.post('/bookings').send({
           customerName: 'Javier Roca',
           email: 'im_am_not_an_email.com',
-          serviceName: 'Re-contextualized Background info-mediaries',
+          serviceName: 'Horizontal radical structure',
           shopName: 'palma',
           appointment: '2023-09-02T15:00:00.000Z',
         });
@@ -578,7 +595,7 @@ describe('Test search feature', () => {
         const { body, status } = await request.post('/bookings').send({
           customerName: 'Javier Roca',
           email: 1111,
-          serviceName: 'Re-contextualized Background info-mediaries',
+          serviceName: 'Horizontal radical structure',
           shopName: 'palma',
           appointment: '2023-09-02T15:00:00.000Z',
         });
@@ -591,7 +608,7 @@ describe('Test search feature', () => {
         const { body, status } = await request.post('/bookings').send({
           customerName: 'Javier Roca',
           email: 'fjrocavazquez@gmail.com',
-          serviceName: 'Re-contextualized Background info-mediaries',
+          serviceName: 'Reverse-engineered mission-critical encryption',
           shopName: 'plma',
           appointment: '2023-09-02T15:00:00.000Z',
         });
@@ -630,14 +647,109 @@ describe('Test search feature', () => {
         const { body, status } = await request.post('/bookings').send({
           customerName: 'Jonh doe',
           email: 'jdoe@yahoo.com',
-          serviceName: 'Re-contextualized Background info-mediaries',
+          serviceName: 'Reverse-engineered mission-critical encryption',
           shopName: 'turo park',
-          appointment: '2023-11-02T11:00:00.000Z',
+          appointment: '2022-11-19T09:00:00.000Z',
         });
 
         const { msg } = body;
         expect(status).toBe(400);
         expect(msg).toBe('Bad request: Appointment not available');
+      });
+    });
+    describe('/bookings/available', () => {
+      test('Get: getAllAvailableBookings should return an array of times available with status code 200 (day with no bookings)', async () => {
+        const { status, body } = await request.get(
+          '/bookings/available?date=19/11/2022&shopName=Palma&serviceName=Customizable next generation alliance'
+        );
+
+        const { bookings } = body;
+        expect(status).toBe(200);
+        expect(bookings).toEqual([
+          '2022-11-19T12:00:00.000Z',
+          '2022-11-19T16:00:00.000Z',
+          '2022-11-19T17:00:00.000Z',
+        ]);
+
+        const firstBooking = await request.post('/bookings').send({
+          customerName: 'Jay dee',
+          email: 'jdoe@yao.com',
+          serviceName: 'Reverse-engineered mission-critical encryption',
+          shopName: 'Palma',
+          appointment: bookings[0],
+        });
+        const secondBooking = await request.post('/bookings').send({
+          customerName: 'Jay dee',
+          email: 'jdoe@yao.com',
+          serviceName: 'Reverse-engineered mission-critical encryption',
+          shopName: 'Palma',
+          appointment: bookings[1],
+        });
+        const thirdBooking = await request.post('/bookings').send({
+          customerName: 'Jay dee',
+          email: 'jdoe@yao.com',
+          serviceName: 'Reverse-engineered mission-critical encryption',
+          shopName: 'Palma',
+          appointment: bookings[2],
+        });
+
+        expect(firstBooking.status).toBe(201);
+        expect(secondBooking.status).toBe(201);
+        expect(thirdBooking.status).toBe(201);
+      });
+      test('Get: getAllAvailableBookings  should return an array of times available with status code 200', async () => {
+        const { status, body } = await request.get(
+          '/bookings/available?date=19/12/2022&shopName=Palma&serviceName=Customizable next generation alliance'
+        );
+
+        const { bookings } = body;
+        expect(status).toBe(200);
+        expect(bookings).toEqual([
+          '2022-12-19T09:00:00.000Z',
+          '2022-12-19T10:00:00.000Z',
+          '2022-12-19T11:00:00.000Z',
+          '2022-12-19T12:00:00.000Z',
+          '2022-12-19T13:00:00.000Z',
+          '2022-12-19T14:00:00.000Z',
+          '2022-12-19T15:00:00.000Z',
+          '2022-12-19T16:00:00.000Z',
+          '2022-12-19T17:00:00.000Z',
+          '2022-12-19T18:00:00.000Z',
+          '2022-12-19T19:00:00.000Z',
+        ]);
+      });
+      test('should return status code 400 to missing query field validation error on serviceName', async () => {
+        const { status, body } = await request.get(
+          '/bookings/available?date=19/12/2022&shopName=Palma&serviceName=NOTASERVICE'
+        );
+        expect(status).toBe(200);
+        expect(body).toEqual({ bookings: {} });
+      });
+    });
+    describe('/bookings/available Errors', () => {
+      test('should return status code 400 to missing query field validation error', async () => {
+        const { status, body } = await request.get(
+          '/bookings/available?date=19/11/2022&serviceName=Customizable next generation alliance'
+        );
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: missing field: shopName');
+      });
+      test('should return status code 400 to missing query field validation error on date', async () => {
+        const { status, body } = await request.get(
+          '/bookings/available?date=19/11/YEAR&shopName=Palma&serviceName=Customizable next generation alliance'
+        );
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: Invalid Date');
+      });
+      test('should return status code 400 to missing query field validation error on date day', async () => {
+        const { status, body } = await request.get(
+          '/bookings/available?date=day/11/2026&shopName=Palma&serviceName=Customizable next generation alliance'
+        );
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: Invalid Date');
       });
     });
   });
