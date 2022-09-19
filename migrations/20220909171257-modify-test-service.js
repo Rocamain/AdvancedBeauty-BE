@@ -8,7 +8,7 @@ module.exports = {
           'services',
           'price',
           {
-            type: Sequelize.DataTypes.STRING,
+            type: Sequelize.DataTypes.INTEGER,
           },
           { transaction: t }
         ),

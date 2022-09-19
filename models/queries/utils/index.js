@@ -51,7 +51,7 @@ const getCustomerId = async ({ customerName, email }) => {
       customerName,
       email,
     }).then((customer) => {
-      const errorMsg = customer.errors[0]?.message;
+      const errorMsg = customer?.errors && customer?.errors[0]?.message;
 
       if (errorMsg) {
         const err = new Error();
@@ -86,6 +86,7 @@ const getCustomerId = async ({ customerName, email }) => {
         customerId,
       };
     });
+
     return customerId;
   } catch (err) {
     throw err;
@@ -97,7 +98,9 @@ const getIds = async ({ serviceName, shopName, customerName, email }) => {
     const { serviceId, duration } = await getServiceInfo({
       serviceName,
     });
+
     const { shopId } = await getShopId({ shopName });
+
     const { customerId } = await getCustomerId({ customerName, email });
 
     return {
@@ -119,10 +122,13 @@ const getAvailableBookings = ({
   newBookingStartTime = openingTime,
   availableSpots = [],
 }) => {
-  let newBookingEndTime = addMinutes(newBookingStartTime, serviceTime);
+  let newBookingEndTime = addMinutes(
+    new Date(newBookingStartTime),
+    serviceTime
+  );
   const currentBooking = bookings[0];
-  const currentBkngStartTime = currentBooking && currentBooking.appointment;
-  const currentBkngEndTime = currentBooking && currentBooking.appointmentFinish;
+  const currentBkngStartTime = currentBooking?.appointment;
+  const currentBkngEndTime = currentBooking?.appointmentFinish;
 
   const isOverlapping =
     currentBooking &&
@@ -138,10 +144,13 @@ const getAvailableBookings = ({
     for (
       newBookingEndTime;
       newBookingEndTime <= closingTime;
-      newBookingEndTime = addMinutes(newBookingEndTime, serviceTime)
+      newBookingEndTime = addMinutes(new Date(newBookingEndTime), serviceTime)
     ) {
       availableSpots.push(newBookingStartTime);
-      newBookingStartTime = addMinutes(newBookingStartTime, serviceTime);
+      newBookingStartTime = addMinutes(
+        new Date(newBookingStartTime),
+        serviceTime
+      );
     }
 
     return availableSpots;
@@ -169,10 +178,13 @@ const getAvailableBookings = ({
   for (
     newBookingEndTime;
     newBookingEndTime <= currentBkngStartTime;
-    newBookingEndTime = addMinutes(newBookingEndTime, serviceTime)
+    newBookingEndTime = addMinutes(new Date(newBookingEndTime), serviceTime)
   ) {
     availableSpots.push(newBookingStartTime);
-    newBookingStartTime = addMinutes(newBookingStartTime, serviceTime);
+    newBookingStartTime = addMinutes(
+      new Date(newBookingStartTime),
+      serviceTime
+    );
   }
 
   newBookingStartTime = currentBkngEndTime;

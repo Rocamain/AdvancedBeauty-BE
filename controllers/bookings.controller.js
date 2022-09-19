@@ -5,7 +5,7 @@ const {
 } = require('../models/queries/bookings.queries');
 const sendEmail = require('../services/send_grid');
 const { getIds } = require('../models/queries/utils/index');
-const { set, isPast } = require('date-fns');
+const { set, isPast, isDate } = require('date-fns');
 const { checkFields, checkIsNum } = require('./utils');
 
 //
@@ -33,7 +33,7 @@ const createBooking = (req, res, next) => {
 
   const { hasAllFields, errors } = checkFields(queryFields, requiredFields);
   const { isNum, numErrors } = checkIsNum([{ customerName }, { appointment }]);
-  const isPastAppointment = isPast(appointment);
+  const isPastAppointment = isPast(new Date(appointment));
 
   if (!hasAllFields) {
     const err = new Error();
@@ -100,15 +100,41 @@ const getAvailableBookings = (req, res, next) => {
 
   const appointment = date.split('/', 3);
   const [day, month, year] = appointment;
-  const resetDate = set(new Date(), { year, month, date: day });
 
+  const resetDate = set(new Date(), {
+    year,
+    month: month - 1,
+    date: day,
+    hours: 9,
+    minutes: 0,
+    seconds: 0,
+    milliseconds: 0,
+  });
+
+  const isInvalidDate = resetDate.toString() === 'Invalid Date';
+
+  if (isInvalidDate) {
+    const err = new Error();
+    err.status = 400;
+    err.msg = 'Bad request: Invalid Date';
+    throw err;
+  }
   fetchAvailableBookings({ date: resetDate, serviceName, shopName })
     .then((bookings) => res.status(200).json({ bookings }))
     .catch(next);
 };
 
+const getBookingByPk = (req, res, next) => {
+  const { id } = req.params;
+};
+
+const modifyBooking = (req, res, next) => {
+  const { id } = req.params;
+};
+
 module.exports = {
   getAvailableBookings,
+  modifyBooking,
   getAllBookings,
   createBooking,
 };

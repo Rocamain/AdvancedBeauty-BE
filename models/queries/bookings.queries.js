@@ -76,7 +76,7 @@ const fetchAllBookings = async ({
       {
         model: Service,
         as: 'serviceInfo',
-        attributes: ['id', 'serviceName', 'type', 'duration'],
+        attributes: ['id', 'serviceName', 'type', 'price', 'duration'],
         where: [
           {
             service_name:
@@ -116,38 +116,46 @@ const fetchAllBookings = async ({
   return bookings;
 };
 
-const fetchBookingsByShopAndDay = ({
+const fetchBookingsByShopAndDay = async ({
   shopName,
   appointmentFrom,
   appointmentTo,
   order = 'ASC',
   orderBy = 'appointment',
 }) => {
-  return Booking.findAll({
-    where: {
-      appointment: {
-        [Op.between]: [appointmentFrom, appointmentTo],
+  try {
+    const bookings = await Booking.findAll({
+      where: {
+        appointment: {
+          [Op.between]: [new Date(appointmentFrom), new Date(appointmentTo)],
+        },
       },
-    },
-    attributes: ['id', 'appointment', 'time', 'appointmentFinish'],
-    include: [
-      {
-        model: Shop,
-        as: 'shopInfo',
-        attributes: ['id', 'shopName'],
-        where: { shopName: { [Op.iRegexp]: `^${shopName}$` } },
-      },
-    ],
-    order: [[orderBy, order]],
-  }).then((bookings) =>
-    bookings.map(({ id, appointment, time, appointmentFinish, shopInfo }) => ({
-      id,
-      appointment,
-      time,
-      appointmentFinish,
-      shopName: shopInfo.shopName,
-    }))
-  );
+      attributes: ['id', 'appointment', 'time', 'appointmentFinish'],
+      include: [
+        {
+          model: Shop,
+          as: 'shopInfo',
+          attributes: ['id', 'shopName'],
+          where: { shopName: { [Op.iRegexp]: `^${shopName}$` } },
+        },
+      ],
+      order: [[orderBy, order]],
+    }).then((bookings) =>
+      bookings.map(
+        ({ id, appointment, time, appointmentFinish, shopInfo }) => ({
+          id,
+          appointment,
+          time,
+          appointmentFinish,
+          shopName: shopInfo.shopName,
+        })
+      )
+    );
+
+    return bookings;
+  } catch (err) {
+    throw err;
+  }
 };
 
 const postBooking = async ({
@@ -158,14 +166,23 @@ const postBooking = async ({
   appointment,
 }) => {
   if (shopId && serviceId && customerId && serviceTime) {
+    const appointmentDate = new Date(appointment);
+    const appointmentEnd = addMinutes(appointmentDate, serviceTime);
     const isAppointmentOverlapped = await fetchAllBookings({
       appointmentFrom: appointment,
-      appointmentTo: addMinutes(appointment, +serviceTime),
+      appointmentTo: appointmentEnd,
       shopId,
     }).then((bookings) => {
-      const isOverlapped = bookings.length > 1;
+      const currentBooking = bookings[0];
+      const currentBkngStartTime = currentBooking?.appointment;
+      const currentBkngEndTime = currentBooking?.appointmentFinish;
+      const isOverlapping =
+        (appointment >= currentBkngStartTime &&
+          appointment <= currentBkngEndTime) ||
+        (appointmentEnd > currentBkngStartTime &&
+          appointmentEnd <= currentBkngEndTime);
 
-      if (isOverlapped) {
+      if (isOverlapping) {
         const err = new Error();
         err.msg = 'Bad request: Appointment not available';
         err.status = 400;
@@ -180,7 +197,7 @@ const postBooking = async ({
         shopId,
         customerId,
         appointment,
-        appointmentFinish: addMinutes(appointment, serviceTime),
+        appointmentFinish: addMinutes(new Date(appointment), serviceTime),
       });
 
       return newBooking;
@@ -189,8 +206,8 @@ const postBooking = async ({
 };
 
 const fetchAvailableBookings = async ({ serviceName, shopName, date }) => {
-  const appointmentFrom = addHours(date, 9);
-  const appointmentTo = addHours(date, 20);
+  const appointmentFrom = date;
+  const appointmentTo = addHours(date, 11);
 
   try {
     const [service] = await fetchAllServices({ serviceName });
@@ -205,8 +222,8 @@ const fetchAvailableBookings = async ({ serviceName, shopName, date }) => {
     // Possible implementation for getting the closing/opening times of the shop
     // by make a query to db, below default
 
-    let openingTime = addHours(new Date(date), 9);
-    let closingTime = addHours(new Date(date), 20);
+    let openingTime = appointmentFrom;
+    let closingTime = appointmentTo;
 
     if (bookings) {
       const availableBookings = getAvailableBookings({
@@ -219,7 +236,6 @@ const fetchAvailableBookings = async ({ serviceName, shopName, date }) => {
       return availableBookings;
     }
   } catch (err) {
-    console.log(err);
     return err;
   }
 };
