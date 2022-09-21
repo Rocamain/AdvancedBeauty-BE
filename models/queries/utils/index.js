@@ -1,7 +1,8 @@
 const { fetchAllShops } = require('../shops.queries.js');
 const { fetchAllServices } = require('../services.queries');
 const { findOrCreateCustomer } = require('../customers.queries');
-const { set, getYear, getMonth, getDate, addMinutes } = require('date-fns');
+const checkIsHolidays = require('../../../services/holidays');
+const { set, addMinutes } = require('date-fns');
 
 const getServiceInfo = async ({ serviceName }) => {
   const service = await fetchAllServices({ serviceName }).then(([service]) => {
@@ -201,19 +202,10 @@ const getAvailableBookings = ({
   });
 };
 
-const LOCATIONS = {
-  3: 'es-b',
-  1: 'es-ct',
-  2: 'es-ct',
-};
-
-const throwShopClosedErr = async ({
-  appointment,
+const checkIsNotWithinOpeningTimes = ({
+  appointmentDate,
   appointmentFinish,
-  shopId,
 }) => {
-  const appointmentDate = new Date(appointment);
-
   const startLimit = set(appointmentDate, {
     hours: 9,
     minutes: 0,
@@ -238,36 +230,38 @@ const throwShopClosedErr = async ({
   );
 
   const isNotWithinOpeningTimes =
-    appointment < startLimitWithOffSet ||
+    appointmentDate < startLimitWithOffSet ||
     appointmentFinish > endLimitWithOffSet;
 
-  const year = getYear(appointmentDate);
-  const month = getMonth(appointmentDate) + 1;
-  const day = getDate(appointmentDate);
+  return { isNotWithinOpeningTimes };
+};
+
+const throwShopClosedErr = async ({
+  appointment,
+  appointmentFinish,
+  shopId,
+}) => {
+  const appointmentDate = new Date(appointment);
+
+  const { isNotWithinOpeningTimes } = checkIsNotWithinOpeningTimes({
+    appointmentDate,
+    appointmentFinish,
+  });
+
+  const err = new Error();
+  err.msg = 'Bad request: Booking needs to be within the opening time';
+  err.status = 400;
+
+  if (isNotWithinOpeningTimes) {
+    throw err;
+  }
 
   try {
-    const nationalHolsData = await fetch(
-      `${process.env.HOLS_API}?&api_key=${process.env.HOLS_KEY}&country=es&type=national&year=${year}&month=${month}&day=${day}`
-    );
-    const localHolsData = await fetch(
-      `${process.env.HOLS_API}?&api_key=${process.env.HOLS_KEY}&country=es&location=${LOCATIONS[shopId]}&type=national&year=${year}&month=${month}&day=${day}`
-    );
-    if (nationalHolsData) {
-      const nationalHolsParsed = await nationalHolsData.json();
-      const nationalHols = nationalHolsParsed.response.holidays;
-      const localHolsParsed = await localHolsData.json();
-      const localHols = localHolsParsed.response.holidays;
-      const isHoliday = localHols.length > 0 || nationalHols.length > 0;
-
-      if (isHoliday || isNotWithinOpeningTimes) {
-        const err = new Error();
-        err.msg = 'Bad request: Booking needs to be within the opening time';
-        err.status = 400;
-        throw err;
-      }
-
-      return;
+    const { isHoliday } = await checkIsHolidays({ appointmentDate, shopId });
+    if (isHoliday) {
+      throw err;
     }
+
     return;
   } catch (err) {
     throw err;
