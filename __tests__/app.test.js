@@ -1,10 +1,8 @@
 process.env.NODE_ENV = 'test';
-
 const supertest = require('supertest');
 const app = require('../app');
 const db = require('../models/index');
 const request = supertest(app);
-const { isPast } = require('date-fns');
 
 describe('Test search feature', () => {
   beforeAll(async () => {
@@ -657,6 +655,106 @@ describe('Test search feature', () => {
         expect(msg).toBe('Bad request: Appointment not available');
       });
     });
+    describe('/bookings/:id', () => {
+      test('Get: getBookingById should return an booking  with status code 200)', async () => {
+        const { status, body } = await request.get('/bookings/1');
+
+        const { updatedAt, createdAt, ...booking } = body.booking;
+
+        expect(status).toBe(200);
+        expect(booking).toEqual({
+          id: 1,
+          customerName: 'Adolf Reichel',
+          email: 'Adolf.Reichel@hotmail.com',
+          shopName: 'Turo Park',
+          appointment: '2022-11-19T09:00:00.000Z',
+          appointmentFinish: '2022-11-19T10:00:00.000Z',
+        });
+      });
+      test('Put: updating a booking should return status code 203', async () => {
+        const { status, body } = await request.put('/bookings/1').send({
+          customerName: 'newCustomer',
+          email: 'newCustomer@email.com',
+          appointment: '2022-12-19T09:00:00.000Z',
+        });
+
+        const { updatedAt, createdAt, ...booking } = body.booking;
+
+        expect(status).toBe(203);
+        expect(booking).toEqual({
+          id: 1,
+          shopId: 1,
+          serviceId: 10,
+          customerId: 106,
+          appointment: '2022-12-19T09:00:00.000Z',
+          time: '9:00',
+          appointmentFinish: '2022-12-19T10:00:00.000Z',
+        });
+      });
+      test('Delete: deleting a booking should return status code 204', async () => {
+        const { status } = await request.delete('/bookings/1');
+        const { body } = await request.get('/bookings/1');
+        const { booking } = body;
+
+        expect(status).toBe(204);
+        expect(booking).toEqual([]);
+      });
+    });
+    describe('/bookings/:id errors', () => {
+      test('Updating a booking with customerName with numbers should return status code 400', async () => {
+        const { status, body } = await request.put('/bookings/10').send({
+          customerName: 11111,
+          email: 'emailChanged@email.com',
+          appointment: '2022-12-19T14:00:00.000Z',
+        });
+
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: customerName cannot be a number');
+      });
+      test('Updating a booking with  an invalid email should return status code 400', async () => {
+        const { status, body } = await request.put('/bookings/10').send({
+          customerName: 'Jake Wills',
+          email: 'notEmail.com',
+          appointment: '2022-12-19T14:00:00.000Z',
+        });
+
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: Email validation failed.');
+      });
+      test('Updating a booking with an invalid appointment (number) should return status code 400', async () => {
+        const { status, body } = await request.put('/bookings/10').send({
+          customerName: 'Jake Wills',
+          email: 'notEmail.com',
+          appointment: 11111,
+        });
+
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: appointment cannot be a number');
+      });
+      test('Updating a booking with an invalid appointment  (not a date) should return status code 400', async () => {
+        const { status, body } = await request.put('/bookings/10').send({
+          customerName: 'Jake Wills',
+          email: 'email@am.com',
+          appointment: '2022-12-42T14:00:00.000Z',
+        });
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: Appointment is not a date');
+      });
+      test('Updating a booking with an invalid customerName length  should return status code 400', async () => {
+        const { status, body } = await request.put('/bookings/10').send({
+          customerName: 'fj',
+          email: 'email@am.com',
+          appointment: '2022-12-12T14:00:00.000Z',
+        });
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: CustomerName minimum length failed.');
+      });
+    });
     describe('/bookings/available', () => {
       test('Get: getAllAvailableBookings should return an array of times available with status code 200 (day with no bookings)', async () => {
         const { status, body } = await request.get(
@@ -697,7 +795,7 @@ describe('Test search feature', () => {
         expect(secondBooking.status).toBe(201);
         expect(thirdBooking.status).toBe(201);
       });
-      test('Get: getAllAvailableBookings  should return an array of times available with status code 200', async () => {
+      test('Get: getAllAvailableBookings should return an array of times available with status code 200', async () => {
         const { status, body } = await request.get(
           '/bookings/available?date=19/12/2022&shopName=Palma&serviceName=Customizable next generation alliance'
         );
@@ -718,12 +816,19 @@ describe('Test search feature', () => {
           '2022-12-19T19:00:00.000Z',
         ]);
       });
-      test('should return status code 400 to missing query field validation error on serviceName', async () => {
+      test('Get: getAllAvailableBookings should return an empty array of times available with status code 200 for a service that not exists', async () => {
         const { status, body } = await request.get(
-          '/bookings/available?date=19/12/2022&shopName=Palma&serviceName=NOTASERVICE'
+          '/bookings/available?date=19/12/2022&shopName=palma&serviceName=NOTASERVICE'
         );
         expect(status).toBe(200);
-        expect(body).toEqual({ bookings: {} });
+        expect(body).toEqual({ bookings: [] });
+      });
+      test('Get: getAllAvailableBookings should return an empty array of times available with status code 200 for a shop that not exists', async () => {
+        const { status, body } = await request.get(
+          '/bookings/available?date=19/12/2022&shopName=notAShop&serviceName=Customizable next generation alliance'
+        );
+        expect(status).toBe(200);
+        expect(body).toEqual({ bookings: [] });
       });
     });
     describe('/bookings/available Errors', () => {

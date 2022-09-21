@@ -14,18 +14,13 @@ const fetchAllCustomers = async ({
   updatedTo = new Date(Date.now()),
   order = 'ASC',
   orderBy = 'id',
-  bookingSearch = false,
   ...queryFields
 }) => {
-  const isBookingQuery = bookingSearch
-    ? `^${customerName}$`
-    : `^${customerName}`;
-
   const customers = await Customer.findAll({
     where: {
       ...queryFields,
       customerName: {
-        [Op.iRegexp]: customerName ? isBookingQuery : '[a-zA-Z]',
+        [Op.iRegexp]: customerName ? `^${customerName}` : '[a-zA-Z]',
       },
       email: {
         [Op.iRegexp]: email ? `^${email}` : '^[a-zA-Z]',
@@ -71,9 +66,8 @@ const getCustomerByPK = async ({ id }) => {
 
 const deleteCustomer = async ({ id }) => {
   await Customer.destroy({ where: { id: id } });
-
-  return `user ${id} has been deleted`;
 };
+
 const putCustomer = async ({ customerName, email, id }) => {
   const customer = await Customer.findByPk(id);
 

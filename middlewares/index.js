@@ -1,4 +1,7 @@
-const { throwDatesErrors } = require('./utils/index');
+const {
+  throwDatesErrors,
+  throwPutPostBookingErrors,
+} = require('./utils/index');
 
 exports.routeNotFound = (req, res) => {
   res.status(404).send({ msg: 'Route not found' });
@@ -8,6 +11,7 @@ exports.withErrorHandling = (controller) => {
   return async (req, res, next) => {
     try {
       throwDatesErrors(req);
+      throwPutPostBookingErrors(req);
 
       await controller(req, res, next);
     } catch (err) {
