@@ -2,14 +2,14 @@ const {
   fetchAllBookings,
   postBooking,
   fetchAvailableBookings,
+  putBookingByPK,
+  getBookingByID,
+  deleteBooking,
 } = require('../models/queries/bookings.queries');
 const sendEmail = require('../services/send_grid');
-const { getIds } = require('../models/queries/utils/index');
-const { set, isPast, isDate } = require('date-fns');
-const { checkFields, checkIsNum } = require('./utils');
-
-//
-//
+const { getIds, getCustomerId } = require('../models/queries/utils/index');
+const { set } = require('date-fns');
+const { checkFields } = require('./utils');
 
 const getAllBookings = (req, res, next) => {
   const { query } = req;
@@ -32,27 +32,11 @@ const createBooking = (req, res, next) => {
   const { serviceName, customerName, shopName, email, appointment } = req.body;
 
   const { hasAllFields, errors } = checkFields(queryFields, requiredFields);
-  const { isNum, numErrors } = checkIsNum([{ customerName }, { appointment }]);
-  const isPastAppointment = isPast(new Date(appointment));
 
   if (!hasAllFields) {
     const err = new Error();
     err.status = 400;
     err.msg = `Bad request: missing field: ${errors[0]}`;
-    throw err;
-  }
-
-  if (isNum) {
-    const err = new Error();
-    err.status = 400;
-    err.msg = `Bad request: ${numErrors[0]} cannot be a number`;
-    throw err;
-  }
-
-  if (isPastAppointment) {
-    const err = new Error();
-    err.status = 400;
-    err.msg = `Bad request: cannot book a date in the past`;
     throw err;
   }
 
@@ -124,12 +108,39 @@ const getAvailableBookings = (req, res, next) => {
     .catch(next);
 };
 
-const getBookingByPk = (req, res, next) => {
-  const { id } = req.params;
-};
-
 const modifyBooking = (req, res, next) => {
   const { id } = req.params;
+  const { appointment, customerName, email } = req.body;
+
+  if (customerName && email) {
+    getCustomerId({ customerName, email })
+      .then(({ customerId }) =>
+        putBookingByPK({
+          id,
+          customerId,
+          appointment: new Date(appointment),
+        })
+          .then((booking) => {
+            return res.status(203).json({ booking });
+          })
+          .catch(next)
+      )
+      .catch(next);
+  }
+};
+
+const getBooking = (req, res, next) => {
+  getBookingByID(req.params)
+    .then((booking) => {
+      res.status(200).json({ booking });
+    })
+    .catch(next);
+};
+
+const eraseBooking = (req, res, next) => {
+  deleteBooking(req.params)
+    .then((booking) => res.status(204).json({ booking }))
+    .catch(next);
 };
 
 module.exports = {
@@ -137,4 +148,6 @@ module.exports = {
   modifyBooking,
   getAllBookings,
   createBooking,
+  getBooking,
+  eraseBooking,
 };

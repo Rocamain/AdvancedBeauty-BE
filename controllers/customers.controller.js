@@ -16,11 +16,11 @@ const getAllCustomers = (req, res, next) => {
 };
 
 const createCustomer = (req, res, next) => {
-  const { email, customerName } = req.body;
-  const { isNum, numErrors } = checkIsNum([{ email }, { customerName }]);
+  const { customerName } = req.body;
+  const { isNum, numErrors } = checkIsNum([{ customerName }]);
 
   if (isNum) {
-    let err = new Error();
+    const err = new Error();
     err.msg = `Bad request: ${numErrors[0]} cannot be a number`;
     err.status = 400;
 
