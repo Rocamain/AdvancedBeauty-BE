@@ -60,7 +60,7 @@ const updateCustomer = (req, res, next) => {
 
   putCustomer({ id, email, customerName })
     .then((customer) => {
-      return res.status(200).json({ customer });
+      return res.status(203).json({ customer });
     })
     .catch(next);
 };
