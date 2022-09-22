@@ -44,6 +44,66 @@ const fetchAllServices = ({
   });
 };
 
+const postService = async ({ serviceName, price, duration, type }) => {
+  try {
+    const service = await Service.create({
+      serviceName,
+      price,
+      duration,
+      type,
+    });
+
+    return service;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getServiceByPK = async ({ id }) => {
+  try {
+    const customer = await Service.findByPk(id);
+    if (customer) {
+      return customer;
+    }
+    return null;
+  } catch (err) {
+    throw err;
+  }
+};
+const deleteService = async ({ id }) => {
+  try {
+    await Service.destroy({ where: { id: id } });
+  } catch (err) {
+    throw err;
+  }
+};
+
+const putService = async ({
+  id,
+  serviceName,
+  type,
+  price,
+  status,
+  duration,
+}) => {
+  try {
+    const service = await Service.findByPk(id);
+
+    if (service) {
+      await service.update({ serviceName, type, price, status, duration });
+      await service.save();
+      return service;
+    }
+    return null;
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   fetchAllServices,
+  postService,
+  getServiceByPK,
+  deleteService,
+  putService,
 };

@@ -9,6 +9,7 @@ const shopsRouter = require('./routes/shops.routes.js');
 const {
   routeNotFound,
   handleCustomErrors,
+  validationErrors,
   SQLErrors,
 } = require('./middlewares');
 
@@ -34,6 +35,7 @@ app.all('*', routeNotFound);
 
 // handling errors
 app.use(handleCustomErrors);
+app.use(validationErrors);
 app.use(SQLErrors);
 app.use((err, req, res, next) => {
   return res.status(500).json({
