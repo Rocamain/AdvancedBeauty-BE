@@ -97,16 +97,7 @@ describe('Test search feature', () => {
         expect(customers).toHaveLength(1);
         expect(customers[0].customerName).toBe('Russell Fahey');
       });
-      test('Get: getAllCustomers Query field that does not exist should return status code 400', async () => {
-        const { status, body } = await request.get(
-          '/customers?IdontExist=Dennis'
-        );
-        const { msg } = body;
 
-        expect(status).toBe(400);
-
-        expect(msg).toBe('Bad request: Query field does not exist');
-      });
       test('Post: should return status code 201', async () => {
         const { body, status } = await request
           .post('/customers')
@@ -121,10 +112,10 @@ describe('Test search feature', () => {
     });
     describe('/customers Errors', () => {
       test('should return status code 400 to unique email validation error', async () => {
-        const { body, status } = await request
-          .post('/customers')
-          .send({ customerName: 'Javier Roca', email: 'Javier_R@yahoo.com' });
-
+        const { body, status } = await request.post('/customers').send({
+          customerName: 'Javier Roca',
+          email: 'Kaleigh.Prosacco@gmail.com',
+        });
         const { msg } = body;
         expect(status).toBe(400);
         expect(msg).toBe('Bad request: Unique constrain error');
@@ -148,6 +139,16 @@ describe('Test search feature', () => {
         expect(status).toBe(400);
         expect(msg).toBe('Bad request: Validation isEmail on email failed');
       });
+      test('should return status code 400:query field that does not exist should return status code 400', async () => {
+        const { status, body } = await request.get(
+          '/customers?IdontExist=Dennis'
+        );
+        const { msg } = body;
+
+        expect(status).toBe(400);
+
+        expect(msg).toBe('Bad request: Query field does not exist');
+      });
     });
 
     describe('/customers/:id', () => {
@@ -162,7 +163,7 @@ describe('Test search feature', () => {
         expect(body.customer).toHaveProperty('reservations');
       });
 
-      test('Delete: deleting as customer should return status code 204', async () => {
+      test('Delete: deleting a customer should return status code 204', async () => {
         const { status } = await request.delete('/customers/1');
         const { body } = await request.get('/customers/1');
         const { customer } = body;
@@ -179,7 +180,7 @@ describe('Test search feature', () => {
 
         const { id, customerName, email } = body.customer;
 
-        expect(status).toBe(200);
+        expect(status).toBe(203);
         expect(id).toBe(10);
         expect(customerName).toBe('nameChange');
         expect(email).toBe('emailChanged@email.com');
@@ -259,6 +260,23 @@ describe('Test search feature', () => {
         expect(services[0].price).toBe(40);
         expect(services[0].type).toBe('Facial');
       });
+      test('Post: should return status code 201', async () => {
+        const { body, status } = await request.post('/services').send({
+          serviceName: 'Amazing rock integration',
+          duration: 45,
+          price: 50,
+          type: 'Facial',
+        });
+
+        const { service } = body;
+
+        expect(status).toBe(201);
+        expect(service.id).toBe(11);
+        expect(service.serviceName).toBe('Amazing rock integration');
+        expect(service.duration).toBe(45);
+        expect(service.price).toBe(50);
+        expect(service.status).toBe(true);
+      });
     });
     describe('/services Errors', () => {
       test('should return status code 400 for query field that does not exist', async () => {
@@ -273,7 +291,7 @@ describe('Test search feature', () => {
         const { status, body } = await request.get('/services?duration=NAN');
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid input value type');
+        expect(msg).toBe('Bad request: Invalid value type');
       });
       test('should return status code 400 for query(createdAt) an invalid input type number', async () => {
         const { status, body } = await request.get('/services?createdAt=111');
@@ -289,8 +307,187 @@ describe('Test search feature', () => {
         expect(status).toBe(400);
         expect(msg).toBe('Bad request: Invalid date');
       });
+      test('should return status code 400 to unique serviceName validation error', async () => {
+        const { body, status } = await request.post('/services').send({
+          serviceName: 'Amazing rock integration',
+          duration: 45,
+          price: 50,
+          type: 'Facial',
+        });
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: Unique constrain error');
+      });
+      test('should return status code 400 to minimum length validation error', async () => {
+        const { body, status } = await request.post('/services').send({
+          serviceName: 'short',
+          duration: 45,
+          price: 50,
+          type: 'Facial',
+        });
+
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: Validation len on serviceName failed');
+      });
+
+      test('should return status code 400 to maximum length validation error', async () => {
+        const { body, status } = await request.post('/services').send({
+          serviceName:
+            'longggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg',
+          duration: 45,
+          price: 50,
+          type: 'Facial',
+        });
+
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: Validation len on serviceName failed');
+      });
+      test('should return status code 400 to missing field in the  req body', async () => {
+        const { body, status } = await request.post('/services').send({
+          duration: 45,
+          price: 50,
+          type: 'Facial',
+        });
+
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: Service.serviceName cannot be null');
+      });
+      test('should return status code 400 to invalid input (duration)', async () => {
+        const { body, status } = await request.post('/services').send({
+          serviceName: 'Fantastic java',
+          duration: 'ten',
+          price: 50,
+          type: 'Facial',
+        });
+
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: Invalid value type');
+      });
+      test('should return status code 400 to invalid input (type)', async () => {
+        const { body, status } = await request.post('/services').send({
+          serviceName: 'Fantastic java',
+          duration: 'ten',
+          price: 50,
+          type: 'NOT A VALID TYPE',
+        });
+
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe(
+          'Bad request: Invalid input on type, available options:Facial,Body,Manicure and pedicure,Laser'
+        );
+      });
+    });
+    describe('/services:id', () => {
+      test('Get: getService should return status code 200', async () => {
+        const { status, body } = await request.get('/services/1');
+
+        const { id, serviceName, duration, price, type, updatedAt, createdAt } =
+          body.service;
+
+        expect(status).toBe(200);
+        expect(id).toBe(1);
+        expect(serviceName).toBe('Open-source optimal paradigm');
+        expect(duration).toBe(30);
+        expect(price).toBe(40);
+        expect(type).toBe('Facial');
+        expect(body.service.status).toBe(true);
+        expect(new Date(updatedAt)).toBeInstanceOf(Date);
+        expect(new Date(createdAt)).toBeInstanceOf(Date);
+      });
+      test('Delete: deleting a service should return status code 204', async () => {
+        const { status } = await request.delete('/services/11');
+        const { body } = await request.get('/services/11');
+        const { service } = body;
+
+        expect(service).toBe(null);
+        expect(status).toBe(204);
+      });
+
+      test('Delete: deleting a service that does not exist should return status code 204', async () => {
+        const { status } = await request.delete('/services/1111');
+        const { body } = await request.get('/services/1111');
+
+        const { service } = body;
+
+        expect(service).toBe(null);
+        expect(status).toBe(204);
+      });
+      test('Put: updating a service should return status code 203', async () => {
+        const { status, body } = await request.put('/services/1').send({
+          serviceName: 'Updated Service',
+          type: 'Facial',
+          price: 100,
+          duration: 120,
+          status: false,
+        });
+
+        const { updatedAt, createdAt, ...service } = body.service;
+
+        expect(status).toBe(203);
+        expect(service).toEqual({
+          id: 1,
+          serviceName: 'Updated Service',
+          duration: 120,
+          price: 100,
+          type: 'Facial',
+          status: false,
+        });
+      });
+    });
+    describe('/services:id Errors', () => {
+      test('should return status code 400 for an invalid ID field that does not exist', async () => {
+        const { status, body } = await request.get('/services/NotID');
+
+        const { msg } = body;
+
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: Invalid value type');
+      });
+
+      test('should return status code 400 for an invalid ID that does not exist should return status code 204', async () => {
+        const { status, body } = await request.delete('/services/NotID');
+
+        const { msg } = body;
+
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: Invalid value type');
+      });
+      test('Updating a service with a non valid input type(price) should return status code 400', async () => {
+        const { status, body } = await request.put('/services/1').send({
+          serviceName: 'Updated Service',
+          type: 'Facial',
+          price: 'hundred',
+          duration: 120,
+          status: false,
+        });
+
+        const { msg } = body;
+
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: Invalid value type');
+      });
+      test('Updating a service with a non valid input  minimum length (serviceName) type(price) should return status code 400', async () => {
+        const { status, body } = await request.put('/services/1').send({
+          serviceName: 'short',
+          type: 'Facial',
+          price: 22,
+          duration: 120,
+          status: false,
+        });
+
+        const { msg } = body;
+
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: Validation len on serviceName failed');
+      });
     });
   });
+
   // Test suite for testing the SHOPS ROUTES
 
   describe('Shops routes', () => {
@@ -339,7 +536,7 @@ describe('Test search feature', () => {
         const { status, body } = await request.get('/shops?id=NAN');
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid input value type');
+        expect(msg).toBe('Bad request: Invalid value type');
       });
       test('should return status code 400 for query(createdAt) an invalid input type number', async () => {
         const { status, body } = await request.get('/shops?createdAt=111');
@@ -548,7 +745,7 @@ describe('Test search feature', () => {
         const { status, body } = await request.get('/bookings?duration=long');
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid input value type');
+        expect(msg).toBe('Bad request: Invalid value type');
       });
       test('Post: should return status code 400 for field(customerName) that cannot be number', async () => {
         const { body, status } = await request.post('/bookings').send({
