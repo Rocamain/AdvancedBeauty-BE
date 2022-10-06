@@ -1,7 +1,7 @@
 const { getYear, getMonth, getDate } = require('date-fns');
 
 const LOCATIONS = {
-  3: 'es-b',
+  3: 'es-ib',
   1: 'es-ct',
   2: 'es-ct',
 };

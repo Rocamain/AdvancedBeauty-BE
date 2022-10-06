@@ -320,7 +320,7 @@ describe('Test search feature', () => {
       });
       test('should return status code 400 to minimum length validation error', async () => {
         const { body, status } = await request.post('/services').send({
-          serviceName: 'short',
+          serviceName: 'sho',
           duration: 45,
           price: 50,
           type: 'Facial',
@@ -328,7 +328,9 @@ describe('Test search feature', () => {
 
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Validation len on serviceName failed');
+        expect(msg).toBe(
+          'Bad request: Validation on serviceName min:4, max:20'
+        );
       });
 
       test('should return status code 400 to maximum length validation error', async () => {
@@ -342,7 +344,9 @@ describe('Test search feature', () => {
 
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Validation len on serviceName failed');
+        expect(msg).toBe(
+          'Bad request: Validation on serviceName min:4, max:20'
+        );
       });
       test('should return status code 400 to missing field in the  req body', async () => {
         const { body, status } = await request.post('/services').send({
@@ -378,7 +382,7 @@ describe('Test search feature', () => {
         const { msg } = body;
         expect(status).toBe(400);
         expect(msg).toBe(
-          'Bad request: Invalid input on type, available options:Facial,Body,Manicure and pedicure,Laser'
+          'Bad request: Invalid input on type, available options: Facial, Body, Manicure and pedicure or Laser'
         );
       });
     });
@@ -473,7 +477,7 @@ describe('Test search feature', () => {
       });
       test('Updating a service with a non valid input  minimum length (serviceName) type(price) should return status code 400', async () => {
         const { status, body } = await request.put('/services/1').send({
-          serviceName: 'short',
+          serviceName: 'sho',
           type: 'Facial',
           price: 22,
           duration: 120,
@@ -483,7 +487,9 @@ describe('Test search feature', () => {
         const { msg } = body;
 
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Validation len on serviceName failed');
+        expect(msg).toBe(
+          'Bad request: Validation on serviceName min:4, max:20'
+        );
       });
     });
   });
@@ -609,7 +615,7 @@ describe('Test search feature', () => {
       });
       test('Get: getAllBookings Query(filter by appointment range of date and shopName) should return status code 200', async () => {
         const { status, body } = await request.get(
-          '/bookings?appointmentFrom=2022-11-19T09:00:00.000Z&appointmentTo=2022-11-19T11:00:00.000Z&shopName=Palma'
+          '/bookings?appointmentFrom=2022-11-19T09:00:00.000Z&appointmentTo=2022-11-19T11:00:00.000Z&shopName=Palma de Majorca'
         );
         const { bookings } = body;
 
@@ -634,7 +640,7 @@ describe('Test search feature', () => {
               price: 50,
               duration: 60,
             },
-            shopInfo: { id: 3, shopName: 'Palma' },
+            shopInfo: { id: 3, shopName: 'Palma de Majorca' },
           },
           {
             appointment: '2022-11-19T10:00:00.000Z',
@@ -655,7 +661,7 @@ describe('Test search feature', () => {
               price: 50,
               duration: 60,
             },
-            shopInfo: { id: 3, shopName: 'Palma' },
+            shopInfo: { id: 3, shopName: 'Palma de Majorca' },
           },
           {
             appointment: '2022-11-19T11:00:00.000Z',
@@ -676,7 +682,7 @@ describe('Test search feature', () => {
               price: 70,
               duration: 60,
             },
-            shopInfo: { id: 3, shopName: 'Palma' },
+            shopInfo: { id: 3, shopName: 'Palma de Majorca' },
           },
         ]);
       });
@@ -685,7 +691,7 @@ describe('Test search feature', () => {
           customerName: 'darlene Murray',
           email: 'Darlene_murray40@yahoo.com',
           serviceName: 'Reverse-engineered mission-critical encryption',
-          shopName: 'Palma',
+          shopName: 'Palma de Majorca',
           appointment: '2023-01-02T15:10:00.000Z',
         });
 
@@ -752,7 +758,7 @@ describe('Test search feature', () => {
           customerName: 111,
           email: 'newUser@yahoo.com',
           serviceName: 'Re-contextualized Background info-mediaries',
-          shopName: 'palma',
+          shopName: 'Palma de Majorca',
           appointment: '2023-09-02T15:00:00.000Z',
         });
 
@@ -765,7 +771,7 @@ describe('Test search feature', () => {
           customerName: 'Javier Roca',
           email: 'fjrocavazquez@gmail.com',
           serviceName: 'Re-contextualized Background info-mediaries',
-          shopName: 'palma',
+          shopName: 'Palma de Majorca',
           appointment: 11111,
         });
 
@@ -778,7 +784,7 @@ describe('Test search feature', () => {
           customerName: 'Javier Roca',
           email: 'im_am_not_an_email.com',
           serviceName: 'Horizontal radical structure',
-          shopName: 'palma',
+          shopName: 'Palma de Majorca',
           appointment: '2023-09-02T15:00:00.000Z',
         });
 
@@ -791,7 +797,7 @@ describe('Test search feature', () => {
           customerName: 'Javier Roca',
           email: 1111,
           serviceName: 'Horizontal radical structure',
-          shopName: 'palma',
+          shopName: 'Palma de Majorca',
           appointment: '2023-09-02T15:00:00.000Z',
         });
 
@@ -955,7 +961,7 @@ describe('Test search feature', () => {
     describe('/bookings/available', () => {
       test('Get: getAllAvailableBookings should return an array of times available with status code 200 (day with no bookings)', async () => {
         const { status, body } = await request.get(
-          '/bookings/available?date=19/11/2022&shopName=Palma&serviceName=Customizable next generation alliance'
+          '/bookings/available?date=19/11/2022&shopName=Palma de Majorca&serviceName=Customizable next generation alliance'
         );
 
         const { bookings } = body;
@@ -970,21 +976,21 @@ describe('Test search feature', () => {
           customerName: 'Jay dee',
           email: 'jdoe@yao.com',
           serviceName: 'Reverse-engineered mission-critical encryption',
-          shopName: 'Palma',
+          shopName: 'Palma de Majorca',
           appointment: bookings[0],
         });
         const secondBooking = await request.post('/bookings').send({
           customerName: 'Jay dee',
           email: 'jdoe@yao.com',
           serviceName: 'Reverse-engineered mission-critical encryption',
-          shopName: 'Palma',
+          shopName: 'Palma de Majorca',
           appointment: bookings[1],
         });
         const thirdBooking = await request.post('/bookings').send({
           customerName: 'Jay dee',
           email: 'jdoe@yao.com',
           serviceName: 'Reverse-engineered mission-critical encryption',
-          shopName: 'Palma',
+          shopName: 'Palma de Majorca',
           appointment: bookings[2],
         });
 
@@ -994,7 +1000,7 @@ describe('Test search feature', () => {
       });
       test('Get: getAllAvailableBookings should return an array of times available with status code 200', async () => {
         const { status, body } = await request.get(
-          '/bookings/available?date=19/12/2022&shopName=Palma&serviceName=Customizable next generation alliance'
+          '/bookings/available?date=19/12/2022&shopName=Palma de Majorca&serviceName=Customizable next generation alliance'
         );
 
         const { bookings } = body;
@@ -1015,7 +1021,7 @@ describe('Test search feature', () => {
       });
       test('Get: getAllAvailableBookings should return an empty array of times available with status code 200 for a service that not exists', async () => {
         const { status, body } = await request.get(
-          '/bookings/available?date=19/12/2022&shopName=palma&serviceName=NOTASERVICE'
+          '/bookings/available?date=19/12/2022&shopName=Palma de Majorca&serviceName=NOTASERVICE'
         );
         expect(status).toBe(200);
         expect(body).toEqual({ bookings: [] });
@@ -1039,7 +1045,7 @@ describe('Test search feature', () => {
       });
       test('should return status code 400 to missing query field validation error on date', async () => {
         const { status, body } = await request.get(
-          '/bookings/available?date=19/11/YEAR&shopName=Palma&serviceName=Customizable next generation alliance'
+          '/bookings/available?date=19/11/YEAR&shopName=Palma de Majorca&serviceName=Customizable next generation alliance'
         );
         const { msg } = body;
         expect(status).toBe(400);
@@ -1047,7 +1053,7 @@ describe('Test search feature', () => {
       });
       test('should return status code 400 to missing query field validation error on date day', async () => {
         const { status, body } = await request.get(
-          '/bookings/available?date=day/11/2026&shopName=Palma&serviceName=Customizable next generation alliance'
+          '/bookings/available?date=day/11/2026&shopName=Palma de Majorca&serviceName=Customizable next generation alliance'
         );
         const { msg } = body;
         expect(status).toBe(400);

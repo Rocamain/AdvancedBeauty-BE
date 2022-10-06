@@ -7,6 +7,8 @@ const {
   sortByAppointment,
   workingDays,
 } = require('./bookings-utils');
+const { utcToZonedTime, format } = require('date-fns-tz');
+
 const fs = require('fs');
 
 const mkdir = promisify(fs.mkdir);
@@ -55,14 +57,15 @@ const generateBookings = (
         const randomHour = sample(hours);
 
         const date =
-          ENV === 'dev' ? sample(workingDays) : new Date(2022, 10, 19);
-        const appointment = addHours(date, randomHour);
+          ENV === 'dev'
+            ? sample(workingDays)
+            : new Date(Date.UTC(2022, 10, 18, 0, 0, 0));
+
         // const appointmentWithOffSet prevent the change the time between summer and winter times as well as if execute from different
         // timezone so date still the same value.
-        const appointmentWithOffSet = addMinutes(
-          appointment,
-          appointment.getTimezoneOffset() * -1
-        );
+
+        const timeZoneAppointment = utcToZonedTime(date, 'Europe/Madrid');
+        const appointment = addHours(timeZoneAppointment, randomHour);
 
         const { customer_id } = sample(customers);
 
@@ -70,8 +73,8 @@ const generateBookings = (
           shop_id: shopId,
           service_id,
           customer_id,
-          appointment: appointmentWithOffSet,
-          appointmentFinish: addMinutes(appointmentWithOffSet, duration),
+          appointment: appointment,
+          appointmentFinish: addMinutes(appointment, duration),
         };
 
         if (checkOverlappedBookings(newBooking, previousBookings).length > 0) {
@@ -149,10 +152,10 @@ const shops = [
     mobile: '640 725 935',
   },
   {
-    shop_name: 'Palma',
+    shop_name: 'Palma de Majorca',
     city: 'Palma de Majorca',
     street: 'C/ Josep Anselm Clavé, 6',
-    postcode: '07002 – Palma de Mallorca',
+    postcode: '07002 – Palma de Majorca ',
     phone: '971 707 281',
     mobile: '646 531 481',
   },

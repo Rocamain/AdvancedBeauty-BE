@@ -1,10 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+const morgan = require('morgan');
 
 const customerRouter = require('./routes/customers.routes');
 const bookingsRouter = require('./routes/bookings.routes');
 const servicesRouter = require('./routes/services.routes');
-const shopsRouter = require('./routes/shops.routes.js');
+const shopsRouter = require('./routes/shops.routes');
+const contactRouter = require('./routes/contact.routes');
 
 const {
   routeNotFound,
@@ -19,6 +21,7 @@ const app = express();
 app.set('port', process.env.PORT || 4000);
 
 // Middlewares
+app.use(morgan('tiny'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -31,6 +34,7 @@ app.use(customerRouter);
 app.use(bookingsRouter);
 app.use(servicesRouter);
 app.use(shopsRouter);
+app.use(contactRouter);
 app.all('*', routeNotFound);
 
 // handling errors

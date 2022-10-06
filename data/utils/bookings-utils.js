@@ -25,7 +25,8 @@ const bankHolidays = [
   new Date(2023, 3, 18),
   new Date(2023, 5, 6),
   new Date(2023, 5, 6),
-  new Date(2023, 7, 15, new Date(2022, 8, 24)),
+  new Date(2023, 7, 15),
+  new Date(2022, 8, 24),
 ];
 
 const workingDays = yearDays.filter(

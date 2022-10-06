@@ -61,9 +61,9 @@ const postService = async ({ serviceName, price, duration, type }) => {
 
 const getServiceByPK = async ({ id }) => {
   try {
-    const customer = await Service.findByPk(id);
-    if (customer) {
-      return customer;
+    const service = await Service.findByPk(id);
+    if (service) {
+      return service;
     }
     return null;
   } catch (err) {

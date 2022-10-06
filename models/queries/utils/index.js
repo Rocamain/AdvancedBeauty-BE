@@ -123,10 +123,7 @@ const getAvailableBookings = ({
   newBookingStartTime = openingTime,
   availableSpots = [],
 }) => {
-  let newBookingEndTime = addMinutes(
-    new Date(newBookingStartTime),
-    serviceTime
-  );
+  let newBookingEndTime = addMinutes(newBookingStartTime, serviceTime);
   const currentBooking = bookings[0];
   const currentBkngStartTime = currentBooking?.appointment;
   const currentBkngEndTime = currentBooking?.appointmentFinish;
@@ -145,13 +142,10 @@ const getAvailableBookings = ({
     for (
       newBookingEndTime;
       newBookingEndTime <= closingTime;
-      newBookingEndTime = addMinutes(new Date(newBookingEndTime), serviceTime)
+      newBookingEndTime = addMinutes(newBookingEndTime, serviceTime)
     ) {
       availableSpots.push(newBookingStartTime);
-      newBookingStartTime = addMinutes(
-        new Date(newBookingStartTime),
-        serviceTime
-      );
+      newBookingStartTime = addMinutes(newBookingStartTime, serviceTime);
     }
 
     return availableSpots;
@@ -179,13 +173,10 @@ const getAvailableBookings = ({
   for (
     newBookingEndTime;
     newBookingEndTime <= currentBkngStartTime;
-    newBookingEndTime = addMinutes(new Date(newBookingEndTime), serviceTime)
+    newBookingEndTime = addMinutes(newBookingEndTime, serviceTime)
   ) {
     availableSpots.push(newBookingStartTime);
-    newBookingStartTime = addMinutes(
-      new Date(newBookingStartTime),
-      serviceTime
-    );
+    newBookingStartTime = addMinutes(newBookingStartTime, serviceTime);
   }
 
   newBookingStartTime = currentBkngEndTime;
@@ -213,25 +204,15 @@ const checkIsNotWithinOpeningTimes = ({
     milliseconds: 0,
   });
 
-  const startLimitWithOffSet = addMinutes(
-    startLimit,
-    startLimit.getTimezoneOffset() * -1
-  );
-
-  const endLimit = set(new Date(appointmentFinish), {
+  const endLimit = set(appointmentFinish, {
     hours: 20,
     minutes: 0,
     seconds: 0,
     milliseconds: 0,
   });
-  const endLimitWithOffSet = addMinutes(
-    endLimit,
-    endLimit.getTimezoneOffset() * -1
-  );
 
   const isNotWithinOpeningTimes =
-    appointmentDate < startLimitWithOffSet ||
-    appointmentFinish > endLimitWithOffSet;
+    appointmentDate < startLimit || appointmentFinish > endLimit;
 
   return { isNotWithinOpeningTimes };
 };
@@ -241,7 +222,7 @@ const throwShopClosedErr = async ({
   appointmentFinish,
   shopId,
 }) => {
-  const appointmentDate = new Date(appointment);
+  const appointmentDate = appointment;
 
   const { isNotWithinOpeningTimes } = checkIsNotWithinOpeningTimes({
     appointmentDate,

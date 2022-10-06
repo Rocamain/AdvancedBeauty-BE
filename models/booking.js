@@ -42,12 +42,8 @@ module.exports = (sequelize, DataTypes) => {
       appointment: {
         type: DataTypes.DATE,
         allowNull: false,
-        get() {
-          const appointment = this.getDataValue('appointment');
-          const cleanDate = new Date(appointment);
-          return cleanDate;
-        },
       },
+
       time: {
         type: DataTypes.VIRTUAL,
         get() {
