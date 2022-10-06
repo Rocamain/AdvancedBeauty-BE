@@ -21,6 +21,52 @@ const fetchAllShops = ({
   });
 };
 
+const getShopByPK = async ({ id }) => {
+  try {
+    const shop = await Shop.findByPk(id);
+    if (shop) {
+      return shop;
+    }
+    return null;
+  } catch (err) {
+    throw err;
+  }
+};
+const putShop = async ({
+  shopName,
+  city,
+  street,
+  postcode,
+  phone,
+  mobile,
+  id,
+}) => {
+  try {
+    const shop = await Shop.findByPk(id);
+
+    if (shop) {
+      await shop.update({
+        shopName,
+        city,
+        street,
+        postcode,
+        phone,
+        mobile,
+        id,
+      });
+      const updatedShop = await shop.save();
+
+      return updatedShop;
+    }
+    return null;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
 module.exports = {
   fetchAllShops,
+  getShopByPK,
+  putShop,
 };

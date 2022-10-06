@@ -23,7 +23,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
         validate: {
-          len: [6, 40],
+          notIn: {
+            args: [[false, true]],
+            msg: 'Validation on serviceName cannot be Boolean',
+          },
+          len: {
+            args: [4, 40],
+            msg: 'Validation on serviceName min:4, max:20',
+          },
         },
       },
       duration: {
@@ -38,11 +45,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          len: [4, 30],
-          isIn: [['Facial', 'Body', 'Manicure and pedicure', 'Laser']],
+          isIn: {
+            args: [['Facial', 'Body', 'Manicure and pedicure', 'Laser']],
+            msg: 'Invalid input on type, available options: Facial, Body, Manicure and pedicure or Laser',
+          },
         },
       },
-      status: { type: DataTypes.BOOLEAN },
+      status: {
+        type: DataTypes.BOOLEAN,
+        validate: {
+          isIn: {
+            args: [[true, false]],
+            msg: 'Invalid input on status, available options: true or false ',
+          },
+        },
+      },
       createdAt: {
         allowNull: true,
         type: DataTypes.DATE,

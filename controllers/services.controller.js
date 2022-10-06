@@ -5,11 +5,18 @@ const {
   deleteService,
   putService,
 } = require('../models/queries/services.queries');
-
-const { checkIsNum } = require('./utils/index');
-
-const getAllServices = (req, res, next) => {
+const { fetchAllShops } = require('../models/queries/shops.queries');
+const getAllServices = async (req, res, next) => {
   const { query } = req;
+  const { shopName } = req.query;
+
+  if (shopName) {
+    const { id } = await fetchAllShops({ shopName });
+
+    fetchAllServices({ shopId: id, ...query })
+      .then((services) => res.status(200).json({ services }))
+      .catch(next);
+  }
 
   fetchAllServices(query)
     .then((services) => res.status(200).json({ services }))

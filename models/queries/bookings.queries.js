@@ -2,8 +2,15 @@ const { Booking, Customer, Service, Shop, sequelize } = require('../index');
 const { fetchAllServices } = require('../queries/services.queries');
 const { fetchAllShops } = require('../queries/shops.queries');
 const { getAvailableBookings, throwShopClosedErr } = require('./utils/index');
-const { addMinutes, addHours, differenceInMinutes } = require('date-fns');
-
+const {
+  addMinutes,
+  addHours,
+  differenceInMinutes,
+  getHours,
+  getMinutes,
+  parseISO,
+} = require('date-fns');
+const { utcToZonedTime } = require('date-fns-tz');
 const { Op } = require('sequelize');
 
 const fetchAllBookings = async ({
@@ -128,7 +135,7 @@ const fetchBookingsByShopAndDay = async ({
     const bookings = await Booking.findAll({
       where: {
         appointment: {
-          [Op.between]: [new Date(appointmentFrom), new Date(appointmentTo)],
+          [Op.between]: [appointmentFrom, appointmentTo],
         },
       },
       attributes: ['id', 'appointment', 'time', 'appointmentFinish'],
@@ -167,10 +174,12 @@ const postBooking = async ({
   appointment,
 }) => {
   if (shopId && serviceId && customerId && serviceTime) {
-    const appointmentDate = new Date(appointment);
-    const appointmentEnd = addMinutes(appointmentDate, serviceTime);
+    const appointmentParsed = parseISO(appointment);
+
+    const appointmentEnd = addMinutes(appointmentParsed, serviceTime);
+
     const isAppointmentOverlapped = await fetchAllBookings({
-      appointmentFrom: appointment,
+      appointmentFrom: appointmentParsed,
       appointmentTo: appointmentEnd,
       shopId,
     }).then((bookings) => {
@@ -197,8 +206,8 @@ const postBooking = async ({
         serviceId,
         shopId,
         customerId,
-        appointment,
-        appointmentFinish: addMinutes(new Date(appointment), serviceTime),
+        appointment: appointmentParsed,
+        appointmentFinish: addMinutes(appointmentParsed, serviceTime),
       });
 
       return newBooking;
@@ -240,7 +249,15 @@ const fetchAvailableBookings = async ({ serviceName, shopName, date }) => {
         serviceTime: duration,
       });
 
-      return availableBookings;
+      const availableTimes = availableBookings.map((bookingDateAvailable) => {
+        const hours = `${getHours(bookingDateAvailable)}`;
+        let minutes = `${getMinutes(bookingDateAvailable)}`;
+
+        minutes = minutes.length === 1 ? 0 + minutes : minutes;
+
+        return `${hours}:${minutes}`;
+      });
+      return { availableBookings, availableTimes };
     }
   } catch (err) {
     throw err;

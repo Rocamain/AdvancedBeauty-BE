@@ -60,6 +60,7 @@ const createBooking = (req, res, next) => {
           appointment: booking.appointment,
           time: booking.time,
           serviceName,
+          from: 'booking',
         });
       });
     })
@@ -100,7 +101,7 @@ const getAvailableBookings = (req, res, next) => {
   if (isInvalidDate) {
     const err = new Error();
     err.status = 400;
-    err.msg = 'Bad request: Invalid Date';
+    err.msg = 'Bad request: Invalid aaaa';
     throw err;
   }
   fetchAvailableBookings({ date: resetDate, serviceName, shopName })
