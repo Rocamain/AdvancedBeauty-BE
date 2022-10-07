@@ -11,8 +11,10 @@
   },
   "main": "listen.js",
   "scripts": {
-    "test": "(npm run db:reset && jest ./__tests__/app.test.js)",
-    "dev": "cross-env NODE_ENV=test nodemon listen.js",
+    "test": "(npm run db-test:reset && jest ./__tests__/app.test.js)",
+    "dev": "cross-env NODE_ENV=production nodemon listen.js",
+    "start": "nodemon listen.js",
+    "build": "nmp db-production:reset",
     "fetch-test-data": "node ./db/data/fetch-data.js",
     "fetch-dev-data": "NODE_ENV=development node  ./db/data/fetch-data.js",
     "setup-db": "npx sequelize-cli db:create",
@@ -24,7 +26,16 @@
     "setup-db:test:create:seed": "cross-env NODE_ENV=test npx sequelize-cli seed:generate --name data-test",
     "setup-db:test:push:seed": "cross-env NODE_ENV=test npx sequelize-cli db:seed:all",
     "setup-db:test:push:seed:undo": "cross-env NODE_ENV=test npx sequelize-cli db:seed:undo",
-    "db:reset": "(npx sequelize-cli db:drop --env test && npx sequelize-cli db:create --env test && npx sequelize-cli db:migrate --env test && npx sequelize-cli db:seed:all --env test)"
+    "db-test:reset": "(npx sequelize-cli db:drop --env test && npx sequelize-cli db:create --env test && npx sequelize-cli db:migrate --env test && npx sequelize-cli db:seed:all --env test)",
+    "setup-db:production": "cross-env NODE_ENV=production npx sequelize-cli db:create",
+    "setup-db:production:drop": "cross-env NODE_ENV=production sequelize-cli db:drop",
+    "setup-db:production:migrate": "cross-env NODE_ENV=production npx sequelize-cli db:migrate",
+    "setup-db:production:model": "cross-env NODE_ENV=production npx sequelize-cli model:generate",
+    "setup-db:production:migrate:undo": "cross-env NODE_ENV=production npx sequelize-cli db:migrate:undo:all",
+    "setup-db:production:create:seed": "cross-env NODE_ENV=production npx sequelize-cli seed:generate --name data-production",
+    "setup-db:production:push:seed": "cross-env NODE_ENV=production npx sequelize-cli db:seed:all",
+    "setup-db:production:push:seed:undo": "cross-env NODE_ENV=production npx sequelize-cli db:seed:undo",
+    "db-production:reset": "(npx sequelize-cli db:drop --env production && npx sequelize-cli db:create --env production && npx sequelize-cli db:migrate --env production && npx sequelize-cli db:seed:all --env production)"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.4.0",
