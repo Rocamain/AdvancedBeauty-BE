@@ -23,7 +23,7 @@ const sendMail = async ({
       text: `We are happy to confirm that your reservation`,
     },
     contact: {
-      to: 'fjrocavazquez@gmail.com',
+      to: email,
       from: process.env.FROM_EMAIL,
       subject: `2U Aesthetics booking confirmation`,
       text: `${name}, ${email}, ${phone}, ${shop}, ${message}`,
@@ -31,13 +31,11 @@ const sendMail = async ({
   };
 
   try {
-    console.log(emailToSend[from]);
     await sgMail.send(emailToSend[from]);
     const msg = 'Email sent';
     return { msg };
   } catch (err) {
     if (err) {
-      console.log(err);
       if (err) {
         const error = {};
         error.msg = 'Something went wrong';

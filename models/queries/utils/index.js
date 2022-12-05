@@ -1,6 +1,10 @@
 const { fetchAllShops } = require('../shops.queries.js');
 const { fetchAllServices } = require('../services.queries');
-const { findOrCreateCustomer } = require('../customers.queries');
+const {
+  postCustomer,
+  fetchAllCustomers,
+  putCustomer,
+} = require('../customers.queries');
 const checkIsHolidays = require('../../../services/holidays');
 const { set, addMinutes } = require('date-fns');
 
@@ -48,47 +52,60 @@ const getShopId = async ({ shopName }) => {
 
 const getCustomerId = async ({ customerName, email }) => {
   try {
-    const customerId = await findOrCreateCustomer({
-      customerName,
-      email,
-    }).then((customer) => {
-      const errorMsg = customer?.errors && customer?.errors[0]?.message;
+    const customer = await fetchAllCustomers({ email });
 
-      if (errorMsg) {
-        const err = new Error();
+    if (customer.length === 0) {
+      const customerId = await postCustomer({
+        customerName,
+        email,
+      }).then((customer) => {
+        const errorMsg = customer?.errors && customer?.errors[0]?.message;
 
-        if (errorMsg === 'email must be unique') {
+        if (errorMsg) {
           const err = new Error();
-          err.msg = 'Bad request: Name value is not matching with the email';
-          err.status = 400;
+
+          if (errorMsg === 'email must be unique') {
+            const err = new Error();
+            err.msg = 'Bad request: Name value is not matching with the email';
+            err.status = 400;
+            throw err;
+          }
+          if (errorMsg === 'Validation len on customerName failed') {
+            const err = new Error();
+            err.msg = 'Bad request: CustomerName minimum length failed.';
+            err.status = 400;
+            throw err;
+          }
+          if (errorMsg === 'Validation isEmail on email failed') {
+            const err = new Error();
+            err.msg = 'Bad request: Email validation failed.';
+            err.status = 400;
+            throw err;
+          }
+
+          err.errors = [{ message: errorMsg }];
+
           throw err;
         }
-        if (errorMsg === 'Validation len on customerName failed') {
-          const err = new Error();
-          err.msg = 'Bad request: CustomerName minimum length failed.';
-          err.status = 400;
-          throw err;
-        }
-        if (errorMsg === 'Validation isEmail on email failed') {
-          const err = new Error();
-          err.msg = 'Bad request: Email validation failed.';
-          err.status = 400;
-          throw err;
-        }
 
-        err.errors = [{ message: errorMsg }];
+        const customerId = customer.dataValues.id;
 
-        throw err;
-      }
+        return {
+          customerId,
+        };
+      });
 
-      const customerId = customer.dataValues.id;
+      return customerId;
+    }
+    if (customer?.customerName !== customerName) {
+      await putCustomer({
+        customerName: customerName,
+        email: email,
+        id: customer[0].id,
+      });
 
-      return {
-        customerId,
-      };
-    });
-
-    return customerId;
+      return { customerId: customer[0].id };
+    }
   } catch (err) {
     throw err;
   }
@@ -242,7 +259,6 @@ const throwShopClosedErr = async ({
     if (isHoliday) {
       throw err;
     }
-
     return;
   } catch (err) {
     throw err;
