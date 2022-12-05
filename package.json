@@ -12,9 +12,9 @@
   "main": "listen.js",
   "scripts": {
     "test": "(npm run db-test:reset && jest ./__tests__/app.test.js)",
-    "dev": "cross-env NODE_ENV=production nodemon listen.js",
-    "start": "nodemon listen.js",
-    "build": "nmp run db-production:reset",
+    "dev": "cross-env NODE_ENV=test nodemon listen.js",
+    "start": "node listen.js",
+    "build": "npm run db-production:reset",
     "fetch-test-data": "node ./db/data/fetch-data.js",
     "fetch-dev-data": "NODE_ENV=development node  ./db/data/fetch-data.js",
     "setup-db": "npx sequelize-cli db:create",

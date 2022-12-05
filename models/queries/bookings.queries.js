@@ -10,7 +10,7 @@ const {
   getMinutes,
   parseISO,
 } = require('date-fns');
-const { utcToZonedTime } = require('date-fns-tz');
+
 const { Op } = require('sequelize');
 
 const fetchAllBookings = async ({
@@ -175,7 +175,6 @@ const postBooking = async ({
 }) => {
   if (shopId && serviceId && customerId && serviceTime) {
     const appointmentParsed = parseISO(appointment);
-
     const appointmentEnd = addMinutes(appointmentParsed, serviceTime);
 
     const isAppointmentOverlapped = await fetchAllBookings({

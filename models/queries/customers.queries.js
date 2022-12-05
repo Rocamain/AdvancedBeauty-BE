@@ -87,9 +87,9 @@ const putCustomer = async ({ customerName, email, id }) => {
     if (customer) {
       await customer.update({ customerName, email });
       await customer.save();
-      return customer;
     }
-    return null;
+
+    return customer;
   } catch (err) {
     throw err;
   }
@@ -100,7 +100,7 @@ const findOrCreateCustomer = async ({ email, customerName }) => {
     const customer = await Customer.findAll({
       where: {
         [Op.and]: [
-          { customerName: { [Op.iRegexp]: `^${customerName}` } },
+          { customerName: customerName },
           { email: { [Op.iRegexp]: `^${email}$` } },
         ],
       },
