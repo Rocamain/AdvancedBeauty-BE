@@ -14,7 +14,7 @@
     "test": "(npm run db-test:reset && jest ./__tests__/app.test.js)",
     "dev": "cross-env NODE_ENV=test nodemon listen.js",
     "start": "node listen.js",
-    "build": "npm run db-development:reset",
+    "build:-seed":"npm run db-development:reset",
     "fetch-test-data": "node ./db/data/fetch-data.js",
     "fetch-dev-data": "cross-env NODE_ENV=development node ./data/fetch-data.js",
     "setup-db": "npx sequelize-cli db:create",
