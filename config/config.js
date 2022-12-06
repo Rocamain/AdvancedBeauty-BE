@@ -3,6 +3,10 @@ require('dotenv').config();
 module.exports = {
   development: {
     DB_URL: process.env.DB_URL,
+    dialect: 'postgres',
+    dialectOptions: {
+      useUTC: false,
+    },
   },
   test: {
     username: process.env.TEST_USER,
