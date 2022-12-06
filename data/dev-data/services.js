@@ -1,122 +1,92 @@
 module.exports = [
   {
-    "service_id": 0,
-    "service_name": "Integrated asynchronous pricing structure ",
+    "service_name": "Persistent zero administration conglomeration",
+    "duration": 60,
+    "price": 25,
+    "type": "Laser"
+  },
+  {
+    "service_name": "Automated optimizing core",
+    "duration": 90,
+    "price": 25,
+    "type": "Manicure and Pedicure"
+  },
+  {
+    "service_name": "Re-engineered even-keeled local area network",
     "duration": 30,
-    "type": "Manicure and Pedicure",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
+    "price": 40,
+    "type": "Facial"
   },
   {
-    "service_id": 1,
-    "service_name": "Business-focused logistical algorithm ",
+    "service_name": "Reactive real-time support",
     "duration": 90,
-    "type": "Manicure and Pedicure",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
+    "price": 50,
+    "type": "Manicure and Pedicure"
   },
   {
-    "service_id": 2,
-    "service_name": "Digitized exuding interface ",
+    "service_name": "Team-oriented clear-thinking hardware",
+    "duration": 90,
+    "price": 70,
+    "type": "Manicure and Pedicure"
+  },
+  {
+    "service_name": "Streamlined non-volatile methodology",
     "duration": 60,
-    "type": "Manicure and Pedicure",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
+    "price": 25,
+    "type": "Manicure and Pedicure"
   },
   {
-    "service_id": 3,
-    "service_name": "Open-source directional definition ",
+    "service_name": "Realigned 24 hour process improvement",
+    "duration": 90,
+    "price": 25,
+    "type": "Manicure and Pedicure"
+  },
+  {
+    "service_name": "Diverse contextually-based algorithm",
+    "duration": 90,
+    "price": 40,
+    "type": "Laser"
+  },
+  {
+    "service_name": "Reverse-engineered disintermediate capability",
+    "duration": 90,
+    "price": 40,
+    "type": "Facial"
+  },
+  {
+    "service_name": "Self-enabling composite analyzer",
+    "duration": 90,
+    "price": 70,
+    "type": "Manicure and Pedicure"
+  },
+  {
+    "service_name": "Self-enabling heuristic access",
+    "duration": 90,
+    "price": 70,
+    "type": "Laser"
+  },
+  {
+    "service_name": "Assimilated client-server instruction set",
+    "duration": 90,
+    "price": 40,
+    "type": "Body"
+  },
+  {
+    "service_name": "Networked disintermediate moderator",
     "duration": 30,
-    "type": "Facial",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
+    "price": 50,
+    "type": "Body"
   },
   {
-    "service_id": 4,
-    "service_name": "Devolved exuding archive ",
+    "service_name": "Business-focused systemic task-force",
     "duration": 30,
-    "type": "Body",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
+    "price": 25,
+    "type": "Facial"
   },
   {
-    "service_id": 5,
-    "service_name": "Reverse-engineered didactic implementation ",
+    "service_name": "Cross-group analyzing initiative",
     "duration": 90,
-    "type": "Body",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
-  },
-  {
-    "service_id": 6,
-    "service_name": "Cross-platform high-level hardware ",
-    "duration": 90,
-    "type": "Body",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
-  },
-  {
-    "service_id": 7,
-    "service_name": "Public-key 3rd generation internet solution ",
-    "duration": 60,
-    "type": "Facial",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
-  },
-  {
-    "service_id": 8,
-    "service_name": "Persistent reciprocal function ",
-    "duration": 30,
-    "type": "Body",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
-  },
-  {
-    "service_id": 9,
-    "service_name": "Progressive well-modulated contingency ",
-    "duration": 60,
-    "type": "Body",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
-  },
-  {
-    "service_id": 10,
-    "service_name": "Secured mobile hardware ",
-    "duration": 90,
-    "type": "Facial",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
-  },
-  {
-    "service_id": 11,
-    "service_name": "Customizable eco-centric knowledge base ",
-    "duration": 60,
-    "type": "Body",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
-  },
-  {
-    "service_id": 12,
-    "service_name": "Integrated national adapter ",
-    "duration": 90,
-    "type": "Body",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
-  },
-  {
-    "service_id": 13,
-    "service_name": "Vision-oriented explicit customer loyalty ",
-    "duration": 60,
-    "type": "Body",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
-  },
-  {
-    "service_id": 14,
-    "service_name": "Future-proofed upward-trending database ",
-    "duration": 60,
-    "type": "Manicure and Pedicure",
-    "created_at": "2022-08-22T15:47:53.564Z",
-    "updated_at": "2022-08-22T15:47:53.564Z"
+    "price": 40,
+    "type": "Laser"
   }
 ]
