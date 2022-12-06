@@ -1,11 +1,24 @@
 require('dotenv').config();
 
+console.log({ a: process.env.NODE_ENV });
+
 module.exports = {
   development: {
-    DB_URL: process.env.DB_URL,
+    username: process.env.DEV_USER,
+    password: process.env.DEV_PASSWORD,
+    database: process.env.DEV_DB_NAME,
+    host: process.env.DEV_HOST,
+    port: process.env.DEV_PORT,
     dialect: 'postgres',
     dialectOptions: {
       useUTC: false,
+    },
+    logging: false,
+    // pool configuration used to pool database connections
+    pool: {
+      max: 5,
+      idle: 30000,
+      acquire: 60000,
     },
   },
   test: {
@@ -27,20 +40,6 @@ module.exports = {
     },
   },
   production: {
-    username: process.env.USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.HOST,
-    dialect: 'postgres',
-    dialectOptions: {
-      useUTC: false,
-    },
-    logging: false,
-    // pool configuration used to pool database connections
-    pool: {
-      max: 5,
-      idle: 30000,
-      acquire: 60000,
-    },
+    use_env_variable: process.env.DATABASE_URL,
   },
 };

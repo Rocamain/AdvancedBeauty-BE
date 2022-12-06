@@ -12,8 +12,8 @@
   "main": "listen.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env NODE_ENV=test nodemon listen.js",
-    "start": "cross-env NODE_ENV=development node listen.js"
+    "dev": "nodemon listen.js",
+    "start": "node listen.js"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.4.0",
