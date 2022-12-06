@@ -2,22 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   development: {
-    username: process.env.DEV_USER,
-    password: process.env.DEV_PASSWORD,
-    database: process.env.DEV_DB_NAME,
-    host: process.env.DEV_HOST,
-    dialect: process.env.DIALECT,
-    port: 5432,
-    dialectOptions: {
-      useUTC: false,
-    },
-    logging: false,
-    // pool configuration used to pool database connections
-    pool: {
-      max: 5,
-      idle: 30000,
-      acquire: 60000,
-    },
+    DB_URL: process.env.DB_URL,
   },
   test: {
     username: process.env.TEST_USER,
