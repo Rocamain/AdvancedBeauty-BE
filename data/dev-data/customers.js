@@ -1,602 +1,402 @@
 module.exports = [
   {
-    customer_name: 'Chaim Mertz',
-    email: 'Chaim18@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Yessenia Wilderman",
+    "email": "Yessenia.Wilderman44@gmail.com"
   },
   {
-    customer_name: 'Mikayla Steuber',
-    email: 'Mikayla.Steuber16@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Terrill Lueilwitz",
+    "email": "Terrill.Lueilwitz62@gmail.com"
   },
   {
-    customer_name: 'Van Erdman',
-    email: 'Van75@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Alia Hudson",
+    "email": "Alia65@gmail.com"
   },
   {
-    customer_name: 'Neil Heaney',
-    email: 'Neil_Heaney@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Carmella Herman",
+    "email": "Carmella.Herman@hotmail.com"
   },
   {
-    customer_name: 'Alysha Tillman',
-    email: 'Alysha41@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Erna Veum",
+    "email": "Erna28@hotmail.com"
   },
   {
-    customer_name: 'Josue Lakin',
-    email: 'Josue27@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Alba Hilll",
+    "email": "Alba_Hilll@hotmail.com"
   },
   {
-    customer_name: 'Steve Sanford',
-    email: 'Steve_Sanford@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Edison Spinka",
+    "email": "Edison91@hotmail.com"
   },
   {
-    customer_name: 'Nelson Rice',
-    email: 'Nelson.Rice@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Erick Macejkovic",
+    "email": "Erick77@yahoo.com"
   },
   {
-    customer_name: 'Kaylah Friesen',
-    email: 'Kaylah34@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Reyes Bergnaum",
+    "email": "Reyes_Bergnaum@hotmail.com"
   },
   {
-    customer_name: 'Pasquale Farrell',
-    email: 'Pasquale_Farrell10@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Fermin Ryan",
+    "email": "Fermin_Ryan@gmail.com"
   },
   {
-    customer_name: 'Ofelia Borer',
-    email: 'Ofelia.Borer1@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Jaime Gulgowski",
+    "email": "Jaime11@hotmail.com"
   },
   {
-    customer_name: 'Arden Schumm',
-    email: 'Arden.Schumm@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Ewald Medhurst",
+    "email": "Ewald.Medhurst@hotmail.com"
   },
   {
-    customer_name: 'Earnest Cormier',
-    email: 'Earnest3@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Colleen Gerlach",
+    "email": "Colleen_Gerlach17@gmail.com"
   },
   {
-    customer_name: 'Savanah Howe',
-    email: 'Savanah3@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Antone Christiansen",
+    "email": "Antone.Christiansen62@yahoo.com"
   },
   {
-    customer_name: 'Precious Wiegand',
-    email: 'Precious_Wiegand@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Donnie Runte",
+    "email": "Donnie.Runte80@gmail.com"
   },
   {
-    customer_name: 'Ariel Conroy',
-    email: 'Ariel.Conroy@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Cleta Ward",
+    "email": "Cleta.Ward61@hotmail.com"
   },
   {
-    customer_name: 'Hermina Stiedemann',
-    email: 'Hermina.Stiedemann0@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Holden Welch",
+    "email": "Holden.Welch@hotmail.com"
   },
   {
-    customer_name: 'Ramona Koch',
-    email: 'Ramona_Koch53@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Nona Stehr",
+    "email": "Nona.Stehr80@hotmail.com"
   },
   {
-    customer_name: 'Estelle Frami',
-    email: 'Estelle_Frami62@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Boyd Homenick",
+    "email": "Boyd.Homenick8@yahoo.com"
   },
   {
-    customer_name: 'Zola Rowe',
-    email: 'Zola45@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Abdul Senger",
+    "email": "Abdul93@hotmail.com"
   },
   {
-    customer_name: 'Amina Nienow',
-    email: 'Amina.Nienow44@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Ansel Schuster",
+    "email": "Ansel.Schuster@yahoo.com"
   },
   {
-    customer_name: 'Therese Ondricka',
-    email: 'Therese.Ondricka@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Burley Abbott",
+    "email": "Burley.Abbott17@gmail.com"
   },
   {
-    customer_name: 'Felicia Lindgren',
-    email: 'Felicia_Lindgren18@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Gia Cruickshank",
+    "email": "Gia7@gmail.com"
   },
   {
-    customer_name: 'Edison Welch',
-    email: 'Edison_Welch63@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Mary Gaylord",
+    "email": "Mary47@gmail.com"
   },
   {
-    customer_name: "Oral O'Connell",
-    email: 'Oral_OConnell@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Mckenna Ebert",
+    "email": "Mckenna.Ebert19@hotmail.com"
   },
   {
-    customer_name: 'Edwina Feeney',
-    email: 'Edwina_Feeney20@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Frankie Cormier",
+    "email": "Frankie_Cormier@yahoo.com"
   },
   {
-    customer_name: 'Eileen Konopelski',
-    email: 'Eileen_Konopelski@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Chris Mraz",
+    "email": "Chris_Mraz88@yahoo.com"
   },
   {
-    customer_name: 'Mylene Collins',
-    email: 'Mylene.Collins@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Nia O'Reilly",
+    "email": "Nia.OReilly@gmail.com"
   },
   {
-    customer_name: 'Tyree Nikolaus',
-    email: 'Tyree_Nikolaus6@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Gene Streich",
+    "email": "Gene_Streich@gmail.com"
   },
   {
-    customer_name: 'Freddy Ledner',
-    email: 'Freddy.Ledner17@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Laurie Prohaska",
+    "email": "Laurie62@yahoo.com"
   },
   {
-    customer_name: 'Carlotta Wehner',
-    email: 'Carlotta.Wehner@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Ruby Hirthe",
+    "email": "Ruby.Hirthe@yahoo.com"
   },
   {
-    customer_name: 'Barbara Cummings',
-    email: 'Barbara_Cummings90@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Kacey Muller",
+    "email": "Kacey69@gmail.com"
   },
   {
-    customer_name: 'Jamel Bergnaum',
-    email: 'Jamel_Bergnaum78@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Ethyl D'Amore",
+    "email": "Ethyl71@hotmail.com"
   },
   {
-    customer_name: 'Grayson Kreiger',
-    email: 'Grayson_Kreiger@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Edd Predovic",
+    "email": "Edd.Predovic@yahoo.com"
   },
   {
-    customer_name: 'Katelyn Graham',
-    email: 'Katelyn73@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Dale Hegmann",
+    "email": "Dale_Hegmann73@yahoo.com"
   },
   {
-    customer_name: 'Lucy Turner',
-    email: 'Lucy.Turner73@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Pamela Beer",
+    "email": "Pamela_Beer@yahoo.com"
   },
   {
-    customer_name: 'Joaquin Gulgowski',
-    email: 'Joaquin.Gulgowski@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Theron Wuckert",
+    "email": "Theron.Wuckert@hotmail.com"
   },
   {
-    customer_name: 'Christophe Homenick',
-    email: 'Christophe_Homenick@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Jackie Rutherford",
+    "email": "Jackie_Rutherford@hotmail.com"
   },
   {
-    customer_name: 'Darius Watsica',
-    email: 'Darius_Watsica@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Lorenzo Kunze",
+    "email": "Lorenzo26@gmail.com"
   },
   {
-    customer_name: 'Kian Wisoky',
-    email: 'Kian.Wisoky72@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Cory Mertz",
+    "email": "Cory_Mertz24@hotmail.com"
   },
   {
-    customer_name: 'Jean Daugherty',
-    email: 'Jean72@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Stan Kemmer",
+    "email": "Stan33@hotmail.com"
   },
   {
-    customer_name: 'Gustave Braun',
-    email: 'Gustave_Braun25@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Coleman Hoeger",
+    "email": "Coleman_Hoeger38@yahoo.com"
   },
   {
-    customer_name: 'Daniela Price',
-    email: 'Daniela_Price98@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Morris Bechtelar",
+    "email": "Morris.Bechtelar@hotmail.com"
   },
   {
-    customer_name: 'Willa Larson',
-    email: 'Willa.Larson72@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Rosalyn Gislason",
+    "email": "Rosalyn74@hotmail.com"
   },
   {
-    customer_name: 'Keyon Hackett',
-    email: 'Keyon87@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Darrel Jast",
+    "email": "Darrel81@hotmail.com"
   },
   {
-    customer_name: 'German Rohan',
-    email: 'German40@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Conor Nolan",
+    "email": "Conor_Nolan67@yahoo.com"
   },
   {
-    customer_name: 'Amara Goyette',
-    email: 'Amara_Goyette@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Asha Moore",
+    "email": "Asha.Moore@hotmail.com"
   },
   {
-    customer_name: 'Jane Zieme',
-    email: 'Jane.Zieme42@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Rollin Vandervort",
+    "email": "Rollin.Vandervort@hotmail.com"
   },
   {
-    customer_name: 'Delphine Nader',
-    email: 'Delphine_Nader@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Angel Schowalter",
+    "email": "Angel42@hotmail.com"
   },
   {
-    customer_name: 'Charley Franey',
-    email: 'Charley_Franey@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Clay Bartoletti",
+    "email": "Clay26@yahoo.com"
   },
   {
-    customer_name: 'Everett McKenzie',
-    email: 'Everett_McKenzie@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Willow Douglas",
+    "email": "Willow_Douglas74@gmail.com"
   },
   {
-    customer_name: 'Hailey VonRueden',
-    email: 'Hailey_VonRueden@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Meredith Goldner",
+    "email": "Meredith46@gmail.com"
   },
   {
-    customer_name: 'Julius Stroman',
-    email: 'Julius29@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Dorthy Waters",
+    "email": "Dorthy_Waters@yahoo.com"
   },
   {
-    customer_name: 'Wade Kulas',
-    email: 'Wade.Kulas42@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Javonte Emard",
+    "email": "Javonte_Emard@gmail.com"
   },
   {
-    customer_name: 'Ron Mohr',
-    email: 'Ron.Mohr@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Macie Reichel",
+    "email": "Macie_Reichel@yahoo.com"
   },
   {
-    customer_name: 'Cornelius Kshlerin',
-    email: 'Cornelius.Kshlerin91@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Reta Hane",
+    "email": "Reta.Hane@yahoo.com"
   },
   {
-    customer_name: 'Cecelia Torp',
-    email: 'Cecelia.Torp@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Joseph Stamm",
+    "email": "Joseph.Stamm79@gmail.com"
   },
   {
-    customer_name: 'Emile Kautzer',
-    email: 'Emile_Kautzer6@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Dimitri Schimmel",
+    "email": "Dimitri.Schimmel65@yahoo.com"
   },
   {
-    customer_name: 'Gennaro Renner',
-    email: 'Gennaro_Renner46@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Madison Rodriguez",
+    "email": "Madison_Rodriguez@gmail.com"
   },
   {
-    customer_name: 'Clarabelle White',
-    email: 'Clarabelle_White17@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Porter Heathcote",
+    "email": "Porter.Heathcote@gmail.com"
   },
   {
-    customer_name: 'Zoie Franecki',
-    email: 'Zoie_Franecki20@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Okey Purdy",
+    "email": "Okey_Purdy98@yahoo.com"
   },
   {
-    customer_name: 'Chesley Johnson',
-    email: 'Chesley.Johnson77@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Armani McLaughlin",
+    "email": "Armani98@yahoo.com"
   },
   {
-    customer_name: 'Rita Trantow',
-    email: 'Rita_Trantow@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Kennith Barton",
+    "email": "Kennith41@hotmail.com"
   },
   {
-    customer_name: "Dayana O'Keefe",
-    email: 'Dayana_OKeefe@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Amina Kerluke",
+    "email": "Amina_Kerluke@yahoo.com"
   },
   {
-    customer_name: 'Winston Cruickshank',
-    email: 'Winston.Cruickshank@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Ramona Kilback",
+    "email": "Ramona_Kilback88@yahoo.com"
   },
   {
-    customer_name: 'Heidi Thiel',
-    email: 'Heidi99@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Myriam Jaskolski",
+    "email": "Myriam.Jaskolski4@hotmail.com"
   },
   {
-    customer_name: 'Ashtyn Kuvalis',
-    email: 'Ashtyn.Kuvalis@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Noble Bruen",
+    "email": "Noble86@hotmail.com"
   },
   {
-    customer_name: 'Nona Brekke',
-    email: 'Nona.Brekke@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Bonnie Hessel",
+    "email": "Bonnie79@gmail.com"
   },
   {
-    customer_name: 'Gisselle Goldner',
-    email: 'Gisselle68@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Melyna Cassin",
+    "email": "Melyna86@yahoo.com"
   },
   {
-    customer_name: 'Jayce Haag',
-    email: 'Jayce43@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Keanu Wyman",
+    "email": "Keanu_Wyman75@gmail.com"
   },
   {
-    customer_name: 'Kacie Witting',
-    email: 'Kacie89@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Dwight Franey",
+    "email": "Dwight51@yahoo.com"
   },
   {
-    customer_name: 'Blake Kemmer',
-    email: 'Blake_Kemmer32@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Sam Bernhard",
+    "email": "Sam.Bernhard@yahoo.com"
   },
   {
-    customer_name: 'Clair Christiansen',
-    email: 'Clair.Christiansen97@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Jovany Ruecker",
+    "email": "Jovany_Ruecker27@gmail.com"
   },
   {
-    customer_name: 'Cleta DuBuque',
-    email: 'Cleta_DuBuque53@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Euna Tromp",
+    "email": "Euna_Tromp@yahoo.com"
   },
   {
-    customer_name: 'Mabel Reynolds',
-    email: 'Mabel50@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "D'angelo Hayes",
+    "email": "Dangelo.Hayes93@yahoo.com"
   },
   {
-    customer_name: 'Roman Kunze',
-    email: 'Roman50@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Gavin McClure",
+    "email": "Gavin81@yahoo.com"
   },
   {
-    customer_name: 'Christian Moore',
-    email: 'Christian21@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Leila Boyle",
+    "email": "Leila.Boyle@hotmail.com"
   },
   {
-    customer_name: 'Amos Dibbert',
-    email: 'Amos.Dibbert89@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Milan Ullrich",
+    "email": "Milan93@yahoo.com"
   },
   {
-    customer_name: 'Savanna Lebsack',
-    email: 'Savanna4@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Rico O'Conner",
+    "email": "Rico9@hotmail.com"
   },
   {
-    customer_name: 'Norris Towne',
-    email: 'Norris39@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Eleanore Gorczany",
+    "email": "Eleanore_Gorczany23@hotmail.com"
   },
   {
-    customer_name: 'Gloria Blick',
-    email: 'Gloria.Blick@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Prudence Oberbrunner",
+    "email": "Prudence.Oberbrunner83@yahoo.com"
   },
   {
-    customer_name: 'Justice Abernathy',
-    email: 'Justice32@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Bernard Dach",
+    "email": "Bernard4@hotmail.com"
   },
   {
-    customer_name: 'Herminio Wuckert',
-    email: 'Herminio_Wuckert85@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Lucie Sauer",
+    "email": "Lucie92@gmail.com"
   },
   {
-    customer_name: 'Casimer Walker',
-    email: 'Casimer_Walker86@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Moriah Jacobson",
+    "email": "Moriah.Jacobson@yahoo.com"
   },
   {
-    customer_name: 'Kaelyn Schowalter',
-    email: 'Kaelyn.Schowalter41@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Faye Keebler",
+    "email": "Faye.Keebler13@gmail.com"
   },
   {
-    customer_name: 'Doris Ward',
-    email: 'Doris_Ward@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Brenda Bartell",
+    "email": "Brenda.Bartell@yahoo.com"
   },
   {
-    customer_name: 'Jadon Ebert',
-    email: 'Jadon.Ebert@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Shaun Haley",
+    "email": "Shaun_Haley28@hotmail.com"
   },
   {
-    customer_name: 'Liliana Walsh',
-    email: 'Liliana.Walsh30@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Jada Swift",
+    "email": "Jada_Swift64@gmail.com"
   },
   {
-    customer_name: 'Euna Mayert',
-    email: 'Euna_Mayert85@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Lola Larkin",
+    "email": "Lola_Larkin17@hotmail.com"
   },
   {
-    customer_name: 'Krista Ruecker',
-    email: 'Krista_Ruecker@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Jaquelin Hand",
+    "email": "Jaquelin.Hand@hotmail.com"
   },
   {
-    customer_name: 'Shanelle Becker',
-    email: 'Shanelle_Becker13@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Krista Breitenberg",
+    "email": "Krista.Breitenberg71@hotmail.com"
   },
   {
-    customer_name: 'Hailie Simonis',
-    email: 'Hailie.Simonis15@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Alyson Gibson",
+    "email": "Alyson28@yahoo.com"
   },
   {
-    customer_name: 'Heaven Wolff',
-    email: 'Heaven99@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Brock Mayert",
+    "email": "Brock71@gmail.com"
   },
   {
-    customer_name: 'Anita Hickle',
-    email: 'Anita.Hickle@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Julio Schulist",
+    "email": "Julio76@yahoo.com"
   },
   {
-    customer_name: 'Mariela Lubowitz',
-    email: 'Mariela.Lubowitz@hotmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Ernestina Leffler",
+    "email": "Ernestina_Leffler@yahoo.com"
   },
   {
-    customer_name: 'Dorcas Reichel',
-    email: 'Dorcas.Reichel@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Levi Rippin",
+    "email": "Levi.Rippin34@gmail.com"
   },
   {
-    customer_name: 'Kay Jakubowski',
-    email: 'Kay_Jakubowski@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Justice Sanford",
+    "email": "Justice.Sanford@yahoo.com"
   },
   {
-    customer_name: 'Rico Wintheiser',
-    email: 'Rico73@yahoo.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Jazmin Spencer",
+    "email": "Jazmin93@yahoo.com"
   },
   {
-    customer_name: 'Domenica Jerde',
-    email: 'Domenica7@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
+    "customer_name": "Sylvan Raynor",
+    "email": "Sylvan.Raynor82@hotmail.com"
   },
   {
-    customer_name: 'Carolyn Emmerich',
-    email: 'Carolyn_Emmerich@gmail.com',
-    created_at: '2022-08-22T15:47:53.564Z',
-    updated_at: '2022-08-22T15:47:53.564Z',
-  },
-];
+    "customer_name": "Tyrese Metz",
+    "email": "Tyrese.Metz92@hotmail.com"
+  }
+]
