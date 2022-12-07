@@ -38,6 +38,12 @@ module.exports = {
     },
   },
   production: {
+    username: process.env.PROD_USER,
+    password: process.env.PROD_PASSWORD,
+    database: process.env.PROD_DB_NAME,
+    host: process.env.PROD_HOST,
+    port: process.env.PROD_PORT,
+    dialect: 'postgres',
     use_env_variable: process.env.DATABASE_URL,
   },
 };
