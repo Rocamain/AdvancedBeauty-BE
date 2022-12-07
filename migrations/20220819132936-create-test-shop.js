@@ -1,5 +1,7 @@
+console.log('migration');
 module.exports = {
   async up(queryInterface, Sequelize) {
+    console.log(Sequelize);
     await queryInterface.createTable('shops', {
       id: {
         type: Sequelize.INTEGER,
@@ -14,6 +16,7 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+
       city: {
         type: Sequelize.STRING,
         allowNull: false,

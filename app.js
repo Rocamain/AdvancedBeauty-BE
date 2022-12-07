@@ -30,6 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 app.get('/', (req, res) => {
   res.status(200).send({ msg: 'Ok' });
 });
+console.log('app');
 app.use(customerRouter);
 app.use(bookingsRouter);
 app.use(servicesRouter);
