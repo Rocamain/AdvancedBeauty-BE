@@ -1,177 +1,26 @@
-const { faker } = require('@faker-js/faker');
-const { sample } = require('lodash');
+const createCustomers = require('./createCustomers');
+const createServices = require('./createServices');
+const createBookings = require('./createBookings');
+const shops = require('./shops');
 const { promisify } = require('util');
-const { addHours, addMinutes } = require('date-fns');
-const {
-  checkOverlappedBookings,
-  sortByAppointment,
-  workingDays,
-} = require('./bookings-utils');
-const { utcToZonedTime, format } = require('date-fns-tz');
-
 const fs = require('fs');
-
 const mkdir = promisify(fs.mkdir);
 const writeFile = promisify(fs.writeFile);
-
-const ENV = process.env.NODE_ENV === 'development' ? 'dev' : 'test';
-
-const generateUniques = (randomList, listLength, generator) => {
-  if (listLength === 0) return randomList;
-  const randomItem = generator();
-  if (randomList.includes(randomItem))
-    return generateUniques(randomList, listLength, generator);
-  return generateUniques([randomItem, ...randomList], --listLength, generator);
-};
-
-const generateBookings = (
-  services,
-  customers,
-  bookingsLength,
-  shopId,
-  bookings = []
-) => {
-  if (bookingsLength <= 0) {
-    const cleanBookingDates = bookings.map(
-      ({ appointment, appointmentFinish, ...restBooking }, i) => {
-        return {
-          ...restBooking,
-          appointment: appointment,
-          appointment_finish: appointmentFinish,
-        };
-      }
-    );
-    return cleanBookingDates;
-  }
-
-  const confirmedReservations = Array(bookingsLength)
-    .fill()
-    .concat(bookings)
-    .reduce(
-      (previousBookings, currentBooking, i) => {
-        const { service_id, duration } = sample(services);
-        const hours = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
-        if (duration > 60) {
-          hours.pop();
-        }
-        const randomHour = sample(hours);
-
-        const date =
-          ENV === 'dev'
-            ? sample(workingDays)
-            : new Date(Date.UTC(2022, 10, 18, 0, 0, 0));
-
-        // const appointmentWithOffSet prevent the change the time between summer and winter times as well as if execute from different
-        // timezone so date still the same value.
-
-        const timeZoneAppointment = utcToZonedTime(date, 'Europe/Madrid');
-        const appointment = addHours(timeZoneAppointment, randomHour);
-
-        const { customer_id } = sample(customers);
-
-        const newBooking = {
-          shop_id: shopId,
-          service_id,
-          customer_id,
-          appointment: appointment,
-          appointmentFinish: addMinutes(appointment, duration),
-        };
-
-        if (checkOverlappedBookings(newBooking, previousBookings).length > 0) {
-          return [...previousBookings];
-        }
-
-        return sortByAppointment([...previousBookings, newBooking]);
-      },
-
-      []
-    );
-
-  const totalBookingsCompleted = bookings.length;
-
-  return generateBookings(
-    services,
-    customers,
-    bookingsLength - totalBookingsCompleted,
-    shopId,
-    confirmedReservations
-  );
-};
-
-const createRandomFirstName = () => faker.name.firstName();
-const createRandomSurname = () => faker.name.lastName();
-const uniqueFirstNames = generateUniques(
-  [],
-  100,
-  createRandomFirstName,
-  'firstNames'
-);
-const uniqueSurNames = generateUniques(
-  [],
-  100,
-  createRandomSurname,
-  'surNames'
-);
-
-const generateCustomers = (firstNames, surNames) => {
-  return firstNames.map((firstName, i) => {
-    return {
-      customer_id: i + 1,
-      customer_name: `${firstName} ${surNames[i]}`,
-      email: faker.internet.email(firstName, surNames[i]),
-    };
-  });
-};
-
-const generateServices = (shops, serviceCount) => {
-  return Array.from({ length: serviceCount }, (service, i) => {
-    return {
-      service_id: i + 1,
-      service_name: `${faker.company.catchPhrase()}`,
-      duration: sample([30, 60, 90]),
-      price: sample([25, 40, 50, 70]),
-      type: sample(['Facial', 'Manicure and Pedicure', 'Laser', 'Body']),
-    };
-  });
-};
-const shops = [
-  {
-    shop_name: 'Turo Park',
-    city: 'Barcelona',
-    street: 'C/ Tenor Viñas, 3',
-    postcode: '08021 – Barcelona',
-    phone: '93 200 96 56',
-    mobile: '640 725 934',
-  },
-  {
-    shop_name: "L'Illa Diagonal",
-    city: 'Barcelona',
-    street: 'Avda. Diagonal, 569',
-    postcode: '08029 – Barcelona',
-    phone: '93 410 14 87',
-    mobile: '640 725 935',
-  },
-  {
-    shop_name: 'Palma de Majorca',
-    city: 'Palma de Majorca',
-    street: 'C/ Josep Anselm Clavé, 6',
-    postcode: '07002 – Palma de Majorca ',
-    phone: '971 707 281',
-    mobile: '646 531 481',
-  },
-];
 
 const generateFileText = (js) =>
   `module.exports = ${JSON.stringify(js, null, 2)}`;
 
-module.exports = ({ bookingsLength, servicesLength }) => {
-  let customers = generateCustomers(uniqueFirstNames, uniqueSurNames);
-  let services = generateServices(shops, servicesLength);
-  let bookings = shops.map((_, index) =>
-    generateBookings(services, customers, bookingsLength, index + 1)
-  );
+const ENV = process.env.NODE_ENV === 'development' ? 'dev' : 'test';
 
-  bookings = [...bookings[0], ...bookings[1], ...bookings[2]];
+module.exports = ({ bookingsLength, servicesLength, customersLength }) => {
+  let customers = createCustomers(customersLength);
+  let services = createServices(servicesLength);
+  const bookings = shops
+    .map((_, index) =>
+      createBookings(services, customers, bookingsLength, index + 1)
+    )
+    .flat();
+
   customers = customers.map(({ customer_id, ...rest }) => rest);
   services = services.map(({ service_id, ...rest }) => rest);
 

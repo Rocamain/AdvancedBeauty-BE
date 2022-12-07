@@ -3,8 +3,14 @@ const { eachDayOfInterval, isSunday } = require('date-fns');
 const checkOverlappedBookings = (bookingWithDate, previousBookings) => {
   return previousBookings.filter(
     (prevBooking, i) =>
-      bookingWithDate.appointment < prevBooking.appointmentFinish &&
-      bookingWithDate.appointmentFinish > prevBooking.appointment
+      (bookingWithDate.appointment <= prevBooking.appointment &&
+        bookingWithDate.appointmentFinish > prevBooking.appointment) ||
+      (bookingWithDate.appointment < prevBooking.appointmentFinish &&
+        bookingWithDate.appointmentFinish >= prevBooking.appointmentFinish) ||
+      (bookingWithDate.appointment >= prevBooking.appointment &&
+        bookingWithDate.appointmentFinish <= prevBooking.appointmentFinish) ||
+      (bookingWithDate.appointment < prevBooking.appointment &&
+        bookingWithDate.appointmentFinish > prevBooking.appointmentFinish)
   );
 };
 
@@ -27,6 +33,8 @@ const bankHolidays = [
   new Date(2023, 5, 6),
   new Date(2023, 7, 15),
   new Date(2022, 8, 24),
+  new Date(2022, 12, 25),
+  new Date(2022, 12, 6),
 ];
 
 const workingDays = yearDays.filter(

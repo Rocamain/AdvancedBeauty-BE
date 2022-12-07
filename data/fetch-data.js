@@ -1,11 +1,9 @@
 const fetchIntel = require('./utils/fetch-helpers');
-
-console.log(
-  process.env.NODE_ENV === 'development',
-  '-------------------->',
-  process.env.NODE_ENV
-);
-
-process.env === 'development'
-  ? fetchIntel({ servicesLength: 15, bookingsLength: 700 })
-  : fetchIntel({ servicesLength: 10, bookingsLength: 15 });
+console.log(process.env.NODE_ENV);
+process.env.NODE_ENV !== 'test'
+  ? fetchIntel({
+      servicesLength: 22,
+      bookingsLength: 2500,
+      customersLength: 150,
+    })
+  : fetchIntel({ servicesLength: 10, bookingsLength: 15, customersLength: 15 });
