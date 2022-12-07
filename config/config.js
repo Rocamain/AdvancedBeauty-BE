@@ -1,7 +1,5 @@
 require('dotenv').config();
 
-console.log({ a: process.env.NODE_ENV });
-
 module.exports = {
   development: {
     username: process.env.DEV_USER,
@@ -40,6 +38,6 @@ module.exports = {
     },
   },
   production: {
-    use_env_variable: process.env.DATABASE_URL,
+    use_env_variable: 'DATABASE_URL',
   },
 };

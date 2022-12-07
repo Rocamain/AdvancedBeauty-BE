@@ -12,7 +12,7 @@
   "main": "listen.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env NODE_ENV=test nodemon listen.js",
+    "dev": "nodemon listen.js",
     "start": "node listen.js"
   },
   "devDependencies": {
