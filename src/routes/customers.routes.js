@@ -6,17 +6,19 @@ const {
   getCustomer,
   updateCustomer,
 } = require('../controllers/customers.controller');
-const { withErrorHandling } = require('../middlewares/index');
+const { withErrorHandling, methodNotAllowed } = require('../middlewares/index');
 const router = Router();
 
 router
-  .route('/customers')
+  .route('/')
   .get(withErrorHandling(getAllCustomers))
-  .post(withErrorHandling(createCustomer));
+  .post(withErrorHandling(createCustomer))
+  .all(methodNotAllowed);
 router
-  .route('/customers/:id')
+  .route('/:id')
   .get(withErrorHandling(getCustomer))
   .put(withErrorHandling(updateCustomer))
-  .delete(withErrorHandling(eraseCustomer));
+  .delete(withErrorHandling(eraseCustomer))
+  .all(methodNotAllowed);
 
 module.exports = router;

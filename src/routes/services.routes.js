@@ -6,18 +6,20 @@ const {
   eraseService,
   updateService,
 } = require('../controllers/services.controller');
-const { withErrorHandling } = require('../middlewares/index');
+const { withErrorHandling, methodNotAllowed } = require('../middlewares/index');
 const router = Router();
 
 router
-  .route('/services')
+  .route('/')
   .get(withErrorHandling(getAllServices))
-  .post(withErrorHandling(createService));
+  .post(withErrorHandling(createService))
+  .all(methodNotAllowed);
 
 router
-  .route('/services/:id')
+  .route('/:id')
   .get(withErrorHandling(getService))
   .delete(withErrorHandling(eraseService))
-  .put(withErrorHandling(updateService));
+  .put(withErrorHandling(updateService))
+  .all(methodNotAllowed);
 
 module.exports = router;

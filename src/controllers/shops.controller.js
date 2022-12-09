@@ -2,7 +2,7 @@ const {
   fetchAllShops,
   getShopByPK,
   putShop,
-} = require('../models/queries/shops.queries');
+} = require('..//services/shops.services');
 
 const getAllShops = (req, res, next) => {
   const { query } = req;

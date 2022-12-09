@@ -1,4 +1,4 @@
-const sendEmail = require('../services/send_grid');
+const sendEmail = require('../utils/send_grid');
 
 const sendQueryEmail = (req, res, next) => {
   const { name, email, phone, shop, message } = req.body;

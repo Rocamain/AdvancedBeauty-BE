@@ -1,6 +1,12 @@
-const { Booking, Customer, Service, Shop, sequelize } = require('../index');
-const { fetchAllServices } = require('../queries/services.queries');
-const { fetchAllShops } = require('../queries/shops.queries');
+const {
+  Booking,
+  Customer,
+  Service,
+  Shop,
+  sequelize,
+} = require('../models/index');
+const { fetchAllServices } = require('../services/services.services');
+const { fetchAllShops } = require('../services/shops.services');
 const { getAvailableBookings, throwShopClosedErr } = require('./utils/index');
 const {
   addMinutes,

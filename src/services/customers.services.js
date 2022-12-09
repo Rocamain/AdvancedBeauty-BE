@@ -1,4 +1,4 @@
-const { Customer, sequelize } = require('../index');
+const { Customer, sequelize } = require('../models/index');
 const { Op } = require('sequelize');
 
 const fetchAllCustomers = async ({

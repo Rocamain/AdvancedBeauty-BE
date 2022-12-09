@@ -1,4 +1,4 @@
-const { Shop } = require('../index');
+const { Shop } = require('../models/index');
 const { Op } = require('sequelize');
 const fetchAllShops = ({
   orderBy = 'id',

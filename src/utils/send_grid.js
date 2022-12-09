@@ -4,17 +4,7 @@ const sgMail = require('@sendgrid/mail');
 
 sgMail.setApiKey(process.env.EMAIL_KEY);
 
-const sendMail = async ({
-  email,
-  appointment,
-  time,
-  serviceName,
-  from,
-  name,
-  phone,
-  shop,
-  message,
-}) => {
+const sendMail = async ({ email, from, name, phone, shop, message }) => {
   const emailToSend = {
     booking: {
       to: email,
@@ -31,7 +21,12 @@ const sendMail = async ({
   };
 
   try {
-    await sgMail.send(emailToSend[from]);
+    await sgMail
+      .send(emailToSend[from])
+      .then((msg) => {
+        console.log('sendGrid', msg);
+      })
+      .catch((err) => console.log('sendGrid', err));
     const msg = 'Email sent';
     return { msg };
   } catch (err) {

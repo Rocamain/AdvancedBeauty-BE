@@ -4,8 +4,8 @@ const {
   getServiceByPK,
   deleteService,
   putService,
-} = require('../models/queries/services.queries');
-const { fetchAllShops } = require('../models/queries/shops.queries');
+} = require('..//services/services.services');
+const { fetchAllShops } = require('..//services/shops.services');
 const getAllServices = async (req, res, next) => {
   const { query } = req;
   const { shopName } = req.query;

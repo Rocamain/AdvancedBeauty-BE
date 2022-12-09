@@ -3,7 +3,7 @@ const { faker } = require('@faker-js/faker');
 const createRandomCustomer = () => {
   const firstName = faker.name.firstName();
   const lastName = faker.name.lastName();
-  const customer_name = `${faker.name.firstName()} ${faker.name.lastName()}`;
+  const customer_name = `${firstName} ${lastName}`;
   const email = faker.internet.email(firstName, lastName);
   return { customer_name, email };
 };

@@ -60,3 +60,7 @@ exports.SQLErrors = (err, req, res, next) => {
     next(err);
   }
 };
+
+exports.methodNotAllowed = (req, res) => {
+  res.status(405).send({ msg: 'Method not allowed' });
+};

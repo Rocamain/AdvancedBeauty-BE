@@ -1,19 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-
-const customerRouter = require('./routes/customers.routes');
-const bookingsRouter = require('./routes/bookings.routes');
-const servicesRouter = require('./routes/services.routes');
-const shopsRouter = require('./routes/shops.routes');
-const contactRouter = require('./routes/contact.routes');
-
+const swaggerUI = require('swagger-ui-express');
+const routes = require('./routes/routes');
 const {
-  routeNotFound,
   handleCustomErrors,
   validationErrors,
   SQLErrors,
 } = require('./middlewares');
+const swaggerSpecs = require('./utils/swaggerSpecs');
 
 const app = express();
 
@@ -27,16 +22,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Routes
-app.get('/', (req, res) => {
-  res.status(200).send({ msg: 'Ok' });
-});
-console.log('app');
-app.use(customerRouter);
-app.use(bookingsRouter);
-app.use(servicesRouter);
-app.use(shopsRouter);
-app.use(contactRouter);
-app.all('*', routeNotFound);
+
+app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerSpecs));
+app.use(routes);
 
 // handling errors
 app.use(handleCustomErrors);

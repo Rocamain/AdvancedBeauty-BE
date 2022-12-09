@@ -1,5 +1,3 @@
-const { format, getHours, getMinutes } = require('date-fns');
-
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Booking extends Model {

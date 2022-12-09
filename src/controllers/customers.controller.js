@@ -4,7 +4,7 @@ const {
   getCustomerByPK,
   deleteCustomer,
   putCustomer,
-} = require('../models/queries/customers.queries');
+} = require('..//services/customers.services');
 const { checkIsNum } = require('./utils/index');
 
 const getAllCustomers = (req, res, next) => {

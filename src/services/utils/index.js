@@ -1,11 +1,11 @@
-const { fetchAllShops } = require('../shops.queries.js');
-const { fetchAllServices } = require('../services.queries');
+const { fetchAllShops } = require('../shops.services.js');
+const { fetchAllServices } = require('../services.services');
 const {
   postCustomer,
   fetchAllCustomers,
   putCustomer,
-} = require('../customers.queries');
-const checkIsHolidays = require('../../../services/holidays');
+} = require('../customers.services');
+const checkIsHolidays = require('../../utils/holidays');
 const { set, addMinutes } = require('date-fns');
 
 const getServiceInfo = async ({ serviceName }) => {

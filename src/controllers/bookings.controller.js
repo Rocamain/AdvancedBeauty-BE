@@ -5,9 +5,9 @@ const {
   putBookingByPK,
   getBookingByID,
   deleteBooking,
-} = require('../models/queries/bookings.queries');
-const sendEmail = require('../services/send_grid');
-const { getIds, getCustomerId } = require('../models/queries/utils/index');
+} = require('../services/bookings.services');
+const sendEmail = require('../utils/send_grid');
+const { getIds, getCustomerId } = require('../services/utils/index');
 const { set } = require('date-fns');
 const { checkFields } = require('./utils');
 
@@ -55,6 +55,7 @@ const createBooking = (req, res, next) => {
         appointment,
       }).then((booking) => {
         res.status(201).json({ booking });
+
         sendEmail({
           email,
           appointment: booking.appointment,

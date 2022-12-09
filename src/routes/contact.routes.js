@@ -1,9 +1,8 @@
 const { Router } = require('express');
-
 const sendQueryEmail = require('../controllers/contact.controller');
-const { withErrorHandling } = require('../middlewares/index');
+const { methodNotAllowed } = require('../middlewares/index');
 const router = Router();
 
-router.route('/contact').post(withErrorHandling(sendQueryEmail));
+router.route('/').post(sendQueryEmail).all(methodNotAllowed);
 
 module.exports = router;

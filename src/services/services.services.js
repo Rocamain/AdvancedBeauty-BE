@@ -1,4 +1,4 @@
-const { Service } = require('../index');
+const { Service } = require('../models/index');
 const { Op } = require('sequelize');
 
 const fetchAllServices = ({

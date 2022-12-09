@@ -7,22 +7,23 @@ const {
   getBooking,
   eraseBooking,
 } = require('../controllers/bookings.controller');
-const { withErrorHandling } = require('../middlewares/index');
+const { withErrorHandling, methodNotAllowed } = require('../middlewares/index');
+
 const router = Router();
 
 router
-  .route('/bookings')
+  .route('/')
   .get(withErrorHandling(getAllBookings))
-  .post(withErrorHandling(createBooking));
+  .post(withErrorHandling(createBooking))
+  .all(methodNotAllowed);
+
+router.route('/available').get(withErrorHandling(getAvailableBookings));
 
 router
-  .route('/bookings/available')
-  .get(withErrorHandling(getAvailableBookings));
-
-router
-  .route('/bookings/:id')
+  .route('/:id')
   .get(withErrorHandling(getBooking))
   .put(withErrorHandling(modifyBooking))
-  .delete(withErrorHandling(eraseBooking));
+  .delete(withErrorHandling(eraseBooking))
+  .all(methodNotAllowed);
 
 module.exports = router;

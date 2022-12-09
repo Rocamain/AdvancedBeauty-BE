@@ -1,7 +1,7 @@
 process.env.NODE_ENV = 'test';
 const supertest = require('supertest');
-const app = require('../app');
-const db = require('../models/index');
+const app = require('../src/app');
+const db = require('../src/models/index');
 const request = supertest(app);
 
 describe('Test search feature', () => {
