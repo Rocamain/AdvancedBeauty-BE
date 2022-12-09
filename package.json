@@ -12,10 +12,10 @@
   "main": "listen.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon listen.js",
-    "start": "node listen.js",
-    "fetch-test-data": "cross-env NODE_ENV=test node ./data/fetch-data.js",
-    "fetch-dev-data": "cross-env NODE_ENV=development node ./data/fetch-data.js",
+    "dev": " cross-env NODE_ENV=test nodemon src/listen.js",
+    "start": "node src/listen.js",
+    "fetch-test-data": "cross-env NODE_ENV=test node data/fetch-data.js",
+    "fetch-dev-data": "cross-env NODE_ENV=development node data/fetch-data.js",
     "setup-db:test": "cross-env NODE_ENV=test npx sequelize-cli db:create",
     "setup-db:development": "cross-env NODE_ENV=development npx sequelize-cli db:create",
     "setup-db:production": "cross-env NODE_ENV=production npx sequelize-cli db:create",
@@ -25,7 +25,7 @@
     "setup-db:test:model": "cross-env NODE_ENV=test npx sequelize-cli model:generate",
     "setup-db:test:migrate": "cross-env NODE_ENV=test npx sequelize-cli db:migrate",
     "setup-db:development:migrate": "cross-env NODE_ENV=development npx sequelize-cli db:migrate",
-    "setup-db:production:migrate": "cross-env NODE_ENV=production npx sequelize-cli db:migrate",
+    "setup-db:production:migrate": "cross-env  NODE_ENV=production npx sequelize-cli db:migrate",
     "setup-db:test:migrate:undo": "cross-env NODE_ENV=test npx sequelize-cli db:migrate:undo:all",
     "setup-db:development:migrate:undo": "cross-env NODE_ENV=development npx sequelize-cli db:migrate:undo:all",
     "setup-db:production:migrate:undo": "cross-env NODE_ENV=production npx sequelize-cli db:migrate:undo:all",
@@ -61,7 +61,9 @@
     "express": "^4.18.1",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.21.4"
+    "sequelize": "^6.21.4",
+    "swagger-jsdoc": "^6.2.5",
+    "swagger-ui-express": "^4.6.0"
   },
   "keywords": [
     "booking",
