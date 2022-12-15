@@ -1,7 +1,7 @@
-const shops = require('../data/dev-data/shops');
-const services = require('../data/dev-data/services');
-const customers = require('../data/dev-data/customers');
-const bookings = require('../data/dev-data/bookings');
+const shops = require('../../data/dev-data/shops');
+const services = require('../../data/dev-data/services');
+const customers = require('../../data/dev-data/customers');
+const bookings = require('../../data/dev-data/bookings');
 
 module.exports = {
   async up(queryInterface, Sequelize) {
