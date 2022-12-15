@@ -7,7 +7,7 @@ const {
 } = require('../models/index');
 const { fetchAllServices } = require('../services/services.services');
 const { fetchAllShops } = require('../services/shops.services');
-const { getAvailableBookings, throwShopClosedErr } = require('./utils/index');
+const { getAvailableBookings } = require('./utils/index');
 const {
   addMinutes,
   addHours,
@@ -228,8 +228,15 @@ const fetchAvailableBookings = async ({ serviceName, shopName, date }) => {
     const [service] = await fetchAllServices({ serviceName });
     const [shop] = await fetchAllShops({ shopName });
 
-    if (!shop || !service) {
-      return [];
+    if (!shop) {
+      const err = new Error();
+      err.msg = 'Bad request: shop does not exist';
+      throw err;
+    }
+    if (!service) {
+      const err = new Error();
+      err.msg = 'Bad request: service does not exist';
+      throw err;
     }
 
     const { duration } = service.dataValues;
@@ -246,7 +253,7 @@ const fetchAvailableBookings = async ({ serviceName, shopName, date }) => {
     let openingTime = appointmentFrom;
     let closingTime = appointmentTo;
 
-    if (bookings && duration) {
+    if (bookings && duration && shop) {
       const availableBookings = getAvailableBookings({
         openingTime,
         closingTime,
@@ -265,6 +272,7 @@ const fetchAvailableBookings = async ({ serviceName, shopName, date }) => {
       return { availableBookings, availableTimes };
     }
   } catch (err) {
+    err.status = 400;
     throw err;
   }
 };
@@ -285,26 +293,21 @@ const putBookingByPK = async ({ id, customerId, appointment }) => {
       ],
     });
     if (booking) {
-      const { shopId } = booking;
-      const end = new Date(booking.appointmentFinish);
-      const start = new Date(booking.appointment);
-      const minutesToFinnish = differenceInMinutes(end, start);
-      const appointmentFinish = addMinutes(
-        new Date(appointment),
-        minutesToFinnish
-      );
+      const end = appointment && new Date(booking.appointmentFinish);
+      const start = appointment && new Date(booking.appointment);
+      const minutesToFinnish = appointment && differenceInMinutes(end, start);
+      const appointmentFinish =
+        appointment && addMinutes(new Date(appointment), minutesToFinnish);
 
-      await throwShopClosedErr({ appointment, appointmentFinish, shopId });
-
-      await booking.update({
+      const newBooking = await booking.update({
         appointment,
         appointmentFinish,
         customerId,
       });
 
-      await booking.save();
+      await newBooking.save();
 
-      return booking;
+      return newBooking;
     }
     const err = new Error();
     err.msg = 'Bad request: Booking does not exist';
