@@ -36,23 +36,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         field: 'created_at',
         defaultValue: DataTypes.NOW,
-        //  Not decided if i want to implement this.
-
-        // get() {
-        //   const rawValue = this.getDataValue('createdAt');
-        //   return rawValue ? moment(rawValue).format('DD/MM/YYYY') : null;
-        // },
       },
       updatedAt: {
         type: DataTypes.DATE,
         field: 'updated_at',
         defaultValue: DataTypes.NOW,
-        //  Not decided if i want to implement this.
-
-        // get() {
-        //   const rawValue = this.getDataValue('updatedAt');
-        //   return rawValue ? moment(rawValue).format('DD/MM/YYYY') : null;
-        // },
       },
     },
 
