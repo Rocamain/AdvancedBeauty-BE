@@ -23,10 +23,8 @@ const sendMail = async ({ email, from, name, phone, shop, message }) => {
   try {
     await sgMail
       .send(emailToSend[from])
-      .then((msg) => {
-        console.log('sendGrid', msg);
-      })
-      .catch((err) => console.log('sendGrid', err));
+      .then((msg) => {})
+      .catch((err) => {});
     const msg = 'Email sent';
     return { msg };
   } catch (err) {
