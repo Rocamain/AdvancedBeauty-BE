@@ -78,19 +78,12 @@ const deleteService = async ({ id }) => {
   }
 };
 
-const putService = async ({
-  id,
-  serviceName,
-  type,
-  price,
-  status,
-  duration,
-}) => {
+const putService = async ({ id, serviceName, type, price, duration }) => {
   try {
     const service = await Service.findByPk(id);
 
     if (service) {
-      await service.update({ serviceName, type, price, status, duration });
+      await service.update({ serviceName, type, price, duration });
       await service.save();
       return service;
     }
