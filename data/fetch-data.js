@@ -6,4 +6,4 @@ process.env.NODE_ENV !== 'test'
       bookingsLength: 1500,
       customersLength: 150,
     })
-  : fetchIntel({ servicesLength: 10, bookingsLength: 15, customersLength: 15 });
+  : fetchIntel({ servicesLength: 10, bookingsLength: 2, customersLength: 15 });
