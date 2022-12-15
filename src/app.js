@@ -2,18 +2,19 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const swaggerUI = require('swagger-ui-express');
+const swaggerSpecs = require('./utils/swaggerSpecs');
 const routes = require('./routes/routes');
 const {
   handleCustomErrors,
   validationErrors,
   SQLErrors,
 } = require('./middlewares');
-const swaggerSpecs = require('./utils/swaggerSpecs');
 
 const app = express();
 
 // Settings
 app.set('port', process.env.PORT || 4000);
+app.use(express.static('public'));
 
 // Middlewares
 app.use(morgan('tiny'));
@@ -23,7 +24,11 @@ app.use(express.urlencoded({ extended: false }));
 
 // Routes
 
-app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerSpecs));
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpecs));
+app.get('/docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpecs);
+});
 app.use(routes);
 
 // handling errors
