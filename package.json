@@ -11,7 +11,7 @@
   },
   "main": "listen.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "(npm run db-test:reset && jest ./__tests__/app.test.js)",
     "dev": " cross-env NODE_ENV=test nodemon src/listen.js",
     "start": "node src/listen.js",
     "fetch-test-data": "cross-env NODE_ENV=test node data/fetch-data.js",
