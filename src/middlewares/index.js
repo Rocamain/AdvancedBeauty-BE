@@ -45,7 +45,7 @@ exports.SQLErrors = (err, req, res, next) => {
     23505: 'Unique constrain error',
     22007: 'Invalid date',
     42703: 'Query field does not exist',
-    '22P02': 'Invalid value type',
+    '22P02': 'Invalid value type on parameters',
     42883: 'Invalid value type',
   };
 

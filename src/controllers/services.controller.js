@@ -41,15 +41,17 @@ const getService = (req, res, next) => {
 };
 const eraseService = (req, res, next) => {
   deleteService(req.params)
-    .then((service) => res.status(204).json({ service }))
+    .then((service) => {
+      return res.status(204).json({ service });
+    })
     .catch(next);
 };
 
 const updateService = (req, res, next) => {
   const { id } = req.params;
-  const { serviceName, type, price, status, duration } = req.body;
+  const { serviceName, type, price, duration } = req.body;
 
-  putService({ serviceName, type, price, status, duration, id })
+  putService({ serviceName, type, price, duration, id })
     .then((service) => {
       return res.status(203).json({ service });
     })

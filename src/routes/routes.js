@@ -6,11 +6,14 @@ const shopsRouter = require('./shops.routes');
 const contactRouter = require('./contact.routes');
 const { routeNotFound } = require('../middlewares');
 
-dbRouter.use('/shops', shopsRouter);
-dbRouter.use('/bookings', bookingsRouter);
-dbRouter.use('/services', servicesRouter);
-dbRouter.use('/customers', customersRouter);
-dbRouter.use('/contact', contactRouter);
-dbRouter.use('*', routeNotFound);
+dbRouter.get('/api', (req, res, next) => res.send({ msg: 'Ok' }));
+dbRouter.use('/api/shops', shopsRouter);
+dbRouter.use('/api/bookings', bookingsRouter);
+dbRouter.use('/api/services', servicesRouter);
+dbRouter.use('/api/customers', customersRouter);
+dbRouter.use('/api/contact', contactRouter);
+dbRouter.use('/api/*', routeNotFound);
+// dbRouter.use('/', swaggerUI.serve, swaggerUI.setup(swaggerSpecs));
+dbRouter.use('/*', routeNotFound);
 
 module.exports = dbRouter;

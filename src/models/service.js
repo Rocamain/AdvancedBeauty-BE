@@ -51,15 +51,6 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      status: {
-        type: DataTypes.BOOLEAN,
-        validate: {
-          isIn: {
-            args: [[true, false]],
-            msg: 'Invalid input on status, available options: true or false ',
-          },
-        },
-      },
       createdAt: {
         allowNull: true,
         type: DataTypes.DATE,

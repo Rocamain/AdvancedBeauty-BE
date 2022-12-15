@@ -30,6 +30,7 @@ const throwIsPastErr = (appointment) => {
 const throwIsDateErr = (appointment) => {
   const appointmentDate = new Date(appointment);
   const invalidDate = JSON.stringify(appointmentDate) === 'null';
+  console.log(appointment);
 
   if (!isDate(appointmentDate) || invalidDate) {
     const err = new Error();
@@ -56,8 +57,10 @@ const throwPutPostBookingErrors = (req) => {
   const { path } = req.route;
   const { appointment, customerName } = req.body;
 
-  const postValidation = path === '/bookings' && req.method === 'POST';
-  const putValidation = path === '/bookings/:id' && req.method === 'PUT';
+  const postValidation =
+    req.baseUrl === '/api/bookings' && req.method === 'POST';
+  const putValidation =
+    req.baseUrl + path === '/api/bookings/:id' && req.method === 'PUT';
 
   if (postValidation || putValidation) {
     throwIsDateErr(appointment);

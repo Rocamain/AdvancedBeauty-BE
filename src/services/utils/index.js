@@ -59,35 +59,6 @@ const getCustomerId = async ({ customerName, email }) => {
         customerName,
         email,
       }).then((customer) => {
-        const errorMsg = customer?.errors && customer?.errors[0]?.message;
-
-        if (errorMsg) {
-          const err = new Error();
-
-          if (errorMsg === 'email must be unique') {
-            const err = new Error();
-            err.msg = 'Bad request: Name value is not matching with the email';
-            err.status = 400;
-            throw err;
-          }
-          if (errorMsg === 'Validation len on customerName failed') {
-            const err = new Error();
-            err.msg = 'Bad request: CustomerName minimum length failed.';
-            err.status = 400;
-            throw err;
-          }
-          if (errorMsg === 'Validation isEmail on email failed') {
-            const err = new Error();
-            err.msg = 'Bad request: Email validation failed.';
-            err.status = 400;
-            throw err;
-          }
-
-          err.errors = [{ message: errorMsg }];
-
-          throw err;
-        }
-
         const customerId = customer.dataValues.id;
 
         return {
@@ -107,6 +78,29 @@ const getCustomerId = async ({ customerName, email }) => {
       return { customerId: customer[0].id };
     }
   } catch (err) {
+    if (
+      err.message === 'Validation error: Validation len on customerName failed'
+    ) {
+      const err = new Error();
+      err.msg = 'Bad request: CustomerName minimum length failed.';
+      err.status = 400;
+      throw err;
+    }
+    if (
+      err.message === 'Validation error: Validation isEmail on email failed'
+    ) {
+      const err = new Error();
+      err.msg = 'Bad request: Email validation failed.';
+      err.status = 400;
+      throw err;
+    }
+    if (err.message === 'Validation error: email must be unique') {
+      const err = new Error();
+      err.msg = 'Bad request: Name value is not matching with the email';
+      err.status = 400;
+      throw err;
+    }
+
     throw err;
   }
 };
@@ -210,64 +204,8 @@ const getAvailableBookings = ({
   });
 };
 
-const checkIsNotWithinOpeningTimes = ({
-  appointmentDate,
-  appointmentFinish,
-}) => {
-  const startLimit = set(appointmentDate, {
-    hours: 9,
-    minutes: 0,
-    seconds: 0,
-    milliseconds: 0,
-  });
-
-  const endLimit = set(appointmentFinish, {
-    hours: 20,
-    minutes: 0,
-    seconds: 0,
-    milliseconds: 0,
-  });
-
-  const isNotWithinOpeningTimes =
-    appointmentDate < startLimit || appointmentFinish > endLimit;
-
-  return { isNotWithinOpeningTimes };
-};
-
-const throwShopClosedErr = async ({
-  appointment,
-  appointmentFinish,
-  shopId,
-}) => {
-  const appointmentDate = appointment;
-
-  const { isNotWithinOpeningTimes } = checkIsNotWithinOpeningTimes({
-    appointmentDate,
-    appointmentFinish,
-  });
-
-  const err = new Error();
-  err.msg = 'Bad request: Booking needs to be within the opening time';
-  err.status = 400;
-
-  if (isNotWithinOpeningTimes) {
-    throw err;
-  }
-
-  try {
-    const { isHoliday } = await checkIsHolidays({ appointmentDate, shopId });
-    if (isHoliday) {
-      throw err;
-    }
-    return;
-  } catch (err) {
-    throw err;
-  }
-};
-
 module.exports = {
   getIds,
   getAvailableBookings,
   getCustomerId,
-  throwShopClosedErr,
 };
