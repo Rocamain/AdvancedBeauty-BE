@@ -22,9 +22,9 @@ const getShop = (req, res, next) => {
 
 const updateShop = (req, res, next) => {
   const { id } = req.params;
-  const { shopName, city, street, postcode, phone, mobile } = req.body;
+  const { city, street, postcode, phone, mobile } = req.body;
 
-  putShop({ shopName, city, street, postcode, phone, mobile, id })
+  putShop({ city, street, postcode, phone, mobile, id })
     .then((shop) => {
       return res.status(203).json({ shop });
     })
