@@ -6,7 +6,7 @@ const {
   putCustomer,
 } = require('../customers.services');
 const checkIsHolidays = require('../../utils/holidays');
-const { set, addMinutes } = require('date-fns');
+const { addMinutes } = require('date-fns');
 
 const getServiceInfo = async ({ serviceName }) => {
   const service = await fetchAllServices({ serviceName }).then(([service]) => {
@@ -107,7 +107,7 @@ const getCustomerId = async ({ customerName, email }) => {
 
 const getIds = async ({ serviceName, shopName, customerName, email }) => {
   try {
-    const { serviceId, duration } = await getServiceInfo({
+    const { serviceId, duration, price } = await getServiceInfo({
       serviceName,
     });
 
@@ -120,6 +120,7 @@ const getIds = async ({ serviceName, shopName, customerName, email }) => {
       shopId,
       customerId,
       serviceTime: duration,
+      price,
     };
   } catch (err) {
     throw err;

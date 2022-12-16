@@ -37,6 +37,7 @@ const createBooking = (req, res, next) => {
     const err = new Error();
     err.status = 400;
     err.msg = `Bad request: missing field: ${errors[0]}`;
+
     throw err;
   }
 
@@ -46,7 +47,7 @@ const createBooking = (req, res, next) => {
     shopName,
     email,
   })
-    .then(({ serviceId, shopId, customerId, serviceTime }) => {
+    .then(({ serviceId, shopId, customerId, serviceTime, price }) => {
       return postBooking({
         serviceId,
         shopId,
@@ -56,12 +57,16 @@ const createBooking = (req, res, next) => {
       }).then((booking) => {
         res.status(201).json({ booking });
 
+        const { appointment } = booking;
         sendEmail({
           email,
-          appointment: booking.appointment,
+          appointment: `${appointment.getDate()}/${appointment.getMonth()}/${appointment.getYear()}`,
           time: booking.time,
           serviceName,
+          name: customerName,
+          shop: shopName,
           from: 'booking',
+          price: price,
         });
       });
     })
