@@ -117,28 +117,33 @@ const createBooking = {
   requestBody: {
     content: {
       'application/json': {
+        required: ['appointment'],
         schema: {
           type: 'object',
           properties: {
-            shopId: {
-              type: 'integer',
-              required: 'true',
-              example: 1,
+            customerName: {
+              type: 'string',
+              required: true,
+              example: 'Francisco Javier Roca',
             },
-            customerId: {
-              type: 'integer',
+            email: {
+              type: 'string',
               required: 'true',
-              example: 4,
+              example: 'fjrocavazquez@gmail.com',
             },
-            serviceId: {
-              type: 'integer',
+            serviceName: {
+              type: 'string',
               required: 'true',
-              example: 8,
+              example: 'Make a request to services/ to get a service name',
+            },
+            shopName: {
+              type: 'string',
+              required: 'true',
+              example: 'Make a request to shops/ to get a shop name',
             },
             appointment: {
               type: 'string',
               format: 'date-time',
-              required: 'true',
               example:
                 'make first a request to bookings/available?serviceName={serviceName}&serviceName={serviceName}&date={DD/MM/YYY}&shopName={shopName} to get a available appointment',
             },

@@ -4,3 +4,4 @@ yarn-error.log
 .env.development
 .env.production
 data/dev-data
+sendgrid.env
