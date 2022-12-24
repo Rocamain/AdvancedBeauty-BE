@@ -93,7 +93,7 @@ My main goal was to learn and create a full project with all the required needs 
  
  3.2 The data for the test database is on this repository, but for the development you will need to create it , for that you will need to enter the command <code>npm run fetch-dev-data</code>, we discourage to use <code>npm run fetch-test-data</code> as the test will break.
  
- 3.3 Next step is to migrate and seed the data. <code>npm run setup-db:test:migrate</code> or <code>npm run setup-db:development:migrate</code> and  next <code>npm run setup-db:test:push:seed</code> or <code>npm run setup-db:development:push:seed</code>.
+ 3.3 Next step is to migrate and seed the data, fort that first you will need to install <code> npm install -g sequelize-cli </code> or <code>yarn add -g sequelize-cli </code> and then run the following scripts <code>npm run setup-db:test:migrate</code> or <code>npm run setup-db:development:migrate</code> and  next <code>npm run setup-db:test:push:seed</code> or <code>npm run setup-db:development:push:seed</code>.
  
  3.4 Last step npm <code>npm run start</code> for test and development <code>npm run dev </code>.
  
