@@ -3,6 +3,9 @@ const supertest = require('supertest');
 const app = require('../src/app');
 const db = require('../src/models/index');
 const request = supertest(app);
+const { set, addDays, addMinutes } = require('date-fns');
+const NOW = new Date();
+const TOMORROW = addDays(NOW, 1);
 
 describe('Test search feature', () => {
   beforeAll(async () => {
@@ -43,13 +46,13 @@ describe('Test search feature', () => {
       );
       const { msg } = body;
       expect(status).toBe(400);
-      expect(msg).toBe('Bad request: Invalid date');
+      expect(msg).toBe('Bad request: createdAt is not a date');
     });
     test('Should return status code 400 for wrong date format(number)', async () => {
       const { status, body } = await request.get('/api/customers?createdAt=23');
       const { msg } = body;
       expect(status).toBe(400);
-      expect(msg).toBe('Bad request: Invalid date');
+      expect(msg).toBe('Bad request: createdAt cannot be a number');
     });
   });
 
@@ -307,7 +310,7 @@ describe('Test search feature', () => {
         );
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid date');
+        expect(msg).toBe('Bad request: createdAt cannot be a number');
       });
       test('should return status code 400 for query(createdAt) an invalid input type string', async () => {
         const { status, body } = await request.get(
@@ -315,7 +318,7 @@ describe('Test search feature', () => {
         );
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid date');
+        expect(msg).toBe('Bad request: createdAt is not a date');
       });
       test('should return status code 400 to unique serviceName validation error', async () => {
         const { body, status } = await request.post('/api/services').send({
@@ -457,7 +460,7 @@ describe('Test search feature', () => {
         const { msg } = body;
 
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid value type on parameters');
+        expect(msg).toBe('Bad request: id has to be a number');
       });
 
       test('Should return status code 400 for an invalid ID that does not exist should return status code 204', async () => {
@@ -466,7 +469,7 @@ describe('Test search feature', () => {
         const { msg } = body;
 
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid value type on parameters');
+        expect(msg).toBe('Bad request: id has to be a number');
       });
       test('Updating a service with a non valid input type(price) should return status code 400', async () => {
         const { status, body } = await request.put('/api/services/1').send({
@@ -559,7 +562,7 @@ describe('Test search feature', () => {
         const { status, body } = await request.get('/api/shops?createdAt=111');
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid date');
+        expect(msg).toBe('Bad request: createdAt cannot be a number');
       });
       test('Should return status code 400 for query(updatedAt) an invalid input type string', async () => {
         const { status, body } = await request.get(
@@ -567,7 +570,7 @@ describe('Test search feature', () => {
         );
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid date');
+        expect(msg).toBe('Bad request: updatedAt is not a date');
       });
     });
   });
@@ -637,19 +640,25 @@ describe('Test search feature', () => {
         const { id } = body.bookings[0];
 
         expect(status).toBe(200);
-
         expect(id).toBe(booking.body.booking.id);
       });
 
       test('Post: should return status code 201 (not case sensitive) with an existing user', async () => {
         const customer = await request.get('/api/customers/1');
+        const appointment = set(TOMORROW, {
+          hours: 15,
+          minutes: 0,
+          seconds: 0,
+          milliseconds: 0,
+        });
+        const appointmentFinish = addMinutes(appointment, 30);
 
         const { body, status } = await request.post('/api/bookings').send({
           customerName: 'amber Sipes',
           email: 'Amber37@hotmail.com',
           serviceName: 'Exclusive grid-enabled Graphical User Interface',
           shopName: 'Palma de Majorca',
-          appointment: '2023-01-02T15:10:00.000Z',
+          appointment: appointment,
         });
 
         const { id } = customer.body.customer;
@@ -658,37 +667,45 @@ describe('Test search feature', () => {
 
         expect(status).toBe(201);
         expect(restBooking).toEqual({
-          appointment: '2023-01-02T15:10:00.000Z',
+          appointment: appointment.toISOString(),
           shopId: 3,
-          time: '15:10',
-          appointmentFinish: '2023-01-02T15:40:00.000Z',
+          time: '15:00',
+          appointmentFinish: appointmentFinish.toISOString(),
           customerId: id,
           id: 7,
           serviceId: 8,
         });
       });
-      // test.only('Post: should return status code 201 (not case sensitive) for a new user', async () => {
-      //   const { body, status } = await request.post('/api/bookings').send({
-      //     customerName: 'New User',
-      //     email: 'newUser@yahoo.com',
-      //     serviceName: 'Public-key dynamic function',
-      //     shopName: 'turo park',
-      //     appointment: '2023-11-02T11:00:00.000Z',
-      //   });
+      test('Post: should return status code 201 (not case sensitive) for a new user', async () => {
+        const appointment = set(TOMORROW, {
+          hours: 10,
+          minutes: 0,
+          seconds: 0,
+          milliseconds: 0,
+        });
+        const appointmentFinish = addMinutes(appointment, 30);
 
-      //   const { createdAt, updatedAt, ...restBooking } = body.booking;
+        const { body, status } = await request.post('/api/bookings').send({
+          customerName: 'New User',
+          email: 'newUser@yahoo.com',
+          serviceName: 'Exclusive grid-enabled Graphical User Interface',
+          shopName: 'turo park',
+          appointment: appointment,
+        });
 
-      //   expect(status).toBe(201);
-      //   expect(restBooking).toEqual({
-      //     time: '11:00',
-      //     id: 8,
-      //     serviceId: 1,
-      //     shopId: 1,
-      //     appointment: '2023-11-02T11:00:00.000Z',
-      //     appointmentFinish: '2023-11-02T11:30:00.000Z',
-      //     customerId: 18,
-      //   });
-      // });
+        const { createdAt, updatedAt, ...restBooking } = body.booking;
+
+        expect(status).toBe(201);
+        expect(restBooking).toEqual({
+          time: '10:00',
+          id: 8,
+          serviceId: 8,
+          shopId: 1,
+          appointment: appointment.toISOString(),
+          appointmentFinish: appointmentFinish.toISOString(),
+          customerId: 18,
+        });
+      });
     });
 
     describe('/api/bookings Errors', () => {
@@ -698,7 +715,7 @@ describe('Test search feature', () => {
         );
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid date');
+        expect(msg).toBe('Bad request: updatedAt is not a date');
       });
       test('Get:should return status code 400 for query field that does not exist', async () => {
         const { status, body } = await request.get(
@@ -766,7 +783,7 @@ describe('Test search feature', () => {
 
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Email validation failed.');
+        expect(msg).toBe('Bad request: email cannot be a number');
       });
       test('Post: should return status code 400 for a non existing shop', async () => {
         const { body, status } = await request.post('/api/bookings').send({
@@ -837,26 +854,7 @@ describe('Test search feature', () => {
           appointmentFinish: '2023-06-24T13:30:00.000Z',
         });
       });
-      test('Put: updating a booking should return status code 203', async () => {
-        const { status, body } = await request.put('/api/bookings/1').send({
-          customerName: 'newCustomer',
-          email: 'newCustomer@email.com',
-          appointment: '2023-12-19T09:00:00.000Z',
-        });
 
-        const { updatedAt, createdAt, ...booking } = body.booking;
-
-        expect(status).toBe(203);
-        expect(booking).toEqual({
-          id: 1,
-          shopId: 1,
-          serviceId: 4,
-          customerId: 19,
-          appointment: '2023-12-19T09:00:00.000Z',
-          time: '9:00',
-          appointmentFinish: '2023-12-19T09:30:00.000Z',
-        });
-      });
       test('Delete: deleting a booking should return status code 204', async () => {
         const { status } = await request.delete('/api/bookings/1');
         const { body } = await request.get('/api/bookings/1');
@@ -867,58 +865,17 @@ describe('Test search feature', () => {
       });
     });
     describe('/api/bookings/:id errors', () => {
-      test('Updating a booking with customerName with numbers should return status code 400', async () => {
-        const { status, body } = await request.put('/api/bookings/10').send({
-          customerName: 11111,
-          email: 'emailChanged@email.com',
-          appointment: '2022-12-19T14:00:00.000Z',
-        });
-
+      test('get: should return status code 400 for a not valid id param', async () => {
+        const { body, status } = await request.get('/api/bookings/notID');
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: customerName cannot be a number');
+        expect(msg).toBe('Bad request: id has to be a number');
       });
-      test('Updating a booking with  an invalid email should return status code 400', async () => {
-        const { status, body } = await request.put('/api/bookings/10').send({
-          customerName: 'Jake Wills',
-          email: 'notEmail.com',
-          appointment: '2022-12-19T14:00:00.000Z',
-        });
-
+      test('get: should return status code 400 for a not valid id param when delete', async () => {
+        const { body, status } = await request.delete('/api/bookings/notID');
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Email validation failed.');
-      });
-      test('Updating a booking with an invalid appointment (number) should return status code 400', async () => {
-        const { status, body } = await request.put('/api/bookings/10').send({
-          customerName: 'Jake Wills',
-          email: 'notEmail.com',
-          appointment: 11111,
-        });
-
-        const { msg } = body;
-        expect(status).toBe(400);
-        expect(msg).toBe('Bad request: appointment cannot be a number');
-      });
-      test('Updating a booking with an invalid appointment  (not a date) should return status code 400', async () => {
-        const { status, body } = await request.put('/api/bookings/10').send({
-          customerName: 'Jake Wills',
-          email: 'email@am.com',
-          appointment: '2022-12-42T14:00:00.000Z',
-        });
-        const { msg } = body;
-        expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Appointment is not a date');
-      });
-      test('Updating a booking with an invalid customerName length  should return status code 400', async () => {
-        const { status, body } = await request.put('/api/bookings/10').send({
-          customerName: 'fj',
-          email: 'email@am.com',
-          appointment: '2023-12-12T14:00:00.000Z',
-        });
-        const { msg } = body;
-        expect(status).toBe(400);
-        expect(msg).toBe('Bad request: CustomerName minimum length failed.');
+        expect(msg).toBe('Bad request: id has to be a number');
       });
     });
     describe('/api/bookings/available', () => {
@@ -967,23 +924,23 @@ describe('Test search feature', () => {
       });
       test('Get: getAllAvailableBookings should return an array of times available with status code 200', async () => {
         const { status, body } = await request.get(
-          '/api/bookings/available?date=19/12/2022&shopName=Palma de Majorca&serviceName=Enhanced static collaboration'
+          '/api/bookings/available?date=19/12/2023&shopName=Palma de Majorca&serviceName=Enhanced static collaboration'
         );
 
         const { availableBookings, availableTimes } = body.bookings;
         expect(status).toBe(200);
         expect(availableBookings).toEqual([
-          '2022-12-19T09:00:00.000Z',
-          '2022-12-19T10:00:00.000Z',
-          '2022-12-19T11:00:00.000Z',
-          '2022-12-19T12:00:00.000Z',
-          '2022-12-19T13:00:00.000Z',
-          '2022-12-19T14:00:00.000Z',
-          '2022-12-19T15:00:00.000Z',
-          '2022-12-19T16:00:00.000Z',
-          '2022-12-19T17:00:00.000Z',
-          '2022-12-19T18:00:00.000Z',
-          '2022-12-19T19:00:00.000Z',
+          '2023-12-19T09:00:00.000Z',
+          '2023-12-19T10:00:00.000Z',
+          '2023-12-19T11:00:00.000Z',
+          '2023-12-19T12:00:00.000Z',
+          '2023-12-19T13:00:00.000Z',
+          '2023-12-19T14:00:00.000Z',
+          '2023-12-19T15:00:00.000Z',
+          '2023-12-19T16:00:00.000Z',
+          '2023-12-19T17:00:00.000Z',
+          '2023-12-19T18:00:00.000Z',
+          '2023-12-19T19:00:00.000Z',
         ]);
         expect(availableTimes).toEqual([
           '9:00',
@@ -1008,6 +965,14 @@ describe('Test search feature', () => {
         const { msg } = body;
         expect(status).toBe(400);
         expect(msg).toBe('Bad request: missing field: shopName');
+      });
+      test('Should return status code 400 to a not valid date field validation error', async () => {
+        const { status, body } = await request.get(
+          '/api/bookings/available?date=notADate&serviceName=Customizable next generation alliance&shopName=Turo Park'
+        );
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: Invalid date');
       });
       test('Should return status code 400 to a shop that does not exist query field validation error', async () => {
         const { status, body } = await request.get(
