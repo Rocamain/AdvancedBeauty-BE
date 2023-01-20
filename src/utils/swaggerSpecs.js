@@ -8,20 +8,20 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: '2U Booking Db - OpenAPI 3.0',
-      description: `This is an open API that is part of one of my portfolio Projects, 2U Aesthetics, a website were you can make reservations of services.`,
+      title: 'Advanced Beauty Booking Db - OpenAPI 3.0',
+      description: `This is an open API that is part of one of my portfolio Projects, Advanced Beauty Aesthetics, a website were you can make reservations of services.`,
       contact: {
-        name: 'me',
+        name: 'Francisco Javier Roca',
         email: 'frocavazquez@gmail.com',
       },
       version: '1.0.0',
       license: {
         name: 'License: Apache 2.0',
-        url: 'http://www.apache.org/licenses/LICENSE-2.0.html',
+        url: 'https://www.apache.org/licenses/LICENSE-2.0.html',
       },
     },
     portfolio: {
-      link: 'http://localhost:3000/confirmation',
+      link: 'http://localhost:3000/tobeChange',
     },
 
     externalDocs: {
@@ -30,12 +30,12 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:9000/api',
-        description: 'Dev server',
-      },
-      {
         url: 'https://advancedbeauty-be-production.up.railway.app/api',
         description: 'Production server',
+      },
+      {
+        url: 'http://localhost:9000/api',
+        description: 'Dev server',
       },
     ],
     tags: [

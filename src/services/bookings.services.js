@@ -11,7 +11,6 @@ const { getAvailableBookings } = require('./utils/index');
 const {
   addMinutes,
   addHours,
-  differenceInMinutes,
   getHours,
   getMinutes,
   parseISO,
@@ -131,7 +130,7 @@ const fetchAllBookings = async ({
 };
 
 const fetchBookingsByShopAndDay = async ({
-  shopName,
+  shopId,
   appointmentFrom,
   appointmentTo,
   order = 'ASC',
@@ -143,28 +142,18 @@ const fetchBookingsByShopAndDay = async ({
         appointment: {
           [Op.between]: [appointmentFrom, appointmentTo],
         },
+        shopId: shopId,
       },
       attributes: ['id', 'appointment', 'time', 'appointmentFinish'],
-      include: [
-        {
-          model: Shop,
-          as: 'shopInfo',
-          attributes: ['id', 'shopName'],
-          where: { shopName: { [Op.iRegexp]: `^${shopName}$` } },
-        },
-      ],
       order: [[orderBy, order]],
-    }).then((bookings) =>
-      bookings.map(
-        ({ id, appointment, time, appointmentFinish, shopInfo }) => ({
-          id,
-          appointment,
-          time,
-          appointmentFinish,
-          shopName: shopInfo.shopName,
-        })
-      )
-    );
+    }).then((bookings) => {
+      return bookings.map(({ id, appointment, time, appointmentFinish }) => ({
+        id,
+        appointment,
+        time,
+        appointmentFinish,
+      }));
+    });
 
     return bookings;
   } catch (err) {
@@ -242,7 +231,7 @@ const fetchAvailableBookings = async ({ serviceName, shopName, date }) => {
     const { duration } = service.dataValues;
 
     const bookings = await fetchBookingsByShopAndDay({
-      shopName,
+      shopId: shop.id,
       appointmentTo,
       appointmentFrom,
     });
@@ -273,47 +262,6 @@ const fetchAvailableBookings = async ({ serviceName, shopName, date }) => {
     }
   } catch (err) {
     err.status = 400;
-    throw err;
-  }
-};
-
-const putBookingByPK = async ({ id, customerId, appointment }) => {
-  try {
-    const booking = await Booking.findByPk(id, {
-      attributes: [
-        'id',
-        'shopId',
-        'serviceId',
-        'customerId',
-        'appointment',
-        'time',
-        'appointmentFinish',
-        'createdAt',
-        'updatedAt',
-      ],
-    });
-    if (booking) {
-      const end = appointment && new Date(booking.appointmentFinish);
-      const start = appointment && new Date(booking.appointment);
-      const minutesToFinnish = appointment && differenceInMinutes(end, start);
-      const appointmentFinish =
-        appointment && addMinutes(new Date(appointment), minutesToFinnish);
-
-      const newBooking = await booking.update({
-        appointment,
-        appointmentFinish,
-        customerId,
-      });
-
-      await newBooking.save();
-
-      return newBooking;
-    }
-    const err = new Error();
-    err.msg = 'Bad request: Booking does not exist';
-    err.status = 400;
-    throw err;
-  } catch (err) {
     throw err;
   }
 };
@@ -369,7 +317,6 @@ module.exports = {
   fetchAllBookings,
   postBooking,
   fetchAvailableBookings,
-  putBookingByPK,
   getBookingByID,
   deleteBooking,
 };

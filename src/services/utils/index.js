@@ -5,7 +5,6 @@ const {
   fetchAllCustomers,
   putCustomer,
 } = require('../customers.services');
-const checkIsHolidays = require('../../utils/holidays');
 const { addMinutes } = require('date-fns');
 
 const getServiceInfo = async ({ serviceName }) => {
@@ -13,10 +12,11 @@ const getServiceInfo = async ({ serviceName }) => {
     if (service) {
       const serviceId = service.dataValues.id;
       const duration = service.dataValues.duration;
-
+      const price = service.dataValues.price;
       return {
         serviceId,
         duration,
+        price,
       };
     }
 
@@ -160,7 +160,15 @@ const getAvailableBookings = ({
       newBookingStartTime = addMinutes(newBookingStartTime, serviceTime);
     }
 
-    return availableSpots;
+    const OneHourAfterNow = new Date().getTime() + 3600000;
+
+    // cannot book an appointment from one before it starts.
+
+    const filterAvailableSpots = availableSpots.filter(
+      (bookingTime) => bookingTime.getTime() > OneHourAfterNow
+    );
+
+    return filterAvailableSpots;
   }
 
   if (isOverlapping) {

@@ -1,6 +1,7 @@
 const {
+  throwParamsErrors,
   throwDatesErrors,
-  throwPutPostBookingErrors,
+  throwPostBookingErrors,
 } = require('./utils/index');
 
 exports.routeNotFound = (req, res) => {
@@ -10,14 +11,25 @@ exports.routeNotFound = (req, res) => {
 exports.withErrorHandling = (controller) => {
   return async (req, res, next) => {
     try {
+      throwParamsErrors(req);
       throwDatesErrors(req);
-      throwPutPostBookingErrors(req);
+      throwPostBookingErrors(req);
 
       await controller(req, res, next);
     } catch (err) {
       next(err);
     }
   };
+};
+
+exports.jsonError = (err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    return res
+      .status(400)
+      .send({ status: 404, message: 'Bad request: Error in JSON.' });
+  }
+
+  next(err);
 };
 
 exports.handleCustomErrors = (err, req, res, next) => {
@@ -50,6 +62,7 @@ exports.SQLErrors = (err, req, res, next) => {
   };
 
   const SQLCode = err?.parent?.code;
+
   const SQLErr = errorCodes[SQLCode];
 
   if (SQLErr) {
