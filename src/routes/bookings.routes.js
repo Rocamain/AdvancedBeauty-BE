@@ -3,7 +3,6 @@ const {
   getAllBookings,
   createBooking,
   getAvailableBookings,
-  modifyBooking,
   getBooking,
   eraseBooking,
 } = require('../controllers/bookings.controller');
@@ -22,7 +21,6 @@ router.route('/available').get(withErrorHandling(getAvailableBookings));
 router
   .route('/:id')
   .get(withErrorHandling(getBooking))
-  .put(withErrorHandling(modifyBooking))
   .delete(withErrorHandling(eraseBooking))
   .all(methodNotAllowed);
 

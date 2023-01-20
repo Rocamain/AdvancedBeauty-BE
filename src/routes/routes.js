@@ -13,7 +13,6 @@ dbRouter.use('/api/services', servicesRouter);
 dbRouter.use('/api/customers', customersRouter);
 dbRouter.use('/api/contact', contactRouter);
 dbRouter.use('/api/*', routeNotFound);
-// dbRouter.use('/', swaggerUI.serve, swaggerUI.setup(swaggerSpecs));
 dbRouter.use('/*', routeNotFound);
 
 module.exports = dbRouter;

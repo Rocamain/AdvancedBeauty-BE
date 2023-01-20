@@ -8,6 +8,7 @@ const {
   handleCustomErrors,
   validationErrors,
   SQLErrors,
+  jsonError,
 } = require('./middlewares');
 
 const app = express();
@@ -17,7 +18,9 @@ app.set('port', process.env.PORT || 4000);
 app.use(express.static('public'));
 
 // Middlewares
-app.use(morgan('tiny'));
+if (process.env.NDE_ENV === 'test' || process.env.NDE_ENV === 'development') {
+  app.use(morgan('tiny'));
+}
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -32,6 +35,7 @@ app.get('/docs.json', (req, res) => {
 app.use(routes);
 
 // handling errors
+app.use(jsonError);
 app.use(handleCustomErrors);
 app.use(validationErrors);
 app.use(SQLErrors);

@@ -1,23 +1,43 @@
-const { isPast, isDate } = require('date-fns');
-const { checkIsNum } = require('../../controllers/utils/index');
+const { isPast } = require('date-fns');
+const {
+  checkIsNum,
+  checkIsDate,
+  filterDatesFields,
+  msgGenerator,
+} = require('../../controllers/utils/index');
 
-// controllers/utils/index.js
 const throwDatesErrors = (req) => {
-  const { updatedAt, createdAt } = req.query;
+  const keysArray = Object.entries(req.query).map(([key, value]) => ({
+    [key]: value,
+  }));
 
-  const isUpdatedAtNum = updatedAt && Number(updatedAt);
-  const isCreatedAtNum = createdAt && Number(createdAt);
+  const dateFieldsArray = filterDatesFields(keysArray);
+  const datesQueryFields = dateFieldsArray.length > 0;
 
-  const err = new Error();
-  err.status = 400;
-  err.msg = 'Bad request: Invalid date';
-  if (isCreatedAtNum || isUpdatedAtNum) {
-    throw err;
+  if (datesQueryFields) {
+    throwIsNumberErr(dateFieldsArray);
+    throwIsDateErr(dateFieldsArray);
   }
 
   return req;
 };
 
+const throwParamsErrors = (req) => {
+  if (req?.params?.id) {
+    const { id } = req.params;
+
+    const isNumber = Number(id);
+
+    if (!isNumber) {
+      const err = new Error();
+      err.msg = 'Bad request: id has to be a number';
+      err.status = 400;
+      throw err;
+    }
+  }
+
+  return req;
+};
 const throwIsPastErr = (appointment) => {
   if (isPast(new Date(appointment))) {
     const err = new Error();
@@ -27,25 +47,27 @@ const throwIsPastErr = (appointment) => {
   }
   return;
 };
-const throwIsDateErr = (appointment) => {
-  const appointmentDate = new Date(appointment);
-  const invalidDate = JSON.stringify(appointmentDate) === 'null';
-  
+const throwIsDateErr = (keysArray) => {
+  const { isDateErr, dateErrors } = checkIsDate(keysArray);
 
-  if (!isDate(appointmentDate) || invalidDate) {
+  if (isDateErr) {
+    let msg = msgGenerator(dateErrors);
     const err = new Error();
     err.status = 400;
-    err.msg = `Bad request: Appointment is not a date`;
+    err.msg = `Bad request: ${msg} is not a date`;
     throw err;
   }
   return;
 };
 
-const throwIsNumberErr = ({ appointment, customerName }) => {
-  const { isNum, numErrors } = checkIsNum([{ customerName }, { appointment }]);
+const throwIsNumberErr = (keysArray) => {
+  const { isNum, numErrors } = checkIsNum(keysArray);
+
   if (isNum) {
+    let msg = msgGenerator(numErrors);
+
     const err = new Error();
-    err.msg = `Bad request: ${numErrors[0]} cannot be a number`;
+    err.msg = `Bad request: ${msg} cannot be a number`;
     err.status = 400;
 
     throw err;
@@ -53,23 +75,27 @@ const throwIsNumberErr = ({ appointment, customerName }) => {
   return;
 };
 
-const throwPutPostBookingErrors = (req) => {
-  const { path } = req.route;
-  const { appointment, customerName } = req.body;
-  
+const throwPostBookingErrors = (req) => {
+  const { appointment } = req.body;
+
+  const keysArray = Object.entries(req.body).map(([key, value]) => ({
+    [key]: value,
+  }));
+
   const postValidation =
     req.baseUrl === '/api/bookings' && req.method === 'POST';
-  const putValidation =
-    req.baseUrl + path === '/api/bookings/:id' && req.method === 'PUT';
 
-  if ((postValidation || putValidation) && appointment) {
-    throwIsDateErr(appointment);
+  if (postValidation && appointment) {
+    throwIsNumberErr(keysArray);
+    throwIsDateErr([{ appointment }]);
     throwIsPastErr(appointment);
-  }
-  if ((postValidation || putValidation) && appointment && customerName) {
-    throwIsNumberErr({ appointment, customerName });
   }
 
   return req;
 };
-module.exports = { throwDatesErrors, throwPutPostBookingErrors };
+module.exports = {
+  throwIsNumberErr,
+  throwDatesErrors,
+  throwPostBookingErrors,
+  throwParamsErrors,
+};

@@ -216,69 +216,6 @@ const getBookingById = {
   },
 };
 
-const modifyBooking = {
-  tags: ['Booking'],
-  description: 'Modify a booking by id params.',
-  parameters: [
-    {
-      $ref: '#/parameters/idPath',
-    },
-  ],
-  requestBody: {
-    description:
-      'Change one or more of the properties: shopId, serviceId, customerId, appointment.',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            customerName: {
-              type: 'string',
-              required: 'true',
-              example: 'Radom Name',
-            },
-            email: {
-              type: 'string',
-              required: 'true',
-              example: 'radom.name@example.com',
-            },
-            appointment: {
-              type: 'string',
-              format: 'date-time',
-              required: 'true',
-              example:
-                'make first a request to bookings/available?serviceName={serviceName}&serviceName={serviceName}&date={DD/MM/YYY}&shopName={shopName} to get a available appointment',
-            },
-          },
-        },
-      },
-    },
-  },
-  responses: {
-    203: {
-      description: 'Modified',
-      content: {
-        'application/json': {
-          schema: {
-            type: 'object',
-            example: {
-              customer: {
-                id: 1,
-                customerName: 'New Name',
-                email: 'new.name@example.com',
-                createdAt: new Date(),
-                updatedAt: new Date(),
-              },
-            },
-          },
-        },
-      },
-    },
-    400: {
-      description: 'Bad request: ',
-    },
-  },
-};
 const deleteBooking = {
   tags: ['Booking'],
   description: 'Modify a Booking by id params.',
@@ -382,7 +319,6 @@ const bookingsRouteDoc = {
   },
   '/bookings/{id}': {
     get: getBookingById,
-    put: modifyBooking,
     delete: deleteBooking,
   },
   '/bookings/available': {
