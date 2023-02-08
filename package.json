@@ -12,7 +12,9 @@
   "main": "listen.js",
   "scripts": {
     "test": "(npm run db-test:reset && jest ./__tests__/app.test.js)",
-    "dev": " cross-env NODE_ENV=test nodemon src/listen.js",
+    "dev": "cross-env NODE_ENV=test nodemon src/listen.js",
+    "build-dev": "cross-env NODE_ENV=dev nodemon src/listen.js",
+    "build-prod": "cross-env NODE_ENV=prod nodemon src/listen.js",
     "start": "node src/listen.js",
     "fetch-test-data": "cross-env NODE_ENV=test node data/fetch-data.js",
     "fetch-dev-data": "cross-env NODE_ENV=development node data/fetch-data.js",
