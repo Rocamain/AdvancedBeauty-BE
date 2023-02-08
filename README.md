@@ -27,8 +27,8 @@ Advance Beauty is a back end open api created with Node js and Express, where yo
 
 My main goal was to learn and create a full project with all the required needs for a functional beauty center. This back end is part of a major project which includes:
 
-1. [Front End](https://advanced-beauty-fe.vercel.app/).
-2. [Strapi/CMS](https://https://advancedbeautycms-production.up.railway.app/admin)
+1. [Advanced beauty web](https://advanced-beauty-fe.vercel.app/).
+2. [Advanced beauty CMS](https://advancedbeautycms-production.up.railway.app/admin)
 
 Repos:
 
