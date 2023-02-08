@@ -199,22 +199,22 @@ install sequelize cli
 
 globally
 
-```npm install -g sequelize-cli
-
+```
+npm install -g sequelize-cli
 ```
 
 local
 
-```npm install sequelize-cli
-
+```
+npm install sequelize-cli
 ```
 
 ### test environment
 
 create database, migrate and seed.
 
-```npm run db-test:reset
-
+```
+npm run db-test:reset
 ```
 
 run it:
@@ -227,8 +227,8 @@ npm run dev
 
 create data
 
-```npm run fetch-dev-data
-
+```
+npm run fetch-dev-data
 ```
 
 create database, migrate and seed
@@ -239,14 +239,15 @@ db-development:reset
 or
 
 db-production:reset
-
-run it:
-
 ```
 
+start
+
+```
 npm run build-dev
 
 or
+
 npm run build-prod
 
 ```
@@ -255,9 +256,12 @@ npm run build-prod
 
 # Let's keep in touch
 
-- [LinkedIn](https://example.com)
+- [LinkedIn](https://www.linkedin.com/in/francisco-javier-roca-vazquez/)
 - [CV](https://example.com)
 - [Porfolio](https://example.com)
 
 ---
+
+```
+
 ```
