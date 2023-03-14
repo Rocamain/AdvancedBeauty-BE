@@ -214,8 +214,9 @@ const fetchAvailableBookings = async ({ serviceName, shopName, date }) => {
   const appointmentTo = addHours(date, 11);
 
   try {
-    const [service] = await fetchAllServices({ serviceName });
     const [shop] = await fetchAllShops({ shopName });
+    
+    const [service] = await fetchAllServices({ serviceName });
 
     if (!shop) {
       const err = new Error();
