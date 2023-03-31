@@ -257,7 +257,7 @@ npm run build-prod
 # Let's keep in touch
 
 - [LinkedIn](https://www.linkedin.com/in/francisco-javier-roca-vazquez/)
-- [CV](https://drive.google.com/file/d/1go0sBfp5Y8yimuth0Ya4xrYH68os-Ew7/view?usp=share_link)
+- [CV](https://drive.google.com/file/d/1F6TTFXxHLpfHuOs6r3gPr_svQPUzIDbq/view?usp=share_link)
 - [Porfolio](https://portfolio-javi-roca-git-main-rocamain.vercel.app/)
 
 ---
