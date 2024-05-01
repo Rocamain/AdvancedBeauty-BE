@@ -1,62 +1,63 @@
 module.exports = [
   {
-    "customer_name": "Amber Sipes",
-    "email": "Amber37@hotmail.com"
+    customer_name: 'Mateo Graham',
+    email: 'Mateo93@hotmail.com',
   },
   {
-    "customer_name": "Titus Kessler",
-    "email": "Titus_Kessler@gmail.com"
+    customer_name: 'Dee Marquardt',
+    email: 'Dee15@gmail.com',
   },
   {
-    "customer_name": "Pearl Harris",
-    "email": "Pearl_Harris93@yahoo.com"
+    customer_name: 'Mitchell Cummerata',
+    email: 'Mitchell_Cummerata@yahoo.com',
   },
   {
-    "customer_name": "Dina Waters",
-    "email": "Dina_Waters10@yahoo.com"
+    customer_name: 'Kimberly Feest',
+    email: 'Kimberly45@hotmail.com',
   },
   {
-    "customer_name": "Chad Pfannerstill",
-    "email": "Chad_Pfannerstill1@gmail.com"
+    customer_name: 'Russ Reinger',
+    email: 'Russ.Reinger30@yahoo.com',
   },
   {
-    "customer_name": "Aglae Gleason",
-    "email": "Aglae.Gleason98@hotmail.com"
+    customer_name: 'Birdie Hickle',
+    email: 'Birdie79@yahoo.com',
   },
   {
-    "customer_name": "Demond Deckow",
-    "email": "Demond_Deckow80@yahoo.com"
+    customer_name: 'Joshua Waelchi',
+    email: 'Joshua_Waelchi54@hotmail.com',
   },
   {
-    "customer_name": "Jerrold Hodkiewicz",
-    "email": "Jerrold93@hotmail.com"
+    customer_name: 'Jeff Nader',
+    email: 'Jeff70@hotmail.com',
   },
   {
-    "customer_name": "Lamar Wyman",
-    "email": "Lamar84@hotmail.com"
+    customer_name: 'Tamara Bauch',
+    email: 'Tamara.Bauch72@hotmail.com',
   },
   {
-    "customer_name": "Delilah Muller",
-    "email": "Delilah_Muller@yahoo.com"
+    customer_name: 'Rachael Kuhlman',
+    email: 'Rachael_Kuhlman91@yahoo.com',
   },
   {
-    "customer_name": "Melany Conn",
-    "email": "Melany42@gmail.com"
+    customer_name: 'Esmeralda Krajcik',
+    email: 'Esmeralda80@hotmail.com',
   },
   {
-    "customer_name": "Mary Tromp",
-    "email": "Mary9@hotmail.com"
+    customer_name: 'Manuela Steuber',
+    email: 'Manuela_Steuber50@hotmail.com',
   },
   {
-    "customer_name": "Dawn Brown",
-    "email": "Dawn82@yahoo.com"
+    customer_name: 'Alaina Jerde',
+    email: 'Alaina72@gmail.com',
   },
   {
-    "customer_name": "Ora Stoltenberg",
-    "email": "Ora88@yahoo.com"
+    customer_name: 'Pearline Jaskolski',
+    email: 'Pearline_Jaskolski20@yahoo.com',
   },
   {
-    "customer_name": "Helen Daugherty",
-    "email": "Helen19@hotmail.com"
-  }
-]
+    customer_name: 'Marlon Leffler',
+    email: 'Marlon_Leffler17@hotmail.com',
+  },
+];
+

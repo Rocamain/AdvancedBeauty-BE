@@ -50,7 +50,9 @@ const fetchAllCustomers = async ({
   }
 };
 
-const postCustomer = ({ customerName, email }) => {
+
+const postCustomer = async ({ customerName, email }) => {
+
   return Customer.create({ customerName, email });
 };
 

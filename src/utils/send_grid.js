@@ -19,16 +19,20 @@ const backOfficeMsg = {
 const sendMail = async ({ from, ...props }) => {
   const mailToCustomer = customerMsg[from](props);
   const mailToBackOffice = backOfficeMsg[from](props);
-  if (process.NOD_ENV !== 'test') {
+  if (process.env.NODE_ENV !== 'test') {
     sgMail
       .send(mailToCustomer)
       .then((res) => {
-        sgMail.send(mailToBackOffice).catch((err) => console.log({ err }));
+        sgMail.send(mailToBackOffice).catch((err) => {
+          throw err;
+        });
       })
       .catch((error) => {
-        console.log(error.response);
+        return error;
       });
   }
+  return;
+
 };
 
 module.exports = sendMail;

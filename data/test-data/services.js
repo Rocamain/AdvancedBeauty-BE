@@ -1,62 +1,63 @@
 module.exports = [
   {
-    "service_name": "Public-key dynamic function",
-    "duration": 30,
-    "price": 25,
-    "type": "Manicure and Pedicure"
+    service_name: 'Secured coherent customer loyalty',
+    duration: 30,
+    price: 40,
+    type: 'Facial',
   },
   {
-    "service_name": "Customer-focused motivating initiative",
-    "duration": 30,
-    "price": 70,
-    "type": "Body"
+    service_name: 'Self-enabling executive array',
+    duration: 90,
+    price: 50,
+    type: 'Body',
   },
   {
-    "service_name": "Enhanced static collaboration",
-    "duration": 60,
-    "price": 70,
-    "type": "Laser"
+    service_name: 'Team-oriented regional system engine',
+    duration: 60,
+    price: 25,
+    type: 'Manicure and Pedicure',
   },
   {
-    "service_name": "Seamless incremental local area network",
-    "duration": 30,
-    "price": 25,
-    "type": "Facial"
+    service_name: 'Proactive systemic support',
+    duration: 60,
+    price: 25,
+    type: 'Body',
   },
   {
-    "service_name": "Triple-buffered 3rd generation knowledge base",
-    "duration": 30,
-    "price": 70,
-    "type": "Manicure and Pedicure"
+    service_name: 'Ergonomic multi-state analyzer',
+    duration: 60,
+    price: 70,
+    type: 'Laser',
   },
   {
-    "service_name": "Reactive holistic projection",
-    "duration": 60,
-    "price": 25,
-    "type": "Laser"
+    service_name: 'Multi-tiered value-added installation',
+    duration: 90,
+    price: 70,
+    type: 'Laser',
   },
   {
-    "service_name": "Polarised disintermediate standardization",
-    "duration": 90,
-    "price": 50,
-    "type": "Laser"
+    service_name: 'Devolved regional orchestration',
+    duration: 60,
+    price: 70,
+    type: 'Facial',
   },
   {
-    "service_name": "Exclusive grid-enabled Graphical User Interface",
-    "duration": 30,
-    "price": 40,
-    "type": "Laser"
+    service_name: 'Devolved bifurcated knowledge user',
+    duration: 90,
+    price: 50,
+    type: 'Facial',
   },
   {
-    "service_name": "Reactive homogeneous moderator",
-    "duration": 60,
-    "price": 40,
-    "type": "Body"
+    service_name: 'Diverse well-modulated encoding',
+    duration: 60,
+    price: 70,
+    type: 'Manicure and Pedicure',
   },
   {
-    "service_name": "Optional bifurcated project",
-    "duration": 90,
-    "price": 70,
-    "type": "Body"
-  }
-]
+    service_name: 'Front-line client-server functionalities',
+    duration: 60,
+    price: 40,
+    type: 'Laser',
+  },
+];
+

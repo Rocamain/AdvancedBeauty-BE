@@ -4,7 +4,6 @@
   <img alt="Logo Advantage Beauty in light Mode mode." srcset="https://drive.google.com/uc?export=view&id=1_cZi3i1jyU3RiNGGG8weX1lKlht6C_9K">
 </picture>
 
-
 ## Tech
 
 [![Express](https://img.shields.io/badge/Express-4.1.8-black)](https://expressjs.com)
@@ -235,11 +234,13 @@ npm run fetch-dev-data
 create database, migrate and seed
 
 ```
-db-development:reset
+
+npm run db-development:reset
 
 or
 
-db-production:reset
+npm run db-production:reset
+
 ```
 
 start

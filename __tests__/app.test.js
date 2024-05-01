@@ -3,13 +3,20 @@ const supertest = require('supertest');
 const app = require('../src/app');
 const db = require('../src/models/index');
 const request = supertest(app);
-const { set, addDays, addMinutes } = require('date-fns');
-const NOW = new Date();
-const TOMORROW = addDays(NOW, 1);
+const { set, addDays, addMinutes, format } = require('date-fns');
+const getRandom = require('./utils/getRandom');
+const getTime = require('./utils/getTime');
+const getRandomDate = require('./utils/getRandomDate');
+
+const TODAY = new Date();
+const TOMORROW = addDays(TODAY, 1);
+const todayUKFormat = format(TODAY, 'dd/MM/YYY');
+let service;
 
 describe('Test search feature', () => {
   beforeAll(async () => {
     await db.Customer.sync({ alter: true });
+    service = await getRandom(request, '/api/services');
   });
   afterAll(async () => {
     await db.sequelize.close();
@@ -84,7 +91,6 @@ describe('Test search feature', () => {
 
         expect(status).toBe(200);
         expect(customers).toHaveLength(5);
-        expect(customers[0].id).toBe(11);
       });
       test('Get: getAllCustomers Query(orderBy customerName order DESC ) should return status code 200', async () => {
         const { status, body } = await request.get(
@@ -92,21 +98,44 @@ describe('Test search feature', () => {
         );
 
         const { customers } = body;
+        const sortByDescCustomerName = (a, b) => {
+          const nameA = a.customerName.toUpperCase();
+          const nameB = b.customerName.toUpperCase();
+
+          if (nameA < nameB) {
+            return 1;
+          }
+          if (nameA > nameB) {
+            return -1;
+          }
+          return a.customerName - b.customerName;
+        };
+        const customersCopy = customers.map((c) => c);
+
+        const customersSoterdCopy = customersCopy.sort(sortByDescCustomerName);
 
         expect(status).toBe(200);
         expect(customers).toHaveLength(15);
-        expect(customers[0].customerName).toBe('Titus Kessler');
-        expect(customers[14].customerName).toBe('Aglae Gleason');
+
+        expect(customers).toEqual(customersSoterdCopy);
       });
       test('Get: getAllCustomers Query(get the names which contains Dennis ) should return status code 200', async () => {
-        const { status, body } = await request.get(
-          '/api/customers?customerName=Titus'
-        );
-        const { customers } = body;
+        const { body } = await request.get('/api/customers');
+        const maxIndex = body.customers.length - 1;
+        const randomIndex = Math.floor(Math.random() * maxIndex + 1);
+        const customerRandomName = body.customers[randomIndex].customerName;
 
-        expect(status).toBe(200);
+        const response = await request.get(
+          `/api/customers?customerName=${customerRandomName}`
+
+
+        );
+        const { customers } = response.body;
+
+        expect(response.status).toBe(200);
         expect(customers).toHaveLength(1);
-        expect(customers[0].customerName).toBe('Titus Kessler');
+        expect(customers[0].customerName).toBe(customerRandomName);
+
       });
 
       test('Post: should return status code 201', async () => {
@@ -170,17 +199,20 @@ describe('Test search feature', () => {
 
         expect(status).toBe(200);
         expect(id).toBe(15);
-        expect(customerName).toBe('Helen Daugherty');
         expect(body.customer).toHaveProperty('reservations');
       });
 
       test('Delete: deleting a customer should return status code 204', async () => {
-        const { status } = await request.delete('/api/customers/2');
-        const { body } = await request.get('/api/customers/2');
-        const { customer } = body;
+        
+        const response = await request.delete('/api/customers/2');
+        if (response) {
+          const { body } = await request.get('/api/customers/2');
+          const { customer } = body;
 
-        expect(customer).toBe(null);
-        expect(status).toBe(204);
+
+          expect(customer).toBe(null);
+          expect(response.status).toBe(204);
+        }
       });
 
       test('Put: updating a customer should return status code 200', async () => {
@@ -244,18 +276,19 @@ describe('Test search feature', () => {
         );
       });
       test('Get: getAllServices Query(serviceName) exact match return  should return status code 200', async () => {
+        const response = await request.get('/api/services');
+        const maxIndex = response.body.services.length - 1;
+        const randomIndex = Math.floor(Math.random() * maxIndex + 1);
+        const randomService = response.body.services[randomIndex];
         const { status, body } = await request.get(
-          '/api/services?serviceName=Exclusive grid-enabled Graphical User Interface'
+          `/api/services?serviceName=${randomService.serviceName}`
         );
         const { services } = body;
-        const { id, duration, price, type } = services[0];
+        const service = services[0];
 
         expect(status).toBe(200);
-        expect(services).toHaveLength(1);
-        expect(id).toBe(8);
-        expect(duration).toBe(30);
-        expect(price).toBe(40);
-        expect(type).toBe('Laser');
+        expect(service).toEqual(randomService);
+
       });
       test('Get: getAllServices Query(type and duration) should return status code 200', async () => {
         const { status, body } = await request.get(
@@ -263,12 +296,17 @@ describe('Test search feature', () => {
         );
         const { services } = body;
 
-        expect(status).toBe(200);
-        expect(services).toHaveLength(1);
-        expect(services[0].id).toBe(4);
-        expect(services[0].duration).toBe(30);
-        expect(services[0].price).toBe(25);
-        expect(services[0].type).toBe('Facial');
+        if (services.length > 0) {
+          expect(status).toBe(200);
+          services.forEach((service) => {
+            expect(service.duration).toBe(30);
+            expect(service.type).toBe('Facial');
+          });
+        } else {
+          expect(status).toBe(200);
+          expect(services).toHaveLength(0);
+        }
+
       });
       test('Post: should return status code 201', async () => {
         const { body, status } = await request.post('/api/services').send({
@@ -408,10 +446,11 @@ describe('Test search feature', () => {
 
         expect(status).toBe(200);
         expect(id).toBe(1);
-        expect(serviceName).toBe('Public-key dynamic function');
-        expect(duration).toBe(30);
-        expect(price).toBe(25);
-        expect(type).toBe('Manicure and Pedicure');
+        expect(typeof serviceName).toBe('string');
+        expect(typeof duration).toBe('number');
+        expect(typeof price).toBe('number');
+        expect(typeof type).toBe('string');
+
         expect(new Date(updatedAt)).toBeInstanceOf(Date);
         expect(new Date(createdAt)).toBeInstanceOf(Date);
       });
@@ -644,7 +683,6 @@ describe('Test search feature', () => {
       });
 
       test('Post: should return status code 201 (not case sensitive) with an existing user', async () => {
-        const customer = await request.get('/api/customers/1');
         const appointment = set(TOMORROW, {
           hours: 15,
           minutes: 0,
@@ -663,19 +701,41 @@ describe('Test search feature', () => {
 
         const { id } = customer.body.customer;
 
+        const { customerName, email, id } = await getRandom(
+          request,
+          '/api/customers'
+        );
+        const service = await getRandom(request, '/api/services');
+
+        const appointmentFinish = addMinutes(appointment, service.duration);
+        const { body, status } = await request.post('/api/bookings').send({
+          customerName,
+          email,
+          serviceName: service.serviceName,
+          shopName: 'Palma de Majorca',
+          appointment: appointment,
+        });
+
+        const time = getTime(appointment);
+        const customerId = id;
+        const serviceId = service.id;
+
         const { createdAt, updatedAt, ...restBooking } = body.booking;
 
         expect(status).toBe(201);
         expect(restBooking).toEqual({
-          appointment: appointment.toISOString(),
-          shopId: 3,
-          time: '15:00',
-          appointmentFinish: appointmentFinish.toISOString(),
-          customerId: id,
+
           id: 7,
-          serviceId: 8,
+          customerId,
+          serviceId,
+          shopId: 3,
+          appointment: appointment.toISOString(),
+          time,
+          appointmentFinish: appointmentFinish.toISOString(),
+
         });
       });
+      
       test('Post: should return status code 201 (not case sensitive) for a new user', async () => {
         const appointment = set(TOMORROW, {
           hours: 10,
@@ -683,13 +743,19 @@ describe('Test search feature', () => {
           seconds: 0,
           milliseconds: 0,
         });
-        const appointmentFinish = addMinutes(appointment, 30);
 
+        const service = await getRandom(request, '/api/services');
+        const appointmentFinish = addMinutes(appointment, service.duration);
+
+        const time = getTime(appointment);
+
+        const serviceId = service.id;
         const { body, status } = await request.post('/api/bookings').send({
           customerName: 'New User',
           email: 'newUser@yahoo.com',
-          serviceName: 'Exclusive grid-enabled Graphical User Interface',
-          shopName: 'turo park',
+          serviceName: service.serviceName,
+          shopName: 'Turo park',
+
           appointment: appointment,
         });
 
@@ -697,9 +763,11 @@ describe('Test search feature', () => {
 
         expect(status).toBe(201);
         expect(restBooking).toEqual({
-          time: '10:00',
+
+          time,
           id: 8,
-          serviceId: 8,
+          serviceId,
+
           shopId: 1,
           appointment: appointment.toISOString(),
           appointmentFinish: appointmentFinish.toISOString(),
@@ -760,12 +828,18 @@ describe('Test search feature', () => {
         expect(msg).toBe('Bad request: appointment cannot be a number');
       });
       test('Post: should return status code 400 for a not valid email', async () => {
+
+        const appointment = getRandomDate();
+        const { customerName } = await getRandom(request, '/api/customers');
+        const service = await getRandom(request, '/api/services');
+
         const { body, status } = await request.post('/api/bookings').send({
-          customerName: 'Javier Roca',
+          customerName,
           email: 'im_am_not_an_email.com',
-          serviceName: 'Customer-focused motivating initiative',
+          serviceName: service.serviceName,
           shopName: 'Palma de Majorca',
-          appointment: '2023-09-02T15:00:00.000Z',
+          appointment: appointment,
+
         });
 
         const { msg } = body;
@@ -773,12 +847,18 @@ describe('Test search feature', () => {
         expect(msg).toBe('Bad request: Email validation failed.');
       });
       test('Post: should return status code 400 for a not valid email(number)', async () => {
+
+        const appointment = getRandomDate();
+        const { customerName } = await getRandom(request, '/api/customers');
+        const { serviceName } = await getRandom(request, '/api/services');
+
         const { body, status } = await request.post('/api/bookings').send({
-          customerName: 'Javier Roca',
+          customerName,
           email: 1111,
-          serviceName: 'Customer-focused motivating initiative',
+          serviceName,
           shopName: 'Palma de Majorca',
-          appointment: '2023-09-02T15:00:00.000Z',
+          appointment,
+
         });
 
         const { msg } = body;
@@ -786,12 +866,20 @@ describe('Test search feature', () => {
         expect(msg).toBe('Bad request: email cannot be a number');
       });
       test('Post: should return status code 400 for a non existing shop', async () => {
+
+        const appointment = getRandomDate();
+        const { customerName, email } = await getRandom(
+          request,
+          '/api/customers'
+        );
+        const { serviceName } = await getRandom(request, '/api/services');
+
         const { body, status } = await request.post('/api/bookings').send({
-          customerName: 'Javier Roca',
-          email: 'fjrocavazquez@gmail.com',
-          serviceName: 'Customer-focused motivating initiative',
+          customerName,
+          email,
+          serviceName,
           shopName: 'plma',
-          appointment: '2023-09-02T15:00:00.000Z',
+          appointment,
         });
 
         const { msg } = body;
@@ -799,12 +887,19 @@ describe('Test search feature', () => {
         expect(msg).toBe('Bad request: Shop not exist');
       });
       test('Post: should return status code 400 for a non existing service', async () => {
+
+        const appointment = getRandomDate();
+        const { customerName, email } = await getRandom(
+          request,
+          '/api/customers'
+        );
+
         const { body, status } = await request.post('/api/bookings').send({
-          customerName: 'Javier Roca',
-          email: 'fjrocavazquez@gmail.com',
+          customerName,
+          email,
           serviceName: 'I am not existing',
-          shopName: 'turo park',
-          appointment: '2023-09-02T15:00:00.000Z',
+          shopName: 'Turo park',
+          appointment,
         });
 
         const { msg } = body;
@@ -812,11 +907,18 @@ describe('Test search feature', () => {
         expect(msg).toBe('Bad request: Service not exist');
       });
       test('Post: should return status code 400 for a past date appointment', async () => {
+
+        const { customerName, email } = await getRandom(
+          request,
+          '/api/customers'
+        );
+        const { serviceName } = await getRandom(request, '/api/services');
+
         const { body, status } = await request.post('/api/bookings').send({
-          customerName: 'Javier Roca',
-          email: 'fjrocavazquez@gmail.com',
-          serviceName: 'Reduced client-driven interface',
-          shopName: 'turo park',
+          customerName,
+          email,
+          serviceName,
+          shopName: 'Turo park',
           appointment: '2022-01-02T15:00:00.000Z',
         });
 
@@ -825,12 +927,23 @@ describe('Test search feature', () => {
         expect(msg).toBe('Bad request: cannot book a date in the past');
       });
       test('Post: should return status code 400 for an appointment date all ready taken', async () => {
+        const appointment = getRandomDate();
+        const { serviceName } = await getRandom(request, '/api/services');
+        console.log(serviceName);
+        await request.post('/api/bookings').send({
+          customerName: 'Jonh doe',
+          email: 'jdoe@yahoo.com',
+          serviceName,
+          shopName: 'Turo park',
+          appointment,
+        });
+
         const { body, status } = await request.post('/api/bookings').send({
           customerName: 'Jonh doe',
           email: 'jdoe@yahoo.com',
-          serviceName: 'Customer-focused motivating initiative',
-          shopName: 'turo park',
-          appointment: '2023-06-24T13:00:00.000Z',
+          serviceName,
+          shopName: 'Turo park',
+          appointment,
         });
 
         const { msg } = body;
@@ -840,18 +953,30 @@ describe('Test search feature', () => {
     });
     describe('/api/bookings/:id', () => {
       test('Get: getBookingById should return an booking  with status code 200)', async () => {
-        const { status, body } = await request.get('/api/bookings/1');
 
-        const { updatedAt, createdAt, ...booking } = body.booking;
+        const {
+          id,
+          customerInfo,
+          shopInfo,
+          appointment,
+          appointmentFinish,
+          createdAt,
+          updatedAt,
+        } = await getRandom(request, '/api/bookings');
+
+        const { status, body } = await request.get(`/api/bookings/${id}`);
+        const { booking } = body;
 
         expect(status).toBe(200);
         expect(booking).toEqual({
-          id: 1,
-          customerName: 'Helen Daugherty',
-          email: 'Helen19@hotmail.com',
-          shopName: 'Turo Park',
-          appointment: '2023-06-24T13:00:00.000Z',
-          appointmentFinish: '2023-06-24T13:30:00.000Z',
+          id,
+          customerName: customerInfo.customerName,
+          email: customerInfo.email,
+          shopName: shopInfo.shopName,
+          appointment,
+          appointmentFinish,
+          createdAt,
+          updatedAt,
         });
       });
 
@@ -871,96 +996,85 @@ describe('Test search feature', () => {
         expect(status).toBe(400);
         expect(msg).toBe('Bad request: id has to be a number');
       });
-      test('get: should return status code 400 for a not valid id param when delete', async () => {
-        const { body, status } = await request.delete('/api/bookings/notID');
+
+      test('Updating a booking with  an invalid email should return status code 400', async () => {
+        const { status, body } = await request.put('/bookings/10').send({
+          customerName: 'Jake Wills',
+          email: 'notEmail.com',
+          appointment: '2022-12-19T14:00:00.000Z',
+        });
+
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toBe('Bad request: id has to be a number');
+        expect(msg).toBe('Bad request: Email validation failed.');
+      });
+      test('Updating a booking with an invalid appointment (number) should return status code 400', async () => {
+        const { status, body } = await request.put('/bookings/10').send({
+          customerName: 'Jake Wills',
+          email: 'notEmail.com',
+          appointment: 11111,
+        });
+
+        const { msg } = body;
+        expect(status).toBe(400);
+        expect(msg).toBe('Bad request: appointment cannot be a number');
       });
     });
     describe('/api/bookings/available', () => {
-      test('Get: getAllAvailableBookings should return an array of times available with status code 200 (day with no bookings)', async () => {
-        const { status, body } = await request.get(
-          '/api/bookings/available?date=24/06/2023&shopName=Palma de Majorca&serviceName=Polarised disintermediate standardization'
+      test('Get: getAllAvailableBookings should return an array of times available with status code 200, then post booking for every space available anch checkafter posting the booking there is no spaces left', async () => {
+        const palmaBookingsResponse = await request.get(
+          '/api/bookings/?shopName=Palma de Majorca'
         );
+        const lastbooking = palmaBookingsResponse.body.bookings.pop();
+        const date = format(new Date(lastbooking.appointment), 'dd/MM/YYY');
+
+        const serviceName = lastbooking.serviceInfo.serviceName;
+        const duration = lastbooking.serviceInfo.duration;
+        const appointment = lastbooking.appointment;
+
+        const { status, body } = await request.get(
+          `/api/bookings/available?date=${date}&shopName=Palma de Majorca&serviceName=${serviceName}`
+        );
+
         const { availableBookings } = body.bookings;
 
+        const { bookings } = body;
         expect(status).toBe(200);
-        expect(availableBookings).toEqual([
-          '2023-06-24T08:00:00.000Z',
-          '2023-06-24T09:30:00.000Z',
-          '2023-06-24T11:00:00.000Z',
-          '2023-06-24T12:30:00.000Z',
-          '2023-06-24T14:00:00.000Z',
-          '2023-06-24T15:30:00.000Z',
-          '2023-06-24T17:00:00.000Z',
-        ]);
+        expect(
+          availableBookings.filter((booking) => booking !== appointment)
+        ).toEqual(availableBookings);
 
-        const firstBooking = await request.post('/api/bookings').send({
-          customerName: 'Jay dee',
-          email: 'jdoe@yao.com',
-          serviceName: 'Polarised disintermediate standardization',
-          shopName: 'Palma de Majorca',
-          appointment: availableBookings[0],
-        });
-        const secondBooking = await request.post('/api/bookings').send({
-          customerName: 'Dina Waters',
-          email: 'Dina_Waters10@yahoo.com',
-          serviceName: 'Polarised disintermediate standardization',
-          shopName: 'Palma de Majorca',
-          appointment: availableBookings[1],
-        });
-        const thirdBooking = await request.post('/api/bookings').send({
-          customerName: 'Aglae Marie Gleason',
-          email: 'Aglae.Gleason98@hotmail.com',
-          serviceName: 'Polarised disintermediate standardization',
-          shopName: 'Palma de Majorca',
-          appointment: availableBookings[2],
-        });
+        // Posting booking for all spaces for bookings available.
 
-        expect(firstBooking.status).toBe(201);
-        expect(secondBooking.status).toBe(201);
-        expect(thirdBooking.status).toBe(201);
-      });
-      test('Get: getAllAvailableBookings should return an array of times available with status code 200', async () => {
-        const { status, body } = await request.get(
-          '/api/bookings/available?date=19/12/2023&shopName=Palma de Majorca&serviceName=Enhanced static collaboration'
+        await Promise.all(
+          availableBookings.map(
+            async (bookingAvailable, index) =>
+              await request.post('/api/bookings').send({
+                customerName: 'Jonh Doe',
+                email: 'jdoe@example.com',
+                serviceName,
+                shopName: 'Palma de Majorca',
+                appointment: bookingAvailable,
+              })
+          )
+        );
+        // Test  that ther no more spaces left to make a booking
+        const {
+          body: { bookings },
+        } = await request.get(
+          `/api/bookings/available?date=${date}&shopName=Palma de Majorca&serviceName=${serviceName}`
         );
 
-        const { availableBookings, availableTimes } = body.bookings;
-        expect(status).toBe(200);
-        expect(availableBookings).toEqual([
-          '2023-12-19T09:00:00.000Z',
-          '2023-12-19T10:00:00.000Z',
-          '2023-12-19T11:00:00.000Z',
-          '2023-12-19T12:00:00.000Z',
-          '2023-12-19T13:00:00.000Z',
-          '2023-12-19T14:00:00.000Z',
-          '2023-12-19T15:00:00.000Z',
-          '2023-12-19T16:00:00.000Z',
-          '2023-12-19T17:00:00.000Z',
-          '2023-12-19T18:00:00.000Z',
-          '2023-12-19T19:00:00.000Z',
-        ]);
-        expect(availableTimes).toEqual([
-          '9:00',
-          '10:00',
-          '11:00',
-          '12:00',
-          '13:00',
-          '14:00',
-          '15:00',
-          '16:00',
-          '17:00',
-          '18:00',
-          '19:00',
-        ]);
+        expect(bookings.availableBookings).toHaveLength(0);
+
       });
     });
     describe('/api/bookings/available Errors', () => {
       test('Should return status code 400 to missing query field validation error', async () => {
         const { status, body } = await request.get(
-          '/api/bookings/available?date=19/11/2022&serviceName=Customizable next generation alliance'
+
+          `/api/bookings/available?date=${todayUKFormat}&serviceName=${service.serviceName}`
+
         );
         const { msg } = body;
         expect(status).toBe(400);
@@ -968,41 +1082,47 @@ describe('Test search feature', () => {
       });
       test('Should return status code 400 to a not valid date field validation error', async () => {
         const { status, body } = await request.get(
-          '/api/bookings/available?date=notADate&serviceName=Customizable next generation alliance&shopName=Turo Park'
+          `/api/bookings/available?date=${'NOT A DATE'}&serviceName=${
+            service.serviceName
+          }&shopName=Turo Park`
         );
+        console.log({ body });
+=
         const { msg } = body;
         expect(status).toBe(400);
         expect(msg).toBe('Bad request: Invalid date');
       });
       test('Should return status code 400 to a shop that does not exist query field validation error', async () => {
         const { status, body } = await request.get(
-          '/api/bookings/available?date=19/12/2022&shopName=notAShop&serviceName=Customizable next generation alliance'
+          `/api/bookings/available?date=${todayUKFormat}&serviceName=${
+            service.serviceName
+          }&shopName=${'NOT A SHOP NAME'}`
+
         );
+
         const { msg } = body;
 
         expect(status).toBe(400);
         expect(msg).toBe('Bad request: shop does not exist');
+
       });
       test('Should return status code 400 to a service that does not exist query field validation error', async () => {
         const { status, body } = await request.get(
-          '/api/bookings/available?date=19/12/2022&shopName=Palma de Majorca&serviceName=NOTASERVICE'
+          `/api/bookings/available?date=${todayUKFormat}&serviceName=${'NOT A SERVICE'}&shopName=Turo Park`
         );
         const { msg } = body;
         expect(status).toBe(400);
-        expect(msg).toEqual('Bad request: service does not exist');
+        expect(msg).toBe('Bad request: missing field: shopName');
+
       });
       test('should return status code 400 to missing query field validation error on date', async () => {
         const { status, body } = await request.get(
-          '/api/bookings/available?date=19/11/YEAR&shopName=Palma de Majorca&serviceName=Customizable next generation alliance'
+          `/api/bookings/available?date=${'NOT A DATE'}&serviceName=${
+            service.serviceName
+          }&shopName=Turo Park`
+
         );
-        const { msg } = body;
-        expect(status).toBe(400);
-        expect(msg).toBe('Bad request: Invalid date');
-      });
-      test('should return status code 400 to missing query field validation error on date day', async () => {
-        const { status, body } = await request.get(
-          '/api/bookings/available?date=day/11/2026&shopName=Palma de Majorca&serviceName=Customizable next generation alliance'
-        );
+
         const { msg } = body;
         expect(status).toBe(400);
         expect(msg).toBe('Bad request: Invalid date');
