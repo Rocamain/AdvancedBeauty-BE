@@ -1,62 +1,62 @@
 module.exports = [
   {
-    "service_name": "Open-source optimal paradigm",
-    "duration": 30,
-    "price": 40,
-    "type": "Facial"
+    service_name: 'Secured coherent customer loyalty',
+    duration: 30,
+    price: 40,
+    type: 'Facial',
   },
   {
-    "service_name": "Reverse-engineered mission-critical encryption",
-    "duration": 30,
-    "price": 40,
-    "type": "Body"
+    service_name: 'Self-enabling executive array',
+    duration: 90,
+    price: 50,
+    type: 'Body',
   },
   {
-    "service_name": "Horizontal radical structure",
-    "duration": 60,
-    "price": 70,
-    "type": "Facial"
+    service_name: 'Team-oriented regional system engine',
+    duration: 60,
+    price: 25,
+    type: 'Manicure and Pedicure',
   },
   {
-    "service_name": "Customizable next generation alliance",
-    "duration": 60,
-    "price": 70,
-    "type": "Laser"
+    service_name: 'Proactive systemic support',
+    duration: 60,
+    price: 25,
+    type: 'Body',
   },
   {
-    "service_name": "Business-focused asynchronous internet solution",
-    "duration": 90,
-    "price": 50,
-    "type": "Body"
+    service_name: 'Ergonomic multi-state analyzer',
+    duration: 60,
+    price: 70,
+    type: 'Laser',
   },
   {
-    "service_name": "Compatible encompassing paradigm",
-    "duration": 30,
-    "price": 25,
-    "type": "Body"
+    service_name: 'Multi-tiered value-added installation',
+    duration: 90,
+    price: 70,
+    type: 'Laser',
   },
   {
-    "service_name": "Triple-buffered uniform capability",
-    "duration": 60,
-    "price": 50,
-    "type": "Body"
+    service_name: 'Devolved regional orchestration',
+    duration: 60,
+    price: 70,
+    type: 'Facial',
   },
   {
-    "service_name": "Switchable web-enabled array",
-    "duration": 60,
-    "price": 70,
-    "type": "Body"
+    service_name: 'Devolved bifurcated knowledge user',
+    duration: 90,
+    price: 50,
+    type: 'Facial',
   },
   {
-    "service_name": "Compatible empowering encoding",
-    "duration": 60,
-    "price": 25,
-    "type": "Laser"
+    service_name: 'Diverse well-modulated encoding',
+    duration: 60,
+    price: 70,
+    type: 'Manicure and Pedicure',
   },
   {
-    "service_name": "Expanded high-level concept",
-    "duration": 60,
-    "price": 50,
-    "type": "Manicure and Pedicure"
-  }
-]
+    service_name: 'Front-line client-server functionalities',
+    duration: 60,
+    price: 40,
+    type: 'Laser',
+  },
+];
