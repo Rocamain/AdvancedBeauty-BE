@@ -1,4 +1,7 @@
 node_modules
-/data/dev-data
 yarn-error.log
 .env
+.env.development
+.env.production
+data/dev-data
+sendgrid.env

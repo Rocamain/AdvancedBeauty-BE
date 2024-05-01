@@ -60,3 +60,4 @@ module.exports = [
     type: 'Laser',
   },
 ];
+

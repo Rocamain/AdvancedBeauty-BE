@@ -234,11 +234,13 @@ npm run fetch-dev-data
 create database, migrate and seed
 
 ```
+
 npm run db-development:reset
 
 or
 
 npm run db-production:reset
+
 ```
 
 start

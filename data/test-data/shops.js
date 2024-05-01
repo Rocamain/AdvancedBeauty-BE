@@ -16,10 +16,10 @@ module.exports = [
     "mobile": "640 725 935"
   },
   {
-    "shop_name": "Palma",
+    "shop_name": "Palma de Majorca",
     "city": "Palma de Majorca",
     "street": "C/ Josep Anselm Clavé, 6",
-    "postcode": "07002 – Palma de Mallorca",
+    "postcode": "07002 – Palma de Majorca ",
     "phone": "971 707 281",
     "mobile": "646 531 481"
   }

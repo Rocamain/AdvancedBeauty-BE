@@ -32,6 +32,7 @@ const sendMail = async ({ from, ...props }) => {
       });
   }
   return;
+
 };
 
 module.exports = sendMail;
