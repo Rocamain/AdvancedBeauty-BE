@@ -30,7 +30,7 @@ const options = {
     },
     servers: [
       {
-        url: 'https://advancedbeauty-be-production.up.railway.app/api',
+        url: 'https://advanced-beauty-booking.up.railway.app/api',
         description: 'Production server',
       },
       {
