@@ -39,7 +39,7 @@
     "setup-db:test:push:seed:undo": "cross-env NODE_ENV=test npx sequelize-cli db:seed:undo",
     "setup-db:development:push:seed:undo": "cross-env NODE_ENV=development npx sequelize-cli db:seed:undo",
     "setup-db:production:push:seed:undo": "cross-env NODE_ENV=production npx sequelize-cli db:seed:undo",
-    "db-test:reset": "(npx sequelize-cli db:drop --env test && npx sequelize-cli db:create --env test && npx sequelize-cli db:migrate --env test && npx sequelize-cli db:seed --seed 20220819144441-data-test --env test)",
+    "db-test:reset": "(npx sequelize-cli db:drop --env test && npx sequelize-cli db:create --env test && npx sequelize-cli db:migrate --env test && npx sequelize-cli db:seed --seed seed-data-test --env test)",
     "db-development:reset": "(npx sequelize-cli db:drop --env development && npx sequelize-cli db:create --env development && npx sequelize-cli db:migrate --env development && npx sequelize-cli db:seed --seed 20221206113308-data-development)",
     "db-production:reset": "(npx sequelize-cli db:drop --env production && npx sequelize-cli db:create --env production && npx sequelize-cli db:migrate --env production && npx sequelize-cli db:seed --seed 20221206113308-data-development)"
   },
@@ -49,12 +49,12 @@
     "jest": "^28.1.3",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.19",
+    "nodemon": "^3.1.0",
     "sequelize-cli": "^6.4.1",
     "supertest": "^6.2.4"
   },
   "dependencies": {
-    "@sendgrid/mail": "^7.7.0",
+    "@sendgrid/mail": "^8.1.3",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "date-fns": "^2.29.2",
